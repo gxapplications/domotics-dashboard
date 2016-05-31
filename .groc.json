@@ -1,0 +1,11 @@
+{
+  "glob": [
+    "lib/**/*.js",
+    "server/*.js",
+    "README.md"
+  ],
+  "github": false,
+  "out": "./doc/groc",
+  "strip": "--no-strip",
+  "index": "README.md"
+}

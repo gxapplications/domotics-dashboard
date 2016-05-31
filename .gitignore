@@ -1,0 +1,13 @@
+npm-debug.log
+.jshint*
+
+/node_modules
+/doc
+
+.idea
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+._*
+*/._*
+*/*/._*
