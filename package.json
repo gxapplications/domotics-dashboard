@@ -7,18 +7,18 @@
   "contributors": [],
   "license": "MIT",
   "scripts": {
-    "start": "node server.js",
+    "start": "node index.js",
     "test": "cross-env NODE_ENV=test mocha",
     "doc": "rimraf doc && jsdoc --package package.json --destination doc/jsdoc/ server/ lib/ && groc && cross-env NODE_ENV=test nyc --require babel-core/register --reporter=lcov mocha && rimraf .nyc_output",
     "doc:publish": "npm run doc && gh-pages -d doc",
     "lint": "standard --verbose | snazzy",
     "validate": "npm ling && npm test && npm ls",
-    "dev:start": "nodemon server.js",
+    "dev:start": "nodemon index.js",
     "dev:test": "npm run test -- --watch",
-    "debug:start": "iron-node server.js",
+    "debug:start": "iron-node index.js",
     "debug:test": "cross-env NODE_ENV=test iron-node node_modules/mocha/bin/_mocha"
   },
-  "main": "server.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/gxapplications/domotics-dashboard"
@@ -70,8 +70,9 @@
     "babel-eslint": "^6.0.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-stage-2": "^6.5.0",
-    "colors": "^1.0.3",
-    "config": "^1.20.1",
+    "colors": "^1.1.2",
+    "config": "^1.21.0",
+    "hapi": "^13.4.1",
     "myfox-wrapper-api": "git://github.com/gxapplications/myfox-wrapper-api.git"
   },
   "devDependencies": {
