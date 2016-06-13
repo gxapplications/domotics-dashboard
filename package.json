@@ -72,8 +72,13 @@
     "babel-preset-stage-2": "^6.5.0",
     "colors": "^1.1.2",
     "config": "^1.21.0",
+    "handlebars": "^4.0.5",
     "hapi": "^13.4.1",
-    "myfox-wrapper-api": "git://github.com/gxapplications/myfox-wrapper-api.git"
+    "hoek": "^4.0.1",
+    "inert": "^4.0.0",
+    "myfox-wrapper-api": "git://github.com/gxapplications/myfox-wrapper-api.git",
+    "path": "^0.12.7",
+    "vision": "^4.1.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

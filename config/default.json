@@ -1,9 +1,5 @@
 {
   "server": {
-    "port": 3000,
-
-    "myfox": {
-      "myfoxSiteIds": [4567]
-    }
+    "port": 3000
   }
 }
