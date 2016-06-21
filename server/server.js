@@ -4,6 +4,7 @@ import config from 'config'
 import Hapi from 'hapi'
 import Vision from 'vision'
 import Handlebars from 'handlebars'
+import ExtendBlock from 'handlebars-extend-block'
 import Hoek from 'hoek'
 import Inert from 'inert'
 import Path from 'path'
@@ -19,7 +20,7 @@ server.connection({
 server.register(Vision, (err) => {
   Hoek.assert(!err, err)
   server.views({
-    engines: { html: Handlebars },
+    engines: { html: ExtendBlock(Handlebars) },
     relativeTo: Path.join(__dirname, '..', 'lib'),
     path: './templates',
     layout: true,
@@ -32,6 +33,15 @@ server.register(Vision, (err) => {
 // Assets engine
 server.register(Inert, (err) => {
   Hoek.assert(!err, err)
+  server.route({
+    method: 'GET',
+    path: '/assets/module/{param*}',
+    handler: {
+      directory: {
+        path: Path.join(__dirname, '..', 'node_modules')
+      }
+    }
+  })
   server.route({
     method: 'GET',
     path: '/assets/{param*}',
@@ -48,7 +58,7 @@ server.route({
   method: 'GET',
   path: '/',
   handler: function (request, reply) {
-    reply.view('login', {}, { layout: 'login_layout' })
+    reply.view('login', {'md-primary': 'teal'})
   }
 })
 

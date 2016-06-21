@@ -1,0 +1,131 @@
+#login-card-folder {
+    width: 2rem;
+    overflow: visible;
+}
+#login-card-1 .opener {
+    transform-origin: top left;
+    transform: rotate(90deg);
+    position: relative;
+    left: 2.2rem;
+    top: -0.9rem;
+}
+
+@keyframes login-card-1-animation-opening {
+    from {
+        top: 0.8rem;
+        right: -0.6rem;
+        transform: rotate(-8deg);
+    }
+    to {
+        top: 0.5rem;
+        right: 5.6rem;
+        transform: rotate(0deg);
+    }
+}
+@keyframes login-card-1-animation-closing {
+    from {
+        top: 0.5rem;
+        right: 5.6rem;
+        transform: rotate(0deg);
+    }
+    to {
+        top: 0.8rem;
+        right: -0.6rem;
+        transform: rotate(-8deg);
+    }
+}
+#login-card-1 {
+    width: 13.8rem;
+    height: 24rem;
+    position: relative;
+    top: 0.8rem;
+    right: -0.6rem;
+    transform: rotate(-8deg);
+    animation-name: login-card-1-animation-closing;
+    animation-duration: 0.6s;
+    animation-timing-function: ease;
+}
+#login-card-1.opened {
+    top: 0.5rem;
+    right: 5.6rem;
+    transform: rotate(0deg);
+    animation-name: login-card-1-animation-opening;
+    animation-duration: 0.6s;
+    animation-timing-function: ease;
+}
+#login-card-1 p {
+    text-align: center;
+}
+
+@keyframes login-card-2-animation-opening {
+    from {
+        right: 0rem;
+    }
+    to {
+        right: -5.6rem
+    }
+}
+@keyframes login-card-2-animation-closing {
+    from {
+        right: -5.6rem;
+    }
+    to {
+        right: 0rem
+    }
+}
+#login-card-2 {
+    z-index: 4;
+    width: 26rem;
+    height: 26rem;
+    position: relative;
+    right: 0rem;
+    animation-name: login-card-2-animation-closing;
+    animation-duration: 0.8s;
+    animation-timing-function: ease;
+}
+#login-card-2.opened {
+    right: -5.6rem;
+    animation-name: login-card-2-animation-opening;
+    animation-duration: 0.8s;
+    animation-timing-function: ease;
+}
+
+div.login-deco-folder {
+    width: 0rem;
+    overflow: visible;
+    position: relative;
+    animation-name: login-card-2-animation-closing;
+    animation-duration: 0.8s;
+    animation-timing-function: ease;
+}
+div.login-deco-folder.opened {
+    right: -5.6rem;
+    animation-name: login-card-2-animation-opening;
+    animation-duration: 0.8s;
+    animation-timing-function: ease;
+}
+#login-card-3 {
+    z-index: 3;
+    width: 26rem;
+    height: 26rem;
+    position: relative;
+    right: 0.1rem;
+    top: 0.1rem;
+    transform: rotate(3deg)
+}
+#login-card-4 {
+    z-index: 2;
+    width: 26rem;
+    height: 26rem;
+    position: relative;
+    right: 0.1rem;
+    top: -0;
+    transform: rotate(5deg)
+}
+
+.patt-holder, div#alarm_pattern.patt-holder {
+    background: transparent;
+}
+.patt-holder ul.patt-wrap, div#alarm_pattern.patt-holder ul.patt-wrap {
+    margin: 0px;
+}

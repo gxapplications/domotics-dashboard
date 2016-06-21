@@ -1,9 +1,86 @@
 <!doctype html>
 <html>
 <head>
-  <title>Test</title>
+  <meta charset="UTF-8" />
+  <title>{{{block "title"}}}</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+  <link rel="stylesheet" href="/assets/module/angular-material/angular-material.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+
+  <style type="text/css">
+    [ng-cloak] {
+      display: none;
+    }
+  </style>
+
+  {{{block "css"}}}
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
 </head>
-<body>
-  {{{content}}}
+<body ng-app="GXDomoticsApp" layout="column" class="ng-scope">
+  <div flex layout="column">
+    <div flex layout="column" ng-cloak>
+      {{{content}}}
+    </div>
+
+    <div id="loading-board" ng-controller="myLoadingController">
+      <div class="loading board">
+        <div class="left">
+        </div>
+        <div class="right">
+        </div>
+        <div class="ball">
+        </div>
+        <div class="ballhit">
+        </div>
+       </div>
+    </div>
+  </div>
+  <script src="/assets/module/jquery/dist/jquery.min.js"></script>
+  <script src="/assets/module/angular/angular.js"></script>
+  <script src="/assets/module/angular-aria/angular-aria.js"></script>
+  <script src="/assets/module/angular-animate/angular-animate.js"></script>
+  <script src="/assets/module/angular-messages/angular-messages.js"></script>
+  <script src="/assets/module/angular-material/angular-material.js"></script>
+  <script src="/assets/js/patternLock.min.js"></script>
+
+  <script type="text/javascript">
+    var app = angular.module('GXDomoticsApp', ['ngMaterial', 'ngMessages'])
+      app.config(function($mdThemingProvider, $controllerProvider, $httpProvider) {
+        $mdThemingProvider.theme('default')
+          .primaryPalette('teal', {
+              'default': '900',
+              'hue-1': '600',
+              'hue-2': '300',
+              'hue-3': 'A700'})
+          .warnPalette('red')
+          .accentPalette('light-green', {
+              'default': '600',
+              'hue-1': '700',
+              'hue-2': '900',
+              'hue-3': 'A700'
+          })
+          .backgroundPalette('grey', {'default': '900'})
+          .dark();
+        app.controllerProvider = $controllerProvider;
+
+        // Do not encode POST data in Angular JSON format, but use jquery POST parameters format (query string)
+        $httpProvider.defaults.transformRequest = function(data){
+          if (data === undefined) return data;
+          return $.param(data);
+        }
+        $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+      })
+      app.controller('myLoadingController', [function() {
+        angular.element(document).ready(function () {
+          window.setTimeout(function() {
+            document.getElementById('loading-board').className += " hidden";
+          }, 1000);
+        });
+      }]);
+
+    {{{block "js"}}}
+  </script>
+
 </body>
 </html>

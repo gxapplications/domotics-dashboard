@@ -1,0 +1,98 @@
+body.ng-scope {
+    background-image: url(http://2.bp.blogspot.com/-wNoKT7wLqNU/UWYou0G0fmI/AAAAAAAAFI8/C9eShUqyBAw/s1600/seamless-black-leather-texture.jpg);
+    background-repeat: repeat;
+    background-size: 128px;
+}
+
+body.ng-scope > div {
+    background-color: rgba(0, 9, 8, .7);
+}
+
+/* Loading animation */
+.loading.board {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 250px;
+}
+.loading.board .left,
+.loading.board .right {
+    height: 50px;
+    width: 8px;
+    background: #80CBC4;
+    display: inline-block;
+    position: absolute;
+}
+.loading.board .left {
+    left: 0;
+    animation: position1 3s linear infinite;
+}
+.loading.board .right {
+    right: 0;
+    animation: position2 3s linear infinite;
+}
+.loading.board .ball,
+.loading.board .ballhit {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #80CBC4;
+    position: absolute;
+    animation: bounce 3s linear infinite;
+}
+.loading.board .ballhit {
+    padding: 4px;
+    margin:-6px 0 0 -6px;
+    border-radius:50%;
+    background: transparent;
+    border: 2px #26A69A solid;
+    z-index: -1;
+    animation: bounce2 3s linear infinite;
+}
+@keyframes position1 {
+    0% {top:-60px;}
+    25% {top:0;}
+    50% {top:60px;}
+    75% {top:-60px;}
+    100% {top:-60px;}
+}
+@keyframes position2 {
+    0% {top:60px;}
+    25% {top:0;}
+    50% {top:-60px;}
+    75% {top:-60px;}
+    100% {top:60px;}
+}
+@keyframes bounce {
+    0% {top:-35px;left:10px;}
+    25% {top:25px;left:225px;}
+    50% {top:75px;left:10px;}
+    75% {top:-35px;left:225px;}
+    100% {top:-35px;left:10px;}
+}
+@keyframes bounce2 {
+    0% {top:-35px;left:10px; border:2px #00695C solid;}
+    24% {border:2px #00695C solid;}
+    25% {top:25px;left:225px; border:2px #26A69A solid;}
+    49% {border:2px #00695C solid;}
+    50% {top:75px;left:10px; border:2px #26A69A solid;}
+    74% {border:2px #00695C solid;}
+    75% {top:-35px;left:225px; border:2px #26A69A solid;}
+    99% {border:2px #00695C solid;}
+    100% {top:-35px;left:10px; border:2px #26A69A solid;}
+}
+#loading-board {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #181818;
+    z-index: 100;
+}
+#loading-board.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 1s, opacity 1s linear;
+}
