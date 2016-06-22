@@ -34,6 +34,22 @@
         transform: rotate(-8deg);
     }
 }
+@keyframes login-card-1-fade-opening {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes login-card-1-fade-closing {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
 #login-card-1 {
     width: 13.8rem;
     height: 24rem;
@@ -55,6 +71,18 @@
 }
 #login-card-1 p {
     text-align: center;
+}
+#login-card-1 > div:nth-child(2) {
+    opacity: 0;
+    animation-name: login-card-1-fade-closing;
+    animation-duration: 0.4s;
+    animation-timing-function: ease;
+}
+#login-card-1.opened > div:nth-child(2) {
+    opacity: 1;
+    animation-name: login-card-1-fade-opening;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-in;
 }
 
 @keyframes login-card-2-animation-opening {
@@ -128,4 +156,9 @@ div.login-deco-folder.opened {
 }
 .patt-holder ul.patt-wrap, div#alarm_pattern.patt-holder ul.patt-wrap {
     margin: 0px;
+}
+#patt-spinner {
+    width: 0;
+    overflow: visible;
+    height: 80%;
 }

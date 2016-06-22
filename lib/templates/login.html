@@ -10,21 +10,50 @@
 {{#extend "js"}}
   app.controller("LoginControls", function($scope, $http, $window) {
     $scope.opened = false;
-    $scope.querying = false;
     $scope.login = {
-      pattern: ""
+      pattern: "",
+      processing: false,
+      password: null
     };
 
     $scope.toggleOpener = function() {
       $scope.opened = !$scope.opened;
+      if ($scope.opened) {
+        setTimeout(() => {
+          // 2 times, because it's needed. I don't jnow why...
+          $('#login-password-container input').focus();
+          $('#login-password-container input').focus();
+        }, 1000);
+      } else {
+        $('#login-password-container input').val('');
+      }
     };
 
     var lock = new PatternLock('#patternHolder',{matrix:[3,3], onDraw: function(pattern) {
-      $scope.querying = true;
       $scope.login.pattern = pattern;
+// TODO: reset du pattern pour qu'il s'efface de l'ecran
+      //$scope.$apply();
+      $scope.logNow();
       $scope.$apply();
-      //$scope.logNow(); // TODO
     }});
+
+    $scope.logNow = function() {
+      $scope.login.password = $('#login-password-container input').val();
+      if ($scope.opened && $scope.login.password === '') {
+// TODO: error, password must be filled!
+        // 2 times, because it's needed. I don't jnow why...
+        $('#login-password-container input').focus();
+        $('#login-password-container input').focus();
+        return;
+      }
+
+      $scope.login.processing = true;
+      if ($scope.opened) {
+// TODO: tenter de s'authentifier avec password, et si success, alors loguer puis stocker le password encrypté par le pattern
+      } else {
+// TODO: decrypter le password grace au pattern $scope.login.pattern puis s'authentifier avec. Traiter les retours err et success.
+      }
+    };
   });
 {{/extend}}
 
@@ -39,7 +68,7 @@
                 </md-button>
             </div>
             <div flex layout="column" layout-align="end center" layout-margin>
-                <md-input-container md-no-float class="md-block">
+                <md-input-container class="md-block md-accent" id="login-password-container">
                     <label>Myfox password</label>
                     <input ng-model="myfox.password" type="password">
                 </md-input-container>
@@ -65,6 +94,9 @@
     <md-card id="login-card-2" md-whiteframe="17" ng-class="{ 'opened': (opened) }"
              md-colors="{background: '{{md-primary}}-100'}"
              layout="row" layout-align="center center">
+        <div id="patt-spinner" layout="row" layout-align="center center">
+            <md-progress-circular ng-disabled="!login.processing" ng-show="login.processing" class="md-hue-2" md-diameter="310"></md-progress-circular>
+        </div>
         <div id="patternHolder" layout="row" layout-align="center"> </div>
     </md-card>
 </div>
