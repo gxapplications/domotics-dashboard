@@ -9,7 +9,7 @@
 
 {{#extend "js"}}
   app.controller("LoginControls", function($scope, $http, $window) {
-    $scope.opened = false;
+    $scope.opened = {{auto-open-password}};
     $scope.login = {
       pattern: "",
       processing: false,
@@ -25,34 +25,66 @@
           $('#login-password-container input').focus();
         }, 1000);
       } else {
-        $('#login-password-container input').val('');
+        $scope.login.password = null;
+        $scope.$apply();
       }
     };
 
     var lock = new PatternLock('#patternHolder',{matrix:[3,3], onDraw: function(pattern) {
       $scope.login.pattern = pattern;
-// TODO: reset du pattern pour qu'il s'efface de l'ecran
-      //$scope.$apply();
       $scope.logNow();
-      $scope.$apply();
     }});
 
     $scope.logNow = function() {
-      $scope.login.password = $('#login-password-container input').val();
-      if ($scope.opened && $scope.login.password === '') {
-// TODO: error, password must be filled!
+      if ($scope.opened && (!$scope.login.password || $scope.login.password === '')) {
+        $scope.login.processing = false;
+        lock.reset();
+// TODO: error, password must be filled! -> input en rouge ? message ?
         // 2 times, because it's needed. I don't jnow why...
         $('#login-password-container input').focus();
         $('#login-password-container input').focus();
+        $scope.$apply();
         return;
       }
 
       $scope.login.processing = true;
-      if ($scope.opened) {
-// TODO: tenter de s'authentifier avec password, et si success, alors loguer puis stocker le password encrypté par le pattern
-      } else {
-// TODO: decrypter le password grace au pattern $scope.login.pattern puis s'authentifier avec. Traiter les retours err et success.
-      }
+      $scope.$apply();
+      $.post('/', $scope.login)
+        .done((data, a2, a3) => {
+          $scope.login.processing = false;
+          lock.reset();
+console.log(data, a2, a3);
+// TODO: reload de page avec location dans data
+          $scope.$apply();
+        })
+        .fail((data) => {
+          $scope.login.processing = false;
+          switch (data.status) {
+            case 401:
+              // pattern wrong, cannot decrypt password
+              lock.error();
+              // TODO: message ?
+              break;
+            case 403:
+              // password rejected by myfox
+              lock.reset();
+              // TODO: ouverture encart si necessaire, input en rouge ? message ?
+              break;
+            case 404:
+              // no password found server side. Must fill a password and a new pattern
+              lock.reset();
+              // TODO: ouverture encart, message ?
+            case 412:
+              // password and pattern must be filled.
+              lock.error();
+              // TODO: input en rouge ? message ?
+              break;
+            default:
+              // unexpected error
+              // TODO: message unknown error
+          }
+          $scope.$apply();
+        });
     };
   });
 {{/extend}}
@@ -70,13 +102,20 @@
             <div flex layout="column" layout-align="end center" layout-margin>
                 <md-input-container class="md-block md-accent" id="login-password-container">
                     <label>Myfox password</label>
-                    <input ng-model="myfox.password" type="password">
+                    <input ng-model="login.password" type="password" required minlength="1" md-no-asterisk>
+                    <div ng-messages="login.password.$error" multiple md-auto-hide="false">
+                        <div ng-message-exp="['required', 'minlength']">
+                            REQUIRED
+                        </div>
+                        <div ng-message="rejected">
+                            REJECTED
+                        </div>
+                    </div>
                 </md-input-container>
                 <p>
                     Enter the Myfox account information,
                     then draw a pattern to save.
                 </p>
-                < spinner >
             </div>
         </md-card>
     </div>

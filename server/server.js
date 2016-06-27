@@ -58,8 +58,23 @@ server.route({
   method: 'GET',
   path: '/',
   handler: function (request, reply) {
-    reply.view('login', {'md-primary': 'teal'})
+    reply.view('login', {'md-primary': 'teal', 'auto-open-password': true}) // TODO: si aucun password en DB, alors true... sinon false
   }
+})
+server.route({
+    method: 'POST',
+    path: '/',
+    handler: function (request, reply) {
+        console.log(request.payload)
+        // 401: pattern seul, mais mauvaise decryption : pattern faux
+        // 403: password rejected by myfox
+        // 404: password non sauve cote serveur, doit en poster un nouveau
+        // 412: password and pattern must be filled
+        reply({}).code(401)
+        // TODO: recup du pattern, ou password + pattern
+        // SI password + pattern: appeler myfox, /home, si KO, rejet sans mémo des password et pattern. Si OK alors mémo password crypté par le pattern en DB, et info du /home en session.
+        // SI pattern: decrypter password avec pattern, appeler myfox, /home, si KO, rejet. Si OK alors mémo info du /home en session.
+    }
 })
 
 // Other pages: named pages
