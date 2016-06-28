@@ -8,6 +8,10 @@ body.ng-scope > div {
     background-color: rgba(0, 9, 8, .7);
 }
 
+md-toast.md-errorToast-theme .md-toast-content {
+    background-color: #B71C1C;
+}
+
 /* Loading animation */
 .loading.board {
     position: absolute;

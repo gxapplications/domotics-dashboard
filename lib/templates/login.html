@@ -8,7 +8,7 @@
 {{/extend}}
 
 {{#extend "js"}}
-  app.controller("LoginControls", function($scope, $http, $window) {
+  app.controller("LoginControls", function($scope, $http, $window, $mdToast) {
     $scope.opened = {{auto-open-password}};
     $scope.login = {
       pattern: "",
@@ -30,6 +30,16 @@
       }
     };
 
+    $scope.showToast = function(text, theme) {
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent(text)
+          .hideDelay(4000)
+          .position('bottom right')
+          .theme(theme || 'default')
+      );
+    };
+
     var lock = new PatternLock('#patternHolder',{matrix:[3,3], onDraw: function(pattern) {
       $scope.login.pattern = pattern;
       $scope.logNow();
@@ -39,7 +49,7 @@
       if ($scope.opened && (!$scope.login.password || $scope.login.password === '')) {
         $scope.login.processing = false;
         lock.reset();
-// TODO: error, password must be filled! -> input en rouge ? message ?
+        $scope.showToast('Password must be filled!', 'errorToast');
         // 2 times, because it's needed. I don't jnow why...
         $('#login-password-container input').focus();
         $('#login-password-container input').focus();
@@ -63,25 +73,31 @@ console.log(data, a2, a3);
             case 401:
               // pattern wrong, cannot decrypt password
               lock.error();
-              // TODO: message ?
+              $scope.showToast('Pattern seems to be wrong!', 'errorToast');
               break;
             case 403:
               // password rejected by myfox
               lock.reset();
-              // TODO: ouverture encart si necessaire, input en rouge ? message ?
+              if (!$scope.opened) {
+                $scope.toggleOpener();
+              }
+              $scope.showToast('Password has been rejected by Myfox!', 'errorToast');
               break;
             case 404:
               // no password found server side. Must fill a password and a new pattern
               lock.reset();
-              // TODO: ouverture encart, message ?
+              if (!$scope.opened) {
+                $scope.toggleOpener();
+              }
+              $scope.showToast('You must indicate your Myfox password and save it with a pattern.');
             case 412:
               // password and pattern must be filled.
               lock.error();
-              // TODO: input en rouge ? message ?
+              $scope.showToast('Password must be filled!', 'errorToast');
               break;
             default:
               // unexpected error
-              // TODO: message unknown error
+              $scope.showToast('Unexpected error :(', 'errorToast');
           }
           $scope.$apply();
         });
@@ -102,15 +118,7 @@ console.log(data, a2, a3);
             <div flex layout="column" layout-align="end center" layout-margin>
                 <md-input-container class="md-block md-accent" id="login-password-container">
                     <label>Myfox password</label>
-                    <input ng-model="login.password" type="password" required minlength="1" md-no-asterisk>
-                    <div ng-messages="login.password.$error" multiple md-auto-hide="false">
-                        <div ng-message-exp="['required', 'minlength']">
-                            REQUIRED
-                        </div>
-                        <div ng-message="rejected">
-                            REJECTED
-                        </div>
-                    </div>
+                    <input ng-model="login.password" type="password" name="password" required md-no-asterisk>
                 </md-input-container>
                 <p>
                     Enter the Myfox account information,

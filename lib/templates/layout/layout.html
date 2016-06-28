@@ -62,6 +62,12 @@
           })
           .backgroundPalette('grey', {'default': '900'})
           .dark();
+        $mdThemingProvider.theme('errorToast')
+                  .primaryPalette('red')
+                  .warnPalette('orange')
+                  .accentPalette('yellow')
+                  .backgroundPalette('red', {'default': '900'})
+                  .dark();
         app.controllerProvider = $controllerProvider;
 
         // Do not encode POST data in Angular JSON format, but use jquery POST parameters format (query string)
