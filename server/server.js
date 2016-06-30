@@ -12,6 +12,9 @@ import Path from 'path'
 import myfoxWrapperApi from 'myfox-wrapper-api'
 import db from './db'
 
+// Stateful instance
+let api = null
+
 const server = new Hapi.Server()
 server.connection({
   port: config.get('server.port')
@@ -74,21 +77,37 @@ server.route({
 
         const pattern = request.payload.pattern || null
         const password = request.payload.password || null
+        const options = {'apiStrategy': 'htmlOnly', 'myfoxSiteIds': config.get('server.myfox.myfoxSiteIds')}
+
+        const encryptPassword = () => {
+            // TODO: encrypt password with pattern and save it to DB.
+        }
+        const afterHomeCalled = (callback = null) => {
+            return (err, data) => {
+                if (err) {
+                    return reply(err).code(403) //FIXME: can also be another error (parsing of /home ? ...)
+                }
+                if (callback) {
+                    callback()
+                }
+                // Login successful, store /home result, then reply with new location.
+                // TODO : store /home data, maybe elsewhere!
+            }
+        }
 
         if (pattern && password) {
-            // Save the new password encrypted with pattern, and use it to login.
-
-            // TODO : appeler myfox sur /home (error 403 si fail, sans mémo des password et pattern). Si OK alors mémo password crypté par le pattern en DB. Pas de return! on continue plus loin
+            // Save the new password encrypted with pattern, once tested on Myfox service.
+            api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
+            api.callHome(afterHomeCalled(encryptPassword))
         } else if (pattern) {
             // Decrypt password from pattern, and use it to login.
+            // TODO : decrypter password avec pattern (error 401 si mauvais pattern, ou 404 si pas de donnee cryptee en db).
 
-            // TODO : decrypter password avec pattern (error 401 si mauvais pattern, ou 404 si pas de donnee cryptee en db), appeler myfox sur /home (error 403 si fail). Pas de return! on continue plus loin
+            api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
+            api.callHome(afterHomeCalled())
         } else {
             return reply({}).code(412) // Malformed request: stops here
         }
-
-        // Login successful, store /home result, then reply with new location.
-        // TODO : apres success du login, alors mémo info du /home en session, puis retour avec 'location' pour indiquer vers quelle url reloader.
     }
 })
 
@@ -100,10 +119,6 @@ server.route({
         reply.view('page', { path: path })
     }
 })
-
-
-
-// let api = myfoxWrapperApi({'apiStrategy': 'htmlOnly', 'myfoxSiteIds': [4567]})
 
 // exports
 export default server

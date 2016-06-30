@@ -1,5 +1,9 @@
 {
   "server": {
-    "port": 3000
+    "port": 3000,
+    "myfox": {
+      "username": "",
+      "myfoxSiteIds": [] // To be overiden in your local settings with a list of your Myfox siteIds
+    }
   }
 }
