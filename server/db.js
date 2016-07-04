@@ -25,7 +25,7 @@ if (!exists) {
 db.storePassword = function(password) {
   db.serialize(() => {
     db.run("DELETE from accounts")
-    db.run("INSERT INTO accounts VALUES (?)", password)
+    db.run("INSERT INTO accounts (password) VALUES (?)", password)
   })
 }
 

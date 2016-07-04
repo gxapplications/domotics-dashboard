@@ -63,7 +63,10 @@ server.route({
   method: 'GET',
   path: '/',
   handler: function (request, reply) {
-    reply.view('login', {'md-primary': 'teal', 'auto-open-password': !db.getPassword()})
+    db.getPassword((err, row) => {
+      const opened = (err || !row || !row.password)
+      reply.view('login', {'md-primary': 'teal', 'auto-open-password': opened})
+    })
   }
 })
 server.route({
@@ -81,7 +84,7 @@ server.route({
     const options = {'apiStrategy': 'htmlOnly', 'myfoxSiteIds': config.get('server.myfox.myfoxSiteIds')}
 
     const encryptPassword = () => {
-      let cryptedPassword = CryptoJS.AES.encrypt(password, 'azerty' + pattern)
+      let cryptedPassword = CryptoJS.AES.encrypt(password, 'azerty' + pattern).toString()
       db.storePassword(cryptedPassword)
     }
     const afterHomeCalled = (errNbr, callback = null) => {
@@ -94,7 +97,7 @@ server.route({
         }
         // Login successful, store /home result, then reply with new location.
         // TODO !0: store /home data, maybe elsewhere!
-        // TODO !2: send location URL with default siteId
+        // TODO !2: send location URL with default page to see
       }
     }
 
@@ -113,8 +116,11 @@ server.route({
           if (!cryptedPassword) {
             return reply({}).code(404)
           }
-          let passwordBytes  = CryptoJS.AES.decrypt(cryptedPassword.toString(), 'azerty' + pattern)
+          let passwordBytes  = CryptoJS.AES.decrypt(cryptedPassword, 'azerty' + pattern)
           password = passwordBytes.toString(CryptoJS.enc.Utf8)
+          if (!password) {
+            return reply(err).code(401)
+          }
           api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
           api.callHome(afterHomeCalled(401))
         })
