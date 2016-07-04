@@ -17,9 +17,20 @@ const db = new sql.Database(file)
 
 // Script to init a new database
 if (!exists) {
-  db.serialize(function() {
-    db.run("CREATE TABLE Accounts (thing TEXT)");
-  });
+  db.serialize(() => {
+    db.run("CREATE TABLE accounts (password TEXT)")
+  })
+}
+
+db.storePassword = function(password) {
+  db.serialize(() => {
+    db.run("DELETE from accounts")
+    db.run("INSERT INTO accounts VALUES (?)", password)
+  })
+}
+
+db.getPassword = function(callback) {
+  db.get("SELECT password FROM accounts LIMIT 1", callback)
 }
 
 // exports

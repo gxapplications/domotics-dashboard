@@ -8,6 +8,7 @@ import ExtendBlock from 'handlebars-extend-block'
 import Hoek from 'hoek'
 import Inert from 'inert'
 import Path from 'path'
+import CryptoJS from 'crypto-js'
 
 import myfoxWrapperApi from 'myfox-wrapper-api'
 import db from './db'
@@ -62,53 +63,68 @@ server.route({
   method: 'GET',
   path: '/',
   handler: function (request, reply) {
-    reply.view('login', {'md-primary': 'teal', 'auto-open-password': true}) // TODO: si aucun password en DB, alors true... sinon false
+    reply.view('login', {'md-primary': 'teal', 'auto-open-password': !db.getPassword()})
   }
 })
 server.route({
-    method: 'POST',
-    path: '/',
-    handler: function (request, reply) {
-        // Error codes to send:
-        // 401: pattern is given to decrypt password from DB but seems to be wrong.
-        // 403: password rejected by myfox.
-        // 404: password not stored server side. Must post password & pattern to save.
-        // 412: password and pattern must be filled.
+  method: 'POST',
+  path: '/',
+  handler: function (request, reply) {
+    // Error codes to send:
+    // 401: pattern is given to decrypt password from DB but seems to be wrong.
+    // 403: password rejected by myfox.
+    // 404: password not stored server side. Must post password & pattern to save.
+    // 412: password and pattern must be filled.
 
-        const pattern = request.payload.pattern || null
-        const password = request.payload.password || null
-        const options = {'apiStrategy': 'htmlOnly', 'myfoxSiteIds': config.get('server.myfox.myfoxSiteIds')}
+    const pattern = request.payload.pattern || null
+    let password = request.payload.password || null
+    const options = {'apiStrategy': 'htmlOnly', 'myfoxSiteIds': config.get('server.myfox.myfoxSiteIds')}
 
-        const encryptPassword = () => {
-            // TODO: encrypt password with pattern and save it to DB.
-        }
-        const afterHomeCalled = (callback = null) => {
-            return (err, data) => {
-                if (err) {
-                    return reply(err).code(403) //FIXME: can also be another error (parsing of /home ? ...)
-                }
-                if (callback) {
-                    callback()
-                }
-                // Login successful, store /home result, then reply with new location.
-                // TODO : store /home data, maybe elsewhere!
-            }
-        }
-
-        if (pattern && password) {
-            // Save the new password encrypted with pattern, once tested on Myfox service.
-            api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
-            api.callHome(afterHomeCalled(encryptPassword))
-        } else if (pattern) {
-            // Decrypt password from pattern, and use it to login.
-            // TODO : decrypter password avec pattern (error 401 si mauvais pattern, ou 404 si pas de donnee cryptee en db).
-
-            api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
-            api.callHome(afterHomeCalled())
-        } else {
-            return reply({}).code(412) // Malformed request: stops here
-        }
+    const encryptPassword = () => {
+      let cryptedPassword = CryptoJS.AES.encrypt(password, 'azerty' + pattern)
+      db.storePassword(cryptedPassword)
     }
+    const afterHomeCalled = (errNbr, callback = null) => {
+      return (err, data) => {
+        if (err) {
+          return reply(err).code(errNbr) //FIXME !1: can also be another error (parsing of /home ? ...)
+        }
+        if (callback) {
+          callback()
+        }
+        // Login successful, store /home result, then reply with new location.
+        // TODO !0: store /home data, maybe elsewhere!
+        // TODO !2: send location URL with default siteId
+      }
+    }
+
+    if (pattern && password) {
+      // Save the new password encrypted with pattern, once tested on Myfox service.
+      api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
+      api.callHome(afterHomeCalled(403, encryptPassword))
+    } else if (pattern) {
+      // Decrypt password from pattern, and use it to login.
+      try {
+        db.getPassword((err, row) => {
+          if (err) {
+            throw err
+          }
+          let cryptedPassword = row.password
+          if (!cryptedPassword) {
+            return reply({}).code(404)
+          }
+          let passwordBytes  = CryptoJS.AES.decrypt(cryptedPassword.toString(), 'azerty' + pattern)
+          password = passwordBytes.toString(CryptoJS.enc.Utf8)
+          api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
+          api.callHome(afterHomeCalled(401))
+        })
+      } catch (err) {
+        return reply(err).code(401)
+      }
+    } else {
+      return reply({}).code(412) // Malformed request: stops here
+    }
+  }
 })
 
 // Other pages: named pages
