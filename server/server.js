@@ -12,6 +12,7 @@ import CryptoJS from 'crypto-js'
 
 import myfoxWrapperApi from 'myfox-wrapper-api'
 import db from './db'
+import context from '../lib/middlewares/context'
 
 // Stateful instance
 let api = null
@@ -58,6 +59,11 @@ server.register(Inert, (err) => {
   })
 })
 
+// Context middleware
+server.register(context, err => {
+  Hoek.assert(!err, err)
+})
+
 // Login page
 server.route({
   method: 'GET',
@@ -96,8 +102,12 @@ server.route({
           callback()
         }
         // Login successful, store /home result, then reply with new location.
-        // TODO !0: store /home data, maybe elsewhere!
-        // TODO !2: send location URL with default page to see
+        request.context.subscribeToApiEvents(api)
+        request.context.updateMany(data)
+        // TODO !0: send location URL with default page to see
+          // TODO: DB: table pages, avec url (slug) et date dernier accès, et champ  pour la config des composants de la page, name, ...
+          // TODO: aller chercher la page visitée la plus recemment, et retourner l'url.
+          // TODO: si aucune page, creer la page "default"
       }
     }
 
@@ -138,7 +148,7 @@ server.route({
     method: 'GET',
     path: '/{path*}',
     handler: function (request, reply) {
-        reply.view('page', { path: path })
+        reply.view('page', { path: path, context: request.context })
     }
 })
 

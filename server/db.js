@@ -19,6 +19,7 @@ const db = new sql.Database(file)
 if (!exists) {
   db.serialize(() => {
     db.run("CREATE TABLE accounts (password TEXT)")
+    db.run("CREATE TABLE pages (slug TEXT, name TEXT, last_access INTEGER)")
   })
 }
 

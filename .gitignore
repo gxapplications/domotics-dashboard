@@ -4,7 +4,9 @@ npm-debug.log
 /config/local*
 /node_modules
 /doc
+
 /var/*
+!/var/.gitkeep
 
 .idea
 .DS_Store
