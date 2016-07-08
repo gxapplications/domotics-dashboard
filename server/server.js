@@ -57,6 +57,13 @@ server.register(Inert, (err) => {
       }
     }
   })
+  server.route({
+    method: 'GET',
+    path: '/favicon.ico',
+    handler: {
+      file: Path.join(__dirname, '..', 'public', 'images', 'home.png')
+    }
+  })
 })
 
 // Context middleware
@@ -104,10 +111,12 @@ server.route({
         // Login successful, store /home result, then reply with new location.
         request.context.subscribeToApiEvents(api)
         request.context.updateMany(data)
-        // TODO !0: send location URL with default page to see
-          // TODO: DB: table pages, avec url (slug) et date dernier accès, et champ  pour la config des composants de la page, name, ...
-          // TODO: aller chercher la page visitée la plus recemment, et retourner l'url.
-          // TODO: si aucune page, creer la page "default"
+        db.getLastAccessedPageSlug((err, slug) => {
+          if (err) {
+              return reply(err).code(500)
+          }
+          reply({rdt: server.info.uri + '/' + slug})
+        }, true)
       }
     }
 
@@ -145,11 +154,21 @@ server.route({
 
 // Other pages: named pages
 server.route({
-    method: 'GET',
-    path: '/{path*}',
-    handler: function (request, reply) {
-        reply.view('page', { path: path, context: request.context })
+  method: 'GET',
+  path: '/{slug*}',
+  handler: function (request, reply) {
+    if (!request.context.api) {
+        return reply.redirect('/') // User is not connected yet!
     }
+    db.getPageBySlug(request.params.slug, (err, page) => {
+      Hoek.assert(!err, err)
+      if (!page) {
+          return reply.redirect('/') // FIXME: or maybe 404 error?
+      }
+      reply.view('page', {'page': page, 'md-primary': 'teal', 'context': request.context})
+      console.log("=========", request.context, page)
+    })
+  }
 })
 
 // exports

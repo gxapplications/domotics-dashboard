@@ -63,9 +63,8 @@
         .done((data, a2, a3) => {
           $scope.login.processing = false;
           lock.reset();
-console.log(data, a2, a3);
-// TODO !2: reload de page avec location dans data
           $scope.$apply();
+          $window.location.href = data.rdt;
         })
         .fail((data) => {
           $scope.login.processing = false;

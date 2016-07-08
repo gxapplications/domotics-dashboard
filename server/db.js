@@ -34,5 +34,36 @@ db.getPassword = function(callback) {
   db.get("SELECT password FROM accounts LIMIT 1", callback)
 }
 
+db.getLastAccessedPageSlug = function(callback, createIfNotFound = false) {
+  db.get("SELECT slug FROM pages ORDER BY last_access DESC LIMIT 1", (err, row) => {
+    if (err) {
+      return callback(err)
+    }
+    if (!row && createIfNotFound) {
+      const now = (new Date()).getTime()
+      db.run("INSERT INTO pages (slug, name, last_access) VALUES (\"default\", \"Default Home\", " + now + ")", (err) => {
+        return callback(err, 'default')
+      })
+    } else {
+      if (row) {
+        return callback(null, row.slug)
+      }
+      callback(null, null)
+    }
+  })
+  // No last_access update here
+}
+
+db.getPageBySlug = function(slug, callback) {
+    db.get("SELECT * FROM pages WHERE slug=? LIMIT 1", slug, (err, row) => {
+        if (err) {
+            return callback(err)
+        }
+        // TODO !0: update page with last_access to NOW
+        return callback(null, row)
+    })
+    // No last_access update here
+}
+
 // exports
 export default db
