@@ -3,7 +3,18 @@
     "port": 3000,
     "myfox": {
       "username": "",
-      "myfoxSiteIds": [] // To be overiden in your local settings with a list of your Myfox siteIds
+      "myfoxSiteIds": [], // To be overiden in your local settings with a list of your Myfox siteIds
+      "data-refresher": {
+        "status": "callHome",
+        "alarm": "callHome",
+        "scenarii": "callHome",
+        "data": "callHome",
+        "heat": "callHome",
+        "domotic": null
+      },
+      "refresher-validity": {
+        "callHome": 3600
+      }
     }
   }
 }

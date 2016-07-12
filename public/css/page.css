@@ -1,0 +1,10 @@
+.hidden {
+    display: none;
+}
+
+.page-controller {
+    overflow: hidden;
+}
+.page-toolbar-static {
+    z-index: 3;
+}

@@ -41,7 +41,7 @@ db.getLastAccessedPageSlug = function(callback, createIfNotFound = false) {
     }
     if (!row && createIfNotFound) {
       const now = (new Date()).getTime()
-      db.run("INSERT INTO pages (slug, name, last_access) VALUES (\"default\", \"Default Home\", " + now + ")", (err) => {
+      db.run("INSERT INTO pages (slug, name, last_access) VALUES (\"default\", \"Default Home\", ?)", now, (err) => {
         return callback(err, 'default')
       })
     } else {
@@ -59,10 +59,11 @@ db.getPageBySlug = function(slug, callback) {
         if (err) {
             return callback(err)
         }
-        // TODO !0: update page with last_access to NOW
-        return callback(null, row)
+        const now = (new Date()).getTime()
+        db.run("UPDATE pages SET last_access=? WHERE slug=?", now, slug, (err) => {
+            return callback(err, row)
+        })
     })
-    // No last_access update here
 }
 
 // exports

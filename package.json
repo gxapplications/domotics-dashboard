@@ -86,6 +86,7 @@
     "jquery": "^3.0.0",
     "jquery-ui": "^1.10.5",
     "myfox-wrapper-api": "git://github.com/gxapplications/myfox-wrapper-api.git",
+    "nes": "^6.2.1",
     "path": "^0.12.7",
     "sqlite3": "^3.1.4",
     "vision": "^4.1.0"

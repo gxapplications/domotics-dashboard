@@ -110,7 +110,7 @@ server.route({
         }
         // Login successful, store /home result, then reply with new location.
         request.context.subscribeToApiEvents(api)
-        request.context.updateMany(data)
+        request.context.updateManyStates(data)
         db.getLastAccessedPageSlug((err, slug) => {
           if (err) {
               return reply(err).code(500)
@@ -163,10 +163,10 @@ server.route({
     db.getPageBySlug(request.params.slug, (err, page) => {
       Hoek.assert(!err, err)
       if (!page) {
-          return reply.redirect('/') // FIXME: or maybe 404 error?
+          return reply.redirect('/') // FIXME !1: or maybe 404 error?
       }
       reply.view('page', {'page': page, 'md-primary': 'teal', 'context': request.context})
-      console.log("=========", request.context, page)
+      //console.log("=========", request.context.states, page)
     })
   }
 })
