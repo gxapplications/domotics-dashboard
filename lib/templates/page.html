@@ -6,51 +6,40 @@
   <link rel="stylesheet" href="/assets/css/page.css">
 {{/extend}}
 
-{{#extend "js"}}
-  app.controller("PageControls", function($scope, $http, $window, $mdToast) {
-    // TODO: placer la var context dans $scope.context, en utilisant un 'toJson'?
-    // TODO: register here with a socket, and listen to update $scope.context :)
-$scope.shrinkable = true
-$scope.todos = [];
-for (var i = 0; i < 26; i++) {
-$scope.todos.push({
-what: "Brunch this weekend?",
-who: "Min Li Chan",
-notes: "I'll be in your neighborhood doing errands."
-});
-}
-
-  });
+{{#extend "scripts"}}
+  <script src="/assets/js/page.js"></script>
 {{/extend}}
 
-<div layout="column" flex ng-controller="PageControls" class="page-controller">
+<div layout="column" flex ng-controller="PageControls" class="page-controller"  ng-class="{'editing': (edition.active)}">
     <md-toolbar md-scroll-shrink ng-if="true"
-                class="md-whiteframe-6dp page-toolbar-static" ng-class="{'hidden': (shrinkable)}">
+                class="md-whiteframe-6dp page-toolbar-static" ng-class="{'hidden': (!edition.active)}">
         <div class="md-toolbar-tools">
             <h3>
                 <span>EDITING MODE</span>
             </h3>
+            <span flex></span>
+            <md-button class="md-fab md-warn" aria-label="Close edit mode" ng-click="edition.close()">
+                <img src="/assets/images/android_core_holodark/ic_action_edit.png" />
+            </md-button>
         </div>
     </md-toolbar>
 
-    <div layout="column" flex style="z-index: 2;">
+    <div layout="column" flex class="page-toolbar-shrinker">
         <md-toolbar md-scroll-shrink ng-if="true"
-                    class="md-whiteframe-6dp" ng-class="{'hidden': (!shrinkable)}">
+                    class="md-whiteframe-6dp" ng-class="{'hidden': (edition.active)}">
             <div class="md-toolbar-tools">
                 <h3>
                     <span>TITRE</span>
                 </h3>
+                <span flex></span>
+                <md-button class="md-fab" aria-label="Open edit mode" ng-click="edition.open()">
+                    <img src="/assets/images/android_core_holodark/ic_action_edit.png" />
+                </md-button>
             </div>
         </md-toolbar>
 
-        <md-content flex class="md-whiteframe-18dp" style="left: 10%; width: 80%; right: 10%;">
-            <md-list style="zoom: 80%">
-                <md-list-item class="md-3-line">
-                    <md-switch ng-model="shrinkable" aria-label="Switch 1">
-                        Switch
-                    </md-switch>
-                    <md-divider inset></md-divider>
-                </md-list-item>
+        <md-content flex class="md-whiteframe-18dp page-content">
+            <div>
                 <md-list-item class="md-3-line" ng-repeat="item in todos">
                     <div class="md-list-item-text">
                         <h3>{{item.what}}</h3>
@@ -61,11 +50,11 @@ notes: "I'll be in your neighborhood doing errands."
                     </div>
                     <md-divider inset></md-divider>
                 </md-list-item>
-            </md-list>
+            </div>
         </md-content>
     </div>
 
-    <div layout="row" flex style="position: fixed;top: 0;left: 0; right: 0; bottom: 0; z-index: 1;">
+    <div layout="row" flex class="page-editors">
         <div  layout="column" layout-align="left center" style="background: red;">
             aaaaaa
         </div>

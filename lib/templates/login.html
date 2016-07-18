@@ -7,6 +7,10 @@
   <link rel="stylesheet" href="/assets/css/login.css">
 {{/extend}}
 
+{{#extend "scripts"}}
+  <script src="/assets/js/patternLock.min.js"></script>
+{{/extend}}
+
 {{#extend "js"}}
   app.controller("LoginControls", function($scope, $http, $window, $mdToast) {
     $scope.opened = {{auto-open-password}};

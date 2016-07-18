@@ -163,7 +163,7 @@ server.route({
     db.getPageBySlug(request.params.slug, (err, page) => {
       Hoek.assert(!err, err)
       if (!page) {
-          return reply.redirect('/') // FIXME !1: or maybe 404 error?
+          return reply.redirect('/')
       }
       reply.view('page', {'page': page, 'md-primary': 'teal', 'context': request.context})
       //console.log("=========", request.context.states, page)
