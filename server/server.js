@@ -103,7 +103,7 @@ server.route({
     const afterHomeCalled = (errNbr, callback = null) => {
       return (err, data) => {
         if (err) {
-          return reply(err).code(errNbr) //FIXME !1: can also be another error (parsing of /home ? ...)
+          return reply(err.toString()).code(errNbr)
         }
         if (callback) {
           callback()
@@ -113,7 +113,7 @@ server.route({
         request.context.updateManyStates(data)
         db.getLastAccessedPageSlug((err, slug) => {
           if (err) {
-              return reply(err).code(500)
+            return reply(err.toString()).code(500)
           }
           reply({rdt: server.info.uri + '/' + slug})
         }, true)
@@ -138,13 +138,13 @@ server.route({
           let passwordBytes  = CryptoJS.AES.decrypt(cryptedPassword, 'azerty' + pattern)
           password = passwordBytes.toString(CryptoJS.enc.Utf8)
           if (!password) {
-            return reply(err).code(401)
+            return reply(err.toString()).code(401)
           }
           api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
           api.callHome(afterHomeCalled(401))
         })
       } catch (err) {
-        return reply(err).code(401)
+        return reply(err.toString()).code(401)
       }
     } else {
       return reply({}).code(412) // Malformed request: stops here
@@ -158,15 +158,14 @@ server.route({
   path: '/{slug*}',
   handler: function (request, reply) {
     if (!request.context.api) {
-        return reply.redirect('/') // User is not connected yet!
+      return reply.redirect('/') // User is not connected yet!
     }
     db.getPageBySlug(request.params.slug, (err, page) => {
       Hoek.assert(!err, err)
       if (!page) {
-          return reply.redirect('/')
+        return reply.redirect('/')
       }
-      reply.view('page', {'page': page, 'md-primary': 'teal', 'context': request.context})
-      //console.log("=========", request.context.states, page)
+      reply.view('page', {'page': page, 'md-primary': 'teal', 'states': request.context.states})
     })
   }
 })

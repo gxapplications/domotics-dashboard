@@ -19,7 +19,7 @@ const db = new sql.Database(file)
 if (!exists) {
   db.serialize(() => {
     db.run("CREATE TABLE accounts (password TEXT)")
-    db.run("CREATE TABLE pages (slug TEXT, name TEXT, last_access INTEGER)")
+    db.run("CREATE TABLE pages (slug TEXT, name TEXT, last_access INTEGER, positions TEXT, layout INTEGER)")
   })
 }
 
@@ -41,7 +41,7 @@ db.getLastAccessedPageSlug = function(callback, createIfNotFound = false) {
     }
     if (!row && createIfNotFound) {
       const now = (new Date()).getTime()
-      db.run("INSERT INTO pages (slug, name, last_access) VALUES (\"default\", \"Default Home\", ?)", now, (err) => {
+      db.run("INSERT INTO pages (slug, name, last_access, positions, layout) VALUES (\"default\", \"Default Home\", ?, \"[]\", 4)", now, (err) => {
         return callback(err, 'default')
       })
     } else {

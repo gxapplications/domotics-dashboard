@@ -39,6 +39,8 @@ button > img {
 .page-controller .page-content > div {
     transform-origin: top;
     background: rgb(33,33,33);
+    width: 100%;
+    height: 100%;
 }
 .page-controller.editing .page-content > div {
     animation-name: page-content-div-closing;

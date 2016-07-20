@@ -1,1 +1,846 @@
-!function(e){function t(o){if(n[o])return n[o].exports;var s=n[o]={exports:{},id:o,loaded:!1};return e[o].call(s.exports,s,s.exports,t),s.loaded=!0,s.exports}var n={};return t.m=e,t.c=n,t.p="",t(0)}([function(e,t,n){"use strict";n(1);window.app.controller("PageControls",function(e,t,n,o){e.edition={active:!1,close:function(){e.edition.active=!1},open:function(){e.edition.active=!0}},e.shrinkable=!0,e.todos=[];for(var s=0;26>s;s++)e.todos.push({what:"Brunch this weekend?",who:"Min Li Chan",notes:"I'll be in your neighborhood doing errands."})})},function(e,t,n){var o,s;(function(e,i){"use strict";var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e};!function(e,c){"object"===r(t)&&"object"===r(i)?i.exports=c():(o=c,s="function"==typeof o?o.call(t,n,t,i):o,!(void 0!==s&&(i.exports=s)))}("undefined"!=typeof window?window:e,function(){var e="2",t=function(){},n=function(e,t){var n=null,o=null;try{n=JSON.parse(e)}catch(s){o=new i(s,"protocol")}return t(o,n)},o=function(e,t){var n=null,o=null;try{n=JSON.stringify(e)}catch(s){o=new i(s,"user")}return t(o,n)},s=function(e){return function(t){setTimeout(function(){return e(t)},0)}},i=function(e,t){return"string"==typeof e&&(e=new Error(e)),e.type=t,e},r={1e3:"Normal closure",1001:"Going away",1002:"Protocol error",1003:"Unsupported data",1004:"Reserved",1005:"No status received",1006:"Abnormal closure",1007:"Invalid frame payload data",1008:"Policy violation",1009:"Message too big",1010:"Mandatory extension",1011:"Internal server error",1015:"TLS handshake"},c=function(e,n){n=n||{},this._url=e,this._settings=n,this._heartbeatTimeout=!1,this._ws=null,this._reconnection=null,this._ids=0,this._requests={},this._subscriptions={},this._heartbeat=null,this._packets=[],this._disconnectListeners=null,this._disconnectRequested=!1,this.onError=function(e){return console.error(e)},this.onConnect=t,this.onDisconnect=t,this.onUpdate=t,this.id=null};return c.WebSocket="undefined"==typeof WebSocket?null:WebSocket,c.prototype.connect=function(e,t){return"function"==typeof e&&(t=arguments[0],e={}),this._reconnection?s(t)(new Error("Cannot connect while client attempts to reconnect")):this._ws?s(t)(new Error("Already connected")):(e.reconnect!==!1?this._reconnection={wait:0,delay:e.delay||1e3,maxDelay:e.maxDelay||5e3,retries:e.retries||1/0,settings:{auth:e.auth,timeout:e.timeout}}:this._reconnection=null,void this._connect(e,!0,t))},c.prototype._connect=function(e,t,n){var o=this,s=new c.WebSocket(this._url,this._settings.ws);this._ws=s;var u=function(e){if(n){var t=n;return n=null,t(e)}return o.onError(e)},a=function(){return o._cleanup(),u(new i("Connection timed out","timeout")),t?o._reconnect():void 0},h=e.timeout?setTimeout(a,e.timeout):null;s.onopen=function(){return clearTimeout(h),s.onopen=null,o._hello(e.auth,function(e){return e?(e.path&&delete o._subscriptions[e.path],o._disconnect(function(){return u(e)},!0)):(o.onConnect(),u())})},s.onerror=function(e){clearTimeout(h),o._cleanup();var t=new i("Socket error","ws");return u(t)},s.onclose=function(e){s.onopen&&u(new Error("Connection terminated while while to connect"));var t=o._disconnectRequested;o._cleanup();var n={code:e.code,explanation:r[e.code]||"Unknown",reason:e.reason,wasClean:e.wasClean,willReconnect:!!(o._reconnection&&o._reconnection.retries>=1),wasRequested:t};o.onDisconnect(n.willReconnect,n),o._reconnect()},s.onmessage=function(e){return o._onMessage(e)}},c.prototype.overrideReconnectionAuth=function(e){return this._reconnection?(this._reconnection.settings.auth=e,!0):!1},c.prototype.disconnect=function(e){return e=e||t,this._disconnect(e,!1)},c.prototype._disconnect=function(e,t){this._reconnection=null;var n=this._disconnectRequested||!t;return this._disconnectListeners?(this._disconnectRequested=n,void this._disconnectListeners.push(e)):!this._ws||this._ws.readyState!==c.WebSocket.OPEN&&this._ws.readyState!==c.WebSocket.CONNECTING?s(e)():(this._disconnectRequested=n,this._disconnectListeners=[e],void this._ws.close())},c.prototype._cleanup=function(){this._ws&&(this._ws.readyState!==c.WebSocket.OPEN&&this._ws.readyState!==c.WebSocket.CONNECTING||this._ws.close(),this._ws.onopen=null,this._ws.onclose=null,this._ws.onerror=t,this._ws.onmessage=null,this._ws=null),this._packets=[],this.id=null,clearTimeout(this._heartbeat),this._heartbeat=null;for(var e=new i("Request failed - server disconnected","disconnect"),n=Object.keys(this._requests),o=0;o<n.length;++o){var s=n[o],r=this._requests[s],u=r.callback;clearTimeout(r.timeout),delete this._requests[s],u(e)}if(this._disconnectListeners){var a=this._disconnectListeners;this._disconnectListeners=null,this._disconnectRequested=!1,a.forEach(function(e){return e()})}},c.prototype._reconnect=function(){var e=this;if(this._reconnection){if(this._reconnection.retries<1)return this._disconnect(t,!0);--this._reconnection.retries,this._reconnection.wait=this._reconnection.wait+this._reconnection.delay;var n=Math.min(this._reconnection.wait,this._reconnection.maxDelay);setTimeout(function(){e._reconnection&&e._connect(e._reconnection.settings,!1,function(t){return t?(e.onError(t),e._reconnect()):void 0})},n)}},c.prototype.request=function(e,t){"string"==typeof e&&(e={method:"GET",path:e});var n={type:"request",method:e.method||"GET",path:e.path,headers:e.headers,payload:e.payload};return this._send(n,!0,t)},c.prototype.message=function(e,t){var n={type:"message",message:e};return this._send(n,!0,t)},c.prototype._send=function(e,n,r){var u=this;return r=r||t,this._ws&&this._ws.readyState===c.WebSocket.OPEN?(e.id=++this._ids,void o(e,function(t,o){if(t)return s(r)(t);if(!n)try{return u._ws.send(o)}catch(t){return s(r)(new i(t,"ws"))}var c={callback:r,timeout:null};u._settings.timeout&&(c.timeout=setTimeout(function(){return c.callback=null,c.timeout=null,r(new i("Request timed out","timeout"))},u._settings.timeout)),u._requests[e.id]=c;try{u._ws.send(o)}catch(t){return clearTimeout(u._requests[e.id].timeout),delete u._requests[e.id],s(r)(new i(t,"ws"))}})):s(r)(new i("Failed to send message - server disconnected","disconnect"))},c.prototype._hello=function(t,n){var o={type:"hello",version:e};t&&(o.auth=t);var s=this.subscriptions();return s.length&&(o.subs=s),this._send(o,!0,n)},c.prototype.subscriptions=function(){return Object.keys(this._subscriptions)},c.prototype.subscribe=function(e,t,n){var o=this;if(!e||"/"!==e[0])return s(n)(new i("Invalid path","user"));var r=this._subscriptions[e];if(r)return-1===r.indexOf(t)&&r.push(t),s(n)();if(this._subscriptions[e]=[t],!this._ws||this._ws.readyState!==c.WebSocket.OPEN)return s(n)();var u={type:"sub",path:e};return this._send(u,!0,function(t){return t&&delete o._subscriptions[e],n(t)})},c.prototype.unsubscribe=function(e,t,n){if(!e||"/"!==e[0])return s(n)(new i("Invalid path","user"));var o=this._subscriptions[e];if(!o)return s(n)();var r=!1;if(t){var u=o.indexOf(t);if(-1===u)return s(n)();o.splice(u,1),o.length||(delete this._subscriptions[e],r=!0)}else delete this._subscriptions[e],r=!0;if(!r||!this._ws||this._ws.readyState!==c.WebSocket.OPEN)return s(n)();var a={type:"unsub",path:e};return this._send(a,!0,function(e){return n()})},c.prototype._onMessage=function(e){var t=this;this._beat();var o=e.data,s=o[0];if("{"!==s){if(this._packets.push(o.slice(1)),"!"!==s)return;o=this._packets.join(""),this._packets=[]}this._packets.length&&(this._packets=[],this.onError(new i("Received an incomplete message","protocol"))),n(o,function(e,n){if(e)return t.onError(e);var o=null;if(n.statusCode&&n.statusCode>=400&&n.statusCode<=599&&(o=new i(n.payload.message||n.payload.error,"server"),o.statusCode=n.statusCode,o.data=n.payload,o.headers=n.headers,o.path=n.path),"ping"===n.type)return t._send({type:"ping"},!1);if("update"===n.type)return t.onUpdate(n.message);if("pub"!==n.type&&"revoke"!==n.type){var s=t._requests[n.id];if(!s)return t.onError(new i("Received response for unknown request","protocol"));var r=s.callback;if(clearTimeout(s.timeout),delete t._requests[n.id],r)return"request"===n.type?r(o,n.payload,n.statusCode,n.headers):"message"===n.type?r(o,n.message):"hello"===n.type?(t.id=n.socket,n.heartbeat&&(t._heartbeatTimeout=n.heartbeat.interval+n.heartbeat.timeout,t._beat()),r(o)):"sub"===n.type||"unsub"===n.type?r(o):t.onError(new i("Received unknown response type: "+n.type,"protocol"))}else{var c=t._subscriptions[n.path];if("revoke"===n.type&&delete t._subscriptions[n.path],c&&void 0!==n.message){var u={};"revoke"===n.type&&(u.revoked=!0);for(var a=0;a<c.length;++a)c[a](n.message,u)}}})},c.prototype._beat=function(){var e=this;this._heartbeatTimeout&&(clearTimeout(this._heartbeat),this._heartbeat=setTimeout(function(){e.onError(new i("Disconnecting due to heartbeat timeout","timeout")),e._ws.close()},this._heartbeatTimeout))},{Client:c}})}).call(t,function(){return this}(),n(2)(e))},function(e,t){e.exports=function(e){return e.webpackPolyfill||(e.deprecate=function(){},e.paths=[],e.children=[],e.webpackPolyfill=1),e}}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _nes = __webpack_require__(1);
+
+	var _nes2 = _interopRequireDefault(_nes);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	window.app.controller("PageControls", function ($scope, $document, $http, $window, $mdToast) {
+	  $scope.states = window.initStates;
+
+	  $scope.edition = {
+	    active: false,
+	    close: function close() {
+	      $scope.edition.active = false;
+	    },
+	    open: function open() {
+	      $scope.edition.active = true;
+	    }
+	  };
+
+	  $scope.grid = {
+	    positions: window.initGridPositions,
+	    layout: window.initGridLayout,
+	    loaderUrl: null, // TODO
+	    gridStack: null,
+	    init: function init() {
+	      $scope.grid.gridStack = $('#grid').gridStack({
+	        matrix: $scope.grid.positions,
+	        onChange: function onChange(changedItems, mx) {
+	          // TODO
+	        },
+	        lanes: $scope.grid.layout,
+	        elementPrototype: 'li.position-card',
+	        elementLoaderUrl: $scope.grid.loaderUrl,
+	        draggableParams: {
+	          handle: '.handle',
+	          helper: 'original'
+	        }
+	      });
+	      console.log('INIT!');
+	    }
+	  };
+
+	  $document.ready(function () {
+	    console.log('INIT...');
+	    $($scope.grid.init());
+	  });
+
+	  // TODO !0: register here with a socket, and listen to update $scope.context :)
+	});
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
+
+	/*
+	    (hapi)nes WebSocket Client (https://github.com/hapijs/nes)
+	    Copyright (c) 2015-2016, Eran Hammer <eran@hammer.io> and other contributors
+	    BSD Licensed
+	*/
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	(function (root, factory) {
+
+	    // $lab:coverage:off$
+
+	    if (( false ? 'undefined' : _typeof(exports)) === 'object' && ( false ? 'undefined' : _typeof(module)) === 'object') {
+	        module.exports = factory(); // Export if used as a module
+	    } else if (true) {
+	            !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
+	            exports.nes = factory();
+	        } else {
+	            root.nes = factory();
+	        }
+
+	    // $lab:coverage:on$
+	})( /* $lab:coverage:off$ */typeof window !== 'undefined' ? window : global /* $lab:coverage:on$ */, function () {
+
+	    // Utilities
+
+	    var version = '2';
+	    var ignore = function ignore() {};
+
+	    var parse = function parse(message, next) {
+
+	        var obj = null;
+	        var error = null;
+
+	        try {
+	            obj = JSON.parse(message);
+	        } catch (err) {
+	            error = new NesError(err, 'protocol');
+	        }
+
+	        return next(error, obj);
+	    };
+
+	    var stringify = function stringify(message, next) {
+
+	        var string = null;
+	        var error = null;
+
+	        try {
+	            string = JSON.stringify(message);
+	        } catch (err) {
+	            error = new NesError(err, 'user');
+	        }
+
+	        return next(error, string);
+	    };
+
+	    var nextTick = function nextTick(callback) {
+
+	        return function (err) {
+
+	            setTimeout(function () {
+	                return callback(err);
+	            }, 0);
+	        };
+	    };
+
+	    var NesError = function NesError(err, type) {
+
+	        if (typeof err === 'string') {
+	            err = new Error(err);
+	        }
+
+	        err.type = type;
+	        return err;
+	    };
+
+	    // Error codes
+
+	    var errorCodes = {
+	        1000: 'Normal closure',
+	        1001: 'Going away',
+	        1002: 'Protocol error',
+	        1003: 'Unsupported data',
+	        1004: 'Reserved',
+	        1005: 'No status received',
+	        1006: 'Abnormal closure',
+	        1007: 'Invalid frame payload data',
+	        1008: 'Policy violation',
+	        1009: 'Message too big',
+	        1010: 'Mandatory extension',
+	        1011: 'Internal server error',
+	        1015: 'TLS handshake'
+	    };
+
+	    // Client
+
+	    var Client = function Client(url, options) {
+
+	        options = options || {};
+
+	        // Configuration
+
+	        this._url = url;
+	        this._settings = options;
+	        this._heartbeatTimeout = false; // Server heartbeat configuration
+
+	        // State
+
+	        this._ws = null;
+	        this._reconnection = null;
+	        this._ids = 0; // Id counter
+	        this._requests = {}; // id -> { callback, timeout }
+	        this._subscriptions = {}; // path -> [callbacks]
+	        this._heartbeat = null;
+	        this._packets = [];
+	        this._disconnectListeners = null;
+	        this._disconnectRequested = false;
+
+	        // Events
+
+	        this.onError = function (err) {
+	            return console.error(err);
+	        }; // General error callback (only when an error cannot be associated with a request)
+	        this.onConnect = ignore; // Called whenever a connection is established
+	        this.onDisconnect = ignore; // Called whenever a connection is lost: function(willReconnect)
+	        this.onUpdate = ignore;
+
+	        // Public properties
+
+	        this.id = null; // Assigned when hello response is received
+	    };
+
+	    Client.WebSocket = /* $lab:coverage:off$ */typeof WebSocket === 'undefined' ? null : WebSocket; /* $lab:coverage:on$ */
+
+	    Client.prototype.connect = function (options, callback) {
+
+	        if (typeof options === 'function') {
+	            callback = arguments[0];
+	            options = {};
+	        }
+
+	        if (this._reconnection) {
+	            return nextTick(callback)(new Error('Cannot connect while client attempts to reconnect'));
+	        }
+
+	        if (this._ws) {
+	            return nextTick(callback)(new Error('Already connected'));
+	        }
+
+	        if (options.reconnect !== false) {
+	            // Defaults to true
+	            this._reconnection = { // Options: reconnect, delay, maxDelay
+	                wait: 0,
+	                delay: options.delay || 1000, // 1 second
+	                maxDelay: options.maxDelay || 5000, // 5 seconds
+	                retries: options.retries || Infinity, // Unlimited
+	                settings: {
+	                    auth: options.auth,
+	                    timeout: options.timeout
+	                }
+	            };
+	        } else {
+	            this._reconnection = null;
+	        }
+
+	        this._connect(options, true, callback);
+	    };
+
+	    Client.prototype._connect = function (options, initial, callback) {
+	        var _this = this;
+
+	        var ws = new Client.WebSocket(this._url, this._settings.ws); // Settings used by node.js only
+	        this._ws = ws;
+
+	        var finalize = function finalize(err) {
+
+	            if (callback) {
+	                // Call only once when connect() is called
+	                var cb = callback;
+	                callback = null;
+	                return cb(err);
+	            }
+
+	            return _this.onError(err);
+	        };
+
+	        var timeoutHandler = function timeoutHandler() {
+
+	            _this._cleanup();
+
+	            finalize(new NesError('Connection timed out', 'timeout'));
+
+	            if (initial) {
+	                return _this._reconnect();
+	            }
+	        };
+
+	        var timeout = options.timeout ? setTimeout(timeoutHandler, options.timeout) : null;
+
+	        ws.onopen = function () {
+
+	            clearTimeout(timeout);
+	            ws.onopen = null;
+
+	            return _this._hello(options.auth, function (err) {
+
+	                if (err) {
+	                    if (err.path) {
+	                        delete _this._subscriptions[err.path];
+	                    }
+
+	                    return _this._disconnect(function () {
+	                        return finalize(err);
+	                    }, true); // Stop reconnection when the hello message returns error
+	                }
+
+	                _this.onConnect();
+	                return finalize();
+	            });
+	        };
+
+	        ws.onerror = function (event) {
+
+	            clearTimeout(timeout);
+	            _this._cleanup();
+
+	            var error = new NesError('Socket error', 'ws');
+	            return finalize(error);
+	        };
+
+	        ws.onclose = function (event) {
+
+	            if (ws.onopen) {
+	                finalize(new Error('Connection terminated while while to connect'));
+	            }
+
+	            var wasRequested = _this._disconnectRequested; // Get value before _cleanup()
+
+	            _this._cleanup();
+
+	            var log = {
+	                code: event.code,
+	                explanation: errorCodes[event.code] || 'Unknown',
+	                reason: event.reason,
+	                wasClean: event.wasClean,
+	                willReconnect: !!(_this._reconnection && _this._reconnection.retries >= 1),
+	                wasRequested: wasRequested
+	            };
+
+	            _this.onDisconnect(log.willReconnect, log);
+	            _this._reconnect();
+	        };
+
+	        ws.onmessage = function (message) {
+
+	            return _this._onMessage(message);
+	        };
+	    };
+
+	    Client.prototype.overrideReconnectionAuth = function (auth) {
+
+	        if (!this._reconnection) {
+	            return false;
+	        }
+
+	        this._reconnection.settings.auth = auth;
+	        return true;
+	    };
+
+	    Client.prototype.disconnect = function (callback) {
+
+	        callback = callback || ignore;
+	        return this._disconnect(callback, false);
+	    };
+
+	    Client.prototype._disconnect = function (callback, isInternal) {
+
+	        this._reconnection = null;
+	        var requested = this._disconnectRequested || !isInternal; // Retain true
+
+	        if (this._disconnectListeners) {
+	            this._disconnectRequested = requested;
+	            this._disconnectListeners.push(callback);
+	            return;
+	        }
+
+	        if (!this._ws || this._ws.readyState !== Client.WebSocket.OPEN && this._ws.readyState !== Client.WebSocket.CONNECTING) {
+
+	            return nextTick(callback)();
+	        }
+
+	        this._disconnectRequested = requested;
+	        this._disconnectListeners = [callback];
+	        this._ws.close();
+	    };
+
+	    Client.prototype._cleanup = function () {
+
+	        if (this._ws) {
+	            if (this._ws.readyState === Client.WebSocket.OPEN || this._ws.readyState === Client.WebSocket.CONNECTING) {
+
+	                this._ws.close();
+	            }
+
+	            this._ws.onopen = null;
+	            this._ws.onclose = null;
+	            this._ws.onerror = ignore;
+	            this._ws.onmessage = null;
+	            this._ws = null;
+	        }
+
+	        this._packets = [];
+	        this.id = null;
+
+	        clearTimeout(this._heartbeat);
+	        this._heartbeat = null;
+
+	        // Flush pending requests
+
+	        var error = new NesError('Request failed - server disconnected', 'disconnect');
+
+	        var ids = Object.keys(this._requests);
+	        for (var i = 0; i < ids.length; ++i) {
+	            var id = ids[i];
+	            var request = this._requests[id];
+	            var callback = request.callback;
+	            clearTimeout(request.timeout);
+	            delete this._requests[id];
+	            callback(error);
+	        }
+
+	        if (this._disconnectListeners) {
+	            var listeners = this._disconnectListeners;
+	            this._disconnectListeners = null;
+	            this._disconnectRequested = false;
+	            listeners.forEach(function (listener) {
+	                return listener();
+	            });
+	        }
+	    };
+
+	    Client.prototype._reconnect = function () {
+	        var _this2 = this;
+
+	        // Reconnect
+
+	        if (!this._reconnection) {
+	            return;
+	        }
+
+	        if (this._reconnection.retries < 1) {
+	            return this._disconnect(ignore, true); // Clear _reconnection state
+	        }
+
+	        --this._reconnection.retries;
+	        this._reconnection.wait = this._reconnection.wait + this._reconnection.delay;
+
+	        var timeout = Math.min(this._reconnection.wait, this._reconnection.maxDelay);
+	        setTimeout(function () {
+
+	            if (!_this2._reconnection) {
+	                return;
+	            }
+
+	            _this2._connect(_this2._reconnection.settings, false, function (err) {
+
+	                if (err) {
+	                    _this2.onError(err);
+	                    return _this2._reconnect();
+	                }
+	            });
+	        }, timeout);
+	    };
+
+	    Client.prototype.request = function (options, callback) {
+
+	        if (typeof options === 'string') {
+	            options = {
+	                method: 'GET',
+	                path: options
+	            };
+	        }
+
+	        var request = {
+	            type: 'request',
+	            method: options.method || 'GET',
+	            path: options.path,
+	            headers: options.headers,
+	            payload: options.payload
+	        };
+
+	        return this._send(request, true, callback);
+	    };
+
+	    Client.prototype.message = function (message, callback) {
+
+	        var request = {
+	            type: 'message',
+	            message: message
+	        };
+
+	        return this._send(request, true, callback);
+	    };
+
+	    Client.prototype._send = function (request, track, callback) {
+	        var _this3 = this;
+
+	        callback = callback || ignore;
+
+	        if (!this._ws || this._ws.readyState !== Client.WebSocket.OPEN) {
+
+	            return nextTick(callback)(new NesError('Failed to send message - server disconnected', 'disconnect'));
+	        }
+
+	        request.id = ++this._ids;
+
+	        stringify(request, function (err, encoded) {
+
+	            if (err) {
+	                return nextTick(callback)(err);
+	            }
+
+	            // Ignore errors
+
+	            if (!track) {
+	                try {
+	                    return _this3._ws.send(encoded);
+	                } catch (err) {
+	                    return nextTick(callback)(new NesError(err, 'ws'));
+	                }
+	            }
+
+	            // Track errors
+
+	            var record = {
+	                callback: callback,
+	                timeout: null
+	            };
+
+	            if (_this3._settings.timeout) {
+	                record.timeout = setTimeout(function () {
+
+	                    record.callback = null;
+	                    record.timeout = null;
+
+	                    return callback(new NesError('Request timed out', 'timeout'));
+	                }, _this3._settings.timeout);
+	            }
+
+	            _this3._requests[request.id] = record;
+
+	            try {
+	                _this3._ws.send(encoded);
+	            } catch (err) {
+	                clearTimeout(_this3._requests[request.id].timeout);
+	                delete _this3._requests[request.id];
+	                return nextTick(callback)(new NesError(err, 'ws'));
+	            }
+	        });
+	    };
+
+	    Client.prototype._hello = function (auth, callback) {
+
+	        var request = {
+	            type: 'hello',
+	            version: version
+	        };
+
+	        if (auth) {
+	            request.auth = auth;
+	        }
+
+	        var subs = this.subscriptions();
+	        if (subs.length) {
+	            request.subs = subs;
+	        }
+
+	        return this._send(request, true, callback);
+	    };
+
+	    Client.prototype.subscriptions = function () {
+
+	        return Object.keys(this._subscriptions);
+	    };
+
+	    Client.prototype.subscribe = function (path, handler, callback) {
+	        var _this4 = this;
+
+	        if (!path || path[0] !== '/') {
+
+	            return nextTick(callback)(new NesError('Invalid path', 'user'));
+	        }
+
+	        var subs = this._subscriptions[path];
+	        if (subs) {
+
+	            // Already subscribed
+
+	            if (subs.indexOf(handler) === -1) {
+	                subs.push(handler);
+	            }
+
+	            return nextTick(callback)();
+	        }
+
+	        this._subscriptions[path] = [handler];
+
+	        if (!this._ws || this._ws.readyState !== Client.WebSocket.OPEN) {
+
+	            // Queued subscription
+
+	            return nextTick(callback)();
+	        }
+
+	        var request = {
+	            type: 'sub',
+	            path: path
+	        };
+
+	        return this._send(request, true, function (err) {
+
+	            if (err) {
+	                delete _this4._subscriptions[path];
+	            }
+
+	            return callback(err);
+	        });
+	    };
+
+	    Client.prototype.unsubscribe = function (path, handler, callback) {
+
+	        if (!path || path[0] !== '/') {
+
+	            return nextTick(callback)(new NesError('Invalid path', 'user'));
+	        }
+
+	        var subs = this._subscriptions[path];
+	        if (!subs) {
+	            return nextTick(callback)();
+	        }
+
+	        var sync = false;
+	        if (!handler) {
+	            delete this._subscriptions[path];
+	            sync = true;
+	        } else {
+	            var pos = subs.indexOf(handler);
+	            if (pos === -1) {
+	                return nextTick(callback)();
+	            }
+
+	            subs.splice(pos, 1);
+	            if (!subs.length) {
+	                delete this._subscriptions[path];
+	                sync = true;
+	            }
+	        }
+
+	        if (!sync || !this._ws || this._ws.readyState !== Client.WebSocket.OPEN) {
+
+	            return nextTick(callback)();
+	        }
+
+	        var request = {
+	            type: 'unsub',
+	            path: path
+	        };
+
+	        return this._send(request, true, function (errIgnore) {
+	            return callback();
+	        }); // Ignoring errors as the subscription handlers are already removed
+	    };
+
+	    Client.prototype._onMessage = function (message) {
+	        var _this5 = this;
+
+	        this._beat();
+
+	        var data = message.data;
+	        var prefix = data[0];
+	        if (prefix !== '{') {
+	            this._packets.push(data.slice(1));
+	            if (prefix !== '!') {
+	                return;
+	            }
+
+	            data = this._packets.join('');
+	            this._packets = [];
+	        }
+
+	        if (this._packets.length) {
+	            this._packets = [];
+	            this.onError(new NesError('Received an incomplete message', 'protocol'));
+	        }
+
+	        parse(data, function (err, update) {
+
+	            if (err) {
+	                return _this5.onError(err);
+	            }
+
+	            // Recreate error
+
+	            var error = null;
+	            if (update.statusCode && update.statusCode >= 400 && update.statusCode <= 599) {
+
+	                error = new NesError(update.payload.message || update.payload.error, 'server');
+	                error.statusCode = update.statusCode;
+	                error.data = update.payload;
+	                error.headers = update.headers;
+	                error.path = update.path;
+	            }
+
+	            // Ping
+
+	            if (update.type === 'ping') {
+	                return _this5._send({ type: 'ping' }, false); // Ignore errors
+	            }
+
+	            // Broadcast and update
+
+	            if (update.type === 'update') {
+	                return _this5.onUpdate(update.message);
+	            }
+
+	            // Publish or Revoke
+
+	            if (update.type === 'pub' || update.type === 'revoke') {
+
+	                var handlers = _this5._subscriptions[update.path];
+	                if (update.type === 'revoke') {
+	                    delete _this5._subscriptions[update.path];
+	                }
+
+	                if (handlers && update.message !== undefined) {
+
+	                    var flags = {};
+	                    if (update.type === 'revoke') {
+	                        flags.revoked = true;
+	                    }
+
+	                    for (var i = 0; i < handlers.length; ++i) {
+	                        handlers[i](update.message, flags);
+	                    }
+	                }
+
+	                return;
+	            }
+
+	            // Lookup callback (message must include an id from this point)
+
+	            var request = _this5._requests[update.id];
+	            if (!request) {
+	                return _this5.onError(new NesError('Received response for unknown request', 'protocol'));
+	            }
+
+	            var callback = request.callback;
+	            clearTimeout(request.timeout);
+	            delete _this5._requests[update.id];
+
+	            if (!callback) {
+	                return; // Response received after timeout
+	            }
+
+	            // Response
+
+	            if (update.type === 'request') {
+	                return callback(error, update.payload, update.statusCode, update.headers);
+	            }
+
+	            // Custom message
+
+	            if (update.type === 'message') {
+	                return callback(error, update.message);
+	            }
+
+	            // Authentication
+
+	            if (update.type === 'hello') {
+	                _this5.id = update.socket;
+	                if (update.heartbeat) {
+	                    _this5._heartbeatTimeout = update.heartbeat.interval + update.heartbeat.timeout;
+	                    _this5._beat(); // Call again once timeout is set
+	                }
+
+	                return callback(error);
+	            }
+
+	            // Subscriptions
+
+	            if (update.type === 'sub' || update.type === 'unsub') {
+
+	                return callback(error);
+	            }
+
+	            return _this5.onError(new NesError('Received unknown response type: ' + update.type, 'protocol'));
+	        });
+	    };
+
+	    Client.prototype._beat = function () {
+	        var _this6 = this;
+
+	        if (!this._heartbeatTimeout) {
+	            return;
+	        }
+
+	        clearTimeout(this._heartbeat);
+
+	        this._heartbeat = setTimeout(function () {
+
+	            _this6.onError(new NesError('Disconnecting due to heartbeat timeout', 'timeout'));
+	            _this6._ws.close();
+	        }, this._heartbeatTimeout);
+	    };
+
+	    // Expose interface
+
+	    return { Client: Client };
+	});
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(2)(module)))
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ }
+/******/ ]);

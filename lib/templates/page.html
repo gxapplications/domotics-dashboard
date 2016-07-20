@@ -3,10 +3,24 @@
 {{/extend}}
 
 {{#extend "css"}}
+  <link rel="stylesheet" href="/assets/css/gx-grid-stack.css">
   <link rel="stylesheet" href="/assets/css/page.css">
 {{/extend}}
 
+{{#extend "js"}}
+  // Initialization vars, from template engine to Angular app scope
+  var initStates = {{tojson states}}
+  var initGridPositions = {{{page.positions}}}
+  var initGridLayout = {{page.layout}}
+  var gridComponentLoaderUrl = '' // TODO !0
+{{/extend}}
+
 {{#extend "scripts"}}
+  <script src="/assets/js/jquery-ui.min.js"></script>
+  <script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+  <script src="/assets/js/gridList.js"></script>
+  <script src="/assets/js/jquery.gridList.js"></script>
+  <script src="/assets/js/gx-grid-stack.js"></script>
   <script src="/assets/js/page.js"></script>
 {{/extend}}
 
@@ -38,18 +52,20 @@
             </div>
         </md-toolbar>
 
-        <md-content flex class="md-whiteframe-18dp page-content">
-            <div>
-                <md-list-item class="md-3-line" ng-repeat="item in todos">
-                    <div class="md-list-item-text">
-                        <h3>{{item.what}}</h3>
-                        <h4>{{item.who}}</h4>
-                        <p>
-                            {{item.notes}}
-                        </p>
-                    </div>
-                    <md-divider inset></md-divider>
-                </md-list-item>
+        <md-content layout="column" flex class="md-whiteframe-18dp page-content">
+            <div flex>
+                <ul id="grid" class="grid">
+                    <li class="position-highlight">
+                        <div class="inner md-whiteframe-1dp"></div>
+                    </li>
+                    <li class="position-card">
+                        <md-card class="md-whiteframe-6dp inner">
+                            <div flex layout="row" layout-align="center center">
+                                <md-progress-circular md-diameter="128" md-mode="indeterminate"></md-progress-circular>
+                            </div>
+                        </md-card>
+                    </li>
+                </ul>
             </div>
         </md-content>
     </div>
