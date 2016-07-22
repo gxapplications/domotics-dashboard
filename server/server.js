@@ -67,7 +67,7 @@ server.register(Inert, (err) => {
 })
 
 // Context middleware
-server.register(context, err => {
+server.register(context, (err) => {
   Hoek.assert(!err, err)
 })
 
@@ -135,7 +135,7 @@ server.route({
           if (!cryptedPassword) {
             return reply({}).code(404)
           }
-          let passwordBytes  = CryptoJS.AES.decrypt(cryptedPassword, 'azerty' + pattern)
+          let passwordBytes = CryptoJS.AES.decrypt(cryptedPassword, 'azerty' + pattern)
           password = passwordBytes.toString(CryptoJS.enc.Utf8)
           if (!password) {
             return reply(err.toString()).code(401)

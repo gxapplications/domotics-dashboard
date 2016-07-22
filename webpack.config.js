@@ -1,10 +1,10 @@
 const Path = require('path')
 
 module.exports = {
-  entry: "./lib/page.js",
+  entry: './lib/page.js',
   output: {
     path: Path.join(__dirname, 'public', 'js'),
-    filename: "page.js"
+    filename: 'page.js'
   },
   module: {
     loaders: [

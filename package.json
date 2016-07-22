@@ -51,7 +51,8 @@
     },
     "parser": "babel-eslint",
     "ignore": [
-      "/doc/"
+      "/doc/",
+      "/public/"
     ]
   },
   "pre-commit": [
@@ -87,7 +88,7 @@
     "hoek": "^4.0.1",
     "inert": "^4.0.0",
     "jquery": "^3.0.0",
-    "myfox-wrapper-api": "^0.0.2",
+    "myfox-wrapper-api": "^0.0.3",
     "nes": "^6.2.1",
     "path": "^0.12.7",
     "sqlite3": "^3.1.4",

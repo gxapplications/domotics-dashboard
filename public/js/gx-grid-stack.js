@@ -24,6 +24,7 @@
             elementPrototype: 'li.position-card',
             elementLoaderUrl: false,
             onChange: function(changedItems, matrix) {},
+            getSizingCoefficient: function() { return 1; },
             draggableParams: {}
         };
         /* Override default settings with provided params, if any */
@@ -157,7 +158,8 @@
                     }
                 }
                 params.onChange(changedItems, params.matrix);
-            }
+            },
+            getSizingCoefficient: params.getSizingCoefficient
         }, settings.draggableParams );
         grid = gridStack.data('_gridList').gridList.grid;
 

@@ -26,7 +26,8 @@
       direction: "horizontal",
       itemSelector: 'li[data-w]',
       widthHeightRatio: 1,
-      dragAndDrop: true
+      dragAndDrop: true,
+      getSizingCoefficient: function() { return 1; }
     },
 
     draggableDefaults: {
@@ -215,11 +216,12 @@
     },
 
     _calculateCellSize: function() {
+      var coefficient = this.options.getSizingCoefficient();
       if (this.options.direction === "horizontal") {
-        this._cellHeight = Math.floor(this.$element.height() / this.options.lanes);
+        this._cellHeight = Math.floor(coefficient * this.$element.height() / this.options.lanes);
         this._cellWidth = this._cellHeight * this.options.widthHeightRatio;
       } else {
-        this._cellWidth = Math.floor(this.$element.width() / this.options.lanes);
+        this._cellWidth = Math.floor(coefficient * this.$element.width() / this.options.lanes);
         this._cellHeight = this._cellWidth / this.options.widthHeightRatio;
       }
       if (this.options.heightToFontSizeRatio) {

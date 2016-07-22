@@ -66,15 +66,16 @@
 	  };
 
 	  $scope.grid = {
-	    positions: window.initGridPositions,
+	    //positions: window.initGridPositions, // TODO !0: retablir une data depuis la DB quand la sauvegarde sera OK
+	    positions: [{ id: 1, w: 1, h: 1, x: 0, y: 0 }, { id: 2, w: 1, h: 2, x: 0, y: 1 }, { id: 3, w: 2, h: 2, x: 1, y: 0 }, { id: 4, w: 1, h: 1, x: 1, y: 2 }, { id: 5, w: 2, h: 1, x: 2, y: 2 }],
 	    layout: window.initGridLayout,
-	    loaderUrl: null, // TODO
+	    loaderUrl: window.gridComponentLoaderUrl, // TODO !0: URL qui rend des CARD a afficher ! l'envoyer depuis le template
 	    gridStack: null,
 	    init: function init() {
 	      $scope.grid.gridStack = $('#grid').gridStack({
 	        matrix: $scope.grid.positions,
 	        onChange: function onChange(changedItems, mx) {
-	          // TODO
+	          // TODO !0
 	        },
 	        lanes: $scope.grid.layout,
 	        elementPrototype: 'li.position-card',
@@ -82,6 +83,9 @@
 	        draggableParams: {
 	          handle: '.handle',
 	          helper: 'original'
+	        },
+	        getSizingCoefficient: function getSizingCoefficient() {
+	          return $scope.edition.active ? 1 / 0.84 : 1;
 	        }
 	      });
 	      console.log('INIT!');
@@ -89,11 +93,14 @@
 	  };
 
 	  $document.ready(function () {
-	    console.log('INIT...');
+	    console.log('INIT...2');
 	    $($scope.grid.init());
+	    window.setTimeout(function () {
+	      $scope.grid.gridStack.gridList('reflow');
+	    }, 900);
 	  });
 
-	  // TODO !0: register here with a socket, and listen to update $scope.context :)
+	  // TODO !1: register here with a socket, and listen to update $scope.states :)
 	});
 
 /***/ },
@@ -117,12 +124,12 @@
 	    if (( false ? 'undefined' : _typeof(exports)) === 'object' && ( false ? 'undefined' : _typeof(module)) === 'object') {
 	        module.exports = factory(); // Export if used as a module
 	    } else if (true) {
-	            !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	        } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
-	            exports.nes = factory();
-	        } else {
-	            root.nes = factory();
-	        }
+	        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
+	        exports.nes = factory();
+	    } else {
+	        root.nes = factory();
+	    }
 
 	    // $lab:coverage:on$
 	})( /* $lab:coverage:off$ */typeof window !== 'undefined' ? window : global /* $lab:coverage:on$ */, function () {
