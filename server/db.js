@@ -66,6 +66,15 @@ db.getPageBySlug = function (slug, callback) {
   })
 }
 
+db.getComponentById = function (slug, id, callback) {
+    db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, row) => {
+        if (err) {
+            return callback(err)
+        }
+        return callback(err, row, null) // TODO !0
+    })
+}
+
 // exports
 export default db
 

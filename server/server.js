@@ -155,7 +155,7 @@ server.route({
 // Other pages: named pages
 server.route({
   method: 'GET',
-  path: '/{slug*}',
+  path: '/{slug}',
   handler: function (request, reply) {
     if (!request.context.api) {
       return reply.redirect('/') // User is not connected yet!
@@ -168,6 +168,22 @@ server.route({
       reply.view('page', {'page': page, 'md-primary': 'teal', 'states': request.context.states})
     })
   }
+})
+server.route({
+    method: 'POST',
+    path: '/{slug}/component',
+    handler: function (request, reply) {
+        if (!request.context.api) {
+            return reply.redirect('/') // User is not connected yet!
+        }
+        db.getComponentById(request.params.slug, request.payload.id, (err, page, component) => {
+            Hoek.assert(!err, err)
+            if (!page) {
+                return reply.redirect('/')
+            }
+            reply.view('component', {'page': page, 'component': component}, {'layout': false})
+        })
+    }
 })
 
 // exports

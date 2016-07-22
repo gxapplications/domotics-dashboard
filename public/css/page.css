@@ -8,6 +8,7 @@ button > img {
     top: 0.6rem;
 }
 
+/* Main layout with shrinkable header */
 @keyframes page-content-div-closing {
     from {
         transform: scale(1);
@@ -17,10 +18,13 @@ button > img {
     }
 }
 @keyframes page-content-div-opening {
-    from {
+    0% {
         transform: scale(0.84);
     }
-    to {
+    30% {
+        transform: scale(0.84);
+    }
+    100% {
         transform: scale(1);
     }
 }
@@ -50,15 +54,65 @@ button > img {
 }
 .page-controller:not(.editing) .page-content > div {
     animation-name: page-content-div-opening;
-    animation-duration: 0.6s;
+    animation-duration: 0.9s;
     animation-timing-function: ease;
     transform: scale(1);
+}
+
+/* Editor toolbars */
+@keyframes page-editors-div-closing {
+    0% {
+        left: -10%;
+        right: -10%;
+    }
+    30% {
+        left: -10%;
+        right: -10%;
+    }
+    100% {
+        left: 0;
+        right: 0;
+    }
+}
+@keyframes page-editors-div-opening {
+    0% {
+        left: 0;
+        right: 0;
+    }
+    60% {
+        left: -10%;
+        right: -10%;
+    }
+    100% {
+        left: -10%;
+        right: -10%;
+    }
 }
 .page-editors {
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
     bottom: 0;
     z-index: 1;
+}
+.page-editors.editing {
+    animation-name: page-editors-div-closing;
+    animation-duration: 0.8s;
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);;
+    left: 0;
+    right: 0;
+}
+.page-editors:not(.editing) {
+    animation-name: page-editors-div-opening;
+    animation-duration: 0.6s;
+    animation-timing-function: cubic-bezier(0.550, 0.055, 0.675, 0.190);;
+    left: -10%;
+    right: -10%;
+}
+.page-editors .left-bar, .page-editors .right-bar {
+    padding-top: 4rem;
+    width: 7%;
+    background-color: red;
+}
+.page-editors .right-bar {
+    margin-right: 0.8em;
 }
