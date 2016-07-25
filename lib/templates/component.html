@@ -1,3 +1,27 @@
-<div>
-    TODO !0
+<div id="component-{{component.id}}" flex layout-fill layout-align="center stretch" class="gridlist-card md-whiteframe-6dp {{{block "card_css"}}}">
+    <div ng-controller="CardCtrl-{{component.id}} as ctrl" layout="column" layout-fill layout-align="space-around stretch">
+        <div style="height: 0; width: 0; overflow: display;">
+            <div class="handle md-button md-fab" layout-padding ng-show="edition.active"
+                ng-class="{ 'md-hue-3': edition.selectedComponent == {{component.id}}, 'md-hue-1': edition.selectedComponent != {{component.id}} }"
+                style="box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2) inset, 0px 6px 10px 0px rgba(0, 0, 0, 0.14) inset, 0px 1px 18px 0px rgba(0, 0, 0, 0.12) inset;">
+                <img src="/assets/images/android_core_holodark/ic_action_make_available_offline.png" />
+            </div>
+        </div>
+
+        <div flex>
+            TODO !0
+        </div>
+    </div>
+
+    <div class="component_edit_dialog" style="display:none;"><!--
+        TODO !0
+    ---></div>
+
+    <script>
+      app.controllerProvider.register("CardCtrl-{{ component.id }}", ($rootScope, $scope, $interval, $mdDialog, $http) => {
+        $scope.edition = $rootScope.edition
+
+        // TODO !0
+      })
+    </script>
 </div>

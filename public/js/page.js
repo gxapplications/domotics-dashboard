@@ -48,10 +48,10 @@
 
 	// import Nes from 'nes'
 
-	window.app.controller('PageControls', function ($scope, $document, $http, $window, $mdToast) {
+	window.app.controller('PageControls', function ($rootScope, $scope, $document, $http, $window, $mdToast) {
 	  $scope.states = window.initStates;
 
-	  $scope.edition = {
+	  $rootScope.edition = {
 	    active: false,
 	    close: function close() {
 	      $scope.edition.active = false;
@@ -62,12 +62,18 @@
 	      // $scope.grid.gridStack.gridList('reflow')
 	    }
 	  };
+	  $scope.edition = $rootScope.edition;
 
 	  $scope.grid = {
 	    // positions: window.initGridPositions, // TODO !1: retablir une data depuis la DB quand la sauvegarde sera OK
 	    positions: [{ id: 1, w: 1, h: 1, x: 0, y: 0 }, { id: 2, w: 1, h: 2, x: 0, y: 1 }, { id: 3, w: 2, h: 2, x: 1, y: 0 }, { id: 4, w: 1, h: 1, x: 1, y: 2 }, { id: 5, w: 2, h: 1, x: 2, y: 2 }],
 	    layout: window.initGridLayout,
 	    loaderUrl: window.gridComponentLoaderUrl,
+	    onLayoutChange: function onLayoutChange() {
+	      if ($scope.grid.gridStack !== null) {
+	        $scope.grid.gridStack.setLanes($scope.grid.layout);
+	      }
+	    },
 	    gridStack: null,
 	    init: function init() {
 	      // eslint-disable-next-line no-undef
@@ -89,6 +95,7 @@
 	      });
 	    }
 	  };
+	  $scope.$watch('grid.layout', $scope.grid.onLayoutChange);
 
 	  $document.ready(function () {
 	    // eslint-disable-next-line no-undef
