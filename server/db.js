@@ -71,7 +71,7 @@ db.getComponentById = function (slug, id, callback) {
     if (err) {
       return callback(err)
     }
-    return callback(err, row, null) // TODO !0
+    return callback(err, row, {id: id}) // TODO !0
   })
 }
 

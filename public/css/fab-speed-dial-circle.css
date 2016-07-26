@@ -1,0 +1,144 @@
+/* Define two variables as the loop limits */
+.fabSpeedDialCircle .btn-0 {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0;
+  xxtransition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+}
+.fabSpeedDialCircle .md-is-open .btn-0 {
+  position: absolute;
+  transform: rotate(200deg) translate(61.2px) rotate(-200deg);
+  opacity: 1;
+}
+.fabSpeedDialCircle .btn-1 {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0;
+  xxtransition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+}
+.fabSpeedDialCircle .md-is-open .btn-1 {
+  position: absolute;
+  transform: rotate(245deg) translate(61.2px) rotate(-245deg);
+  opacity: 1;
+}
+.fabSpeedDialCircle .btn-2 {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+}
+.fabSpeedDialCircle .md-is-open .btn-2 {
+  position: absolute;
+  transform: rotate(290deg) translate(61.2px) rotate(-290deg);
+  opacity: 1;
+}
+.fabSpeedDialCircle .btn-3 {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+}
+.fabSpeedDialCircle .md-is-open .btn-3 {
+  position: absolute;
+  transform: rotate(335deg) translate(61.2px) rotate(-335deg);
+  opacity: 1;
+}
+.fabSpeedDialCircle .btn-4 {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+}
+.fabSpeedDialCircle .md-is-open .btn-4 {
+  position: absolute;
+  transform: rotate(380deg) translate(61.2px) rotate(-380deg);
+  opacity: 1;
+}
+.fabSpeedDialCircle .btn-5 {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+}
+.fabSpeedDialCircle .md-is-open .btn-5 {
+  position: absolute;
+  transform: rotate(425deg) translate(61.2px) rotate(-425deg);
+  opacity: 1;
+}
+.fabSpeedDialCircle .btn-6 {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+}
+.fabSpeedDialCircle .md-is-open .btn-6 {
+  position: absolute;
+  transform: rotate(470deg) translate(61.2px) rotate(-470deg);
+  opacity: 1;
+}
+.fabSpeedDialCircle .btn-7 {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+}
+.fabSpeedDialCircle .md-is-open .btn-7 {
+  position: absolute;
+  transform: rotate(515deg) translate(61.2px) rotate(-515deg);
+  opacity: 1;
+}
+.fabSpeedDialCircle .text-capitalize {
+  text-transform: capitalize;
+}
+.fabSpeedDialCircle .lock-size {
+  min-width: 300px;
+  min-height: 300px;
+  width: 300px;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.fabSpeedDialCircle md-fab-trigger {
+  z-index: 100;
+}
+.fabSpeedDialCircle md-fab-actions {
+  z-index: 50;
+}
+.fabSpeedDialCircle ng-md-icon {
+  display: block;
+}
+.fabSpeedDialCircle ng-md-icon svg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.fabSpeedDialCircle .menu-icon,
+.fabSpeedDialCircle .close-icon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  transition: all 0.3s ease-in-out;
+  opacity: 1;
+  transform: scale(1);
+}
+.fabSpeedDialCircle .close-icon {
+  opacity: 0;
+  transform: scale(0);
+}
+.fabSpeedDialCircle .md-is-open .menu-icon {
+  opacity: 0;
+  transform: scale(0);
+}
+.fabSpeedDialCircle .md-is-open .close-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+

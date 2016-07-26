@@ -10,6 +10,33 @@
 
         <div flex>
             TODO !0
+
+<div class="fabSpeedDialCircle" layout="column">
+    <div class="lock-size" layout="row" layout-align="center center">
+      <md-fab-speed-dial md-open="ctrl.speedDialOpened" md-direction="up" ng-class="md-scale">
+        <md-fab-trigger>
+          <md-button aria-label="menu" class="md-fab md-warn" aria-label="Google Hangout">
+            AA
+          </md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+          <md-button class="md-fab md-raised btn-0" aria-label="Google Hangout">
+            G+
+          </md-button>
+          <md-button class="md-fab md-raised btn-1" aria-label="Google Hangout">
+            B
+          </md-button>
+          <md-button class="md-fab md-raised btn-2" aria-label="Google Hangout">
+            CDE
+          </md-button>
+          <md-button class="md-fab md-raised btn-3" aria-label="Google Hangout">
+            t
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+    </div>
+</div>
+
         </div>
     </div>
 
@@ -18,10 +45,10 @@
     ---></div>
 
     <script>
-      app.controllerProvider.register("CardCtrl-{{ component.id }}", ($rootScope, $scope, $interval, $mdDialog, $http) => {
+      app.controllerProvider.register("CardCtrl-{{component.id}}", ($rootScope, $scope, $interval, $mdDialog, $http) => {
         $scope.edition = $rootScope.edition
-
+        this.speedDialOpened = false
         // TODO !0
-      })
+      });
     </script>
 </div>
