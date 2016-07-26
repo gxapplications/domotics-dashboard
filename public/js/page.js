@@ -54,12 +54,16 @@
 	  $rootScope.edition = {
 	    active: false,
 	    close: function close() {
-	      $scope.edition.active = false;
-	      // $scope.grid.gridStack.gridList('reflow')
+	      $rootScope.edition.active = false;
+	      // $rootScope.grid.gridStack.gridList('reflow')
 	    },
 	    open: function open() {
-	      $scope.edition.active = true;
-	      // $scope.grid.gridStack.gridList('reflow')
+	      $rootScope.edition.active = true;
+	      // $rootScope.grid.gridStack.gridList('reflow')
+	    },
+	    selectedComponent: false,
+	    selectComponent: function selectComponent(id) {
+	      $rootScope.edition.selectedComponent = id;
 	    }
 	  };
 	  $scope.edition = $rootScope.edition;

@@ -1,43 +1,43 @@
 <div id="component-{{component.id}}" flex layout-fill layout-align="center stretch" class="gridlist-card md-whiteframe-6dp {{{block "card_css"}}}">
     <div ng-controller="CardCtrl-{{component.id}} as ctrl" layout="column" layout-fill layout-align="space-around stretch">
-        <div style="height: 0; width: 0; overflow: display;">
-            <div class="handle md-button md-fab" layout-padding ng-show="edition.active"
-                ng-class="{ 'md-hue-3': edition.selectedComponent == {{component.id}}, 'md-hue-1': edition.selectedComponent != {{component.id}} }"
-                style="box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2) inset, 0px 6px 10px 0px rgba(0, 0, 0, 0.14) inset, 0px 1px 18px 0px rgba(0, 0, 0, 0.12) inset;">
-                <img src="/assets/images/android_core_holodark/ic_action_make_available_offline.png" />
+
+
+
+        <div flex layout-padding>
+            TODO !0: placer des icones depuis la fonte ! pas de png !
+
+
+
+        </div>
+
+        <div class="fabSpeedDialCircle" ng-show="edition.active"
+             style="height: 0; width: 0; overflow: display;">
+            <div class="lock-size" layout="row" layout-align="center end">
+                <md-fab-speed-dial md-open="ctrl.speedDialOpened" md-direction="up" ng-class="md-scale">
+                    <md-fab-trigger>
+                        <div aria-label="menu" class="md-button handle md-fab" aria-label="Move your card" ng-mousedown="edition.selectComponent({{component.id}})"
+                             ng-class="{ 'md-hue-3': edition.selectedComponent == {{component.id}}, 'md-hue-1': edition.selectedComponent != {{component.id}} }">
+                            <img src="/assets/images/android_core_holodark/ic_action_make_available_offline.png" />
+                        </div>
+                    </md-fab-trigger>
+                    <md-fab-actions>
+                        <md-button class="md-fab md-raised btn-0" aria-label="Refresh">
+                            Refresh
+                        </md-button>
+                        <md-button class="md-fab md-raised btn-1" aria-label="Edit">
+                            Edit
+                        </md-button>
+                        <md-button class="md-fab md-raised btn-2" aria-label="Resize">
+                            Resize
+                        </md-button>
+                        <md-button class="md-fab md-raised btn-3" aria-label="Remove">
+                            Remove
+                        </md-button>
+                    </md-fab-actions>
+                </md-fab-speed-dial>
             </div>
         </div>
 
-        <div flex>
-            TODO !0
-
-<div class="fabSpeedDialCircle" layout="column">
-    <div class="lock-size" layout="row" layout-align="center center">
-      <md-fab-speed-dial md-open="ctrl.speedDialOpened" md-direction="up" ng-class="md-scale">
-        <md-fab-trigger>
-          <md-button aria-label="menu" class="md-fab md-warn" aria-label="Google Hangout">
-            AA
-          </md-button>
-        </md-fab-trigger>
-        <md-fab-actions>
-          <md-button class="md-fab md-raised btn-0" aria-label="Google Hangout">
-            G+
-          </md-button>
-          <md-button class="md-fab md-raised btn-1" aria-label="Google Hangout">
-            B
-          </md-button>
-          <md-button class="md-fab md-raised btn-2" aria-label="Google Hangout">
-            CDE
-          </md-button>
-          <md-button class="md-fab md-raised btn-3" aria-label="Google Hangout">
-            t
-          </md-button>
-        </md-fab-actions>
-      </md-fab-speed-dial>
-    </div>
-</div>
-
-        </div>
     </div>
 
     <div class="component_edit_dialog" style="display:none;"><!--

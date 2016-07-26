@@ -4,7 +4,7 @@
   bottom: 0px;
   left: 0px;
   opacity: 0;
-  xxtransition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 .fabSpeedDialCircle .md-is-open .btn-0 {
   position: absolute;
@@ -16,7 +16,7 @@
   bottom: 0px;
   left: 0px;
   opacity: 0;
-  xxtransition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 .fabSpeedDialCircle .md-is-open .btn-1 {
   position: absolute;
@@ -99,12 +99,14 @@
   text-transform: capitalize;
 }
 .fabSpeedDialCircle .lock-size {
-  min-width: 300px;
-  min-height: 300px;
-  width: 300px;
-  height: 300px;
+  min-width: 4.5rem;
+  min-height: 4.5rem;
+  width: 4.5rem;
+  height: 4.5rem;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  top: -4.5rem;
 }
 .fabSpeedDialCircle md-fab-trigger {
   z-index: 100;
@@ -112,33 +114,15 @@
 .fabSpeedDialCircle md-fab-actions {
   z-index: 50;
 }
-.fabSpeedDialCircle ng-md-icon {
-  display: block;
+.fabSpeedDialCircle .md-button.handle {
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2) inset,
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14) inset,
+    0px 1px 18px 0px rgba(0, 0, 0, 0.12) inset;
 }
-.fabSpeedDialCircle ng-md-icon svg {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+.fabSpeedDialCircle .md-button.handle > img {
+    width: 2.2rem;
+    height: 2.2rem !important;
+    position: relative;
+    top: 0.6rem;
+    left: 0.2rem;
 }
-.fabSpeedDialCircle .menu-icon,
-.fabSpeedDialCircle .close-icon {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  transition: all 0.3s ease-in-out;
-  opacity: 1;
-  transform: scale(1);
-}
-.fabSpeedDialCircle .close-icon {
-  opacity: 0;
-  transform: scale(0);
-}
-.fabSpeedDialCircle .md-is-open .menu-icon {
-  opacity: 0;
-  transform: scale(0);
-}
-.fabSpeedDialCircle .md-is-open .close-icon {
-  opacity: 1;
-  transform: scale(1);
-}
-
