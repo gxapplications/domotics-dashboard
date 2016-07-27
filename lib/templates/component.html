@@ -1,13 +1,10 @@
 <div id="component-{{component.id}}" flex layout-fill layout-align="center stretch" class="gridlist-card md-whiteframe-6dp {{{block "card_css"}}}">
     <div ng-controller="CardCtrl-{{component.id}} as ctrl" layout="column" layout-fill layout-align="space-around stretch">
 
-
-
         <div flex layout-padding>
-            TODO !0: placer des icones depuis la fonte ! pas de png !
+            {{{block "component_content"}}}
 
-
-
+            // TODO !4
         </div>
 
         <div class="fabSpeedDialCircle" ng-show="edition.active"
@@ -15,23 +12,26 @@
             <div class="lock-size" layout="row" layout-align="center end">
                 <md-fab-speed-dial md-open="ctrl.speedDialOpened" md-direction="up" ng-class="md-scale">
                     <md-fab-trigger>
-                        <div aria-label="menu" class="md-button handle md-fab" aria-label="Move your card" ng-mousedown="edition.selectComponent({{component.id}})"
-                             ng-class="{ 'md-hue-3': edition.selectedComponent == {{component.id}}, 'md-hue-1': edition.selectedComponent != {{component.id}} }">
-                            <img src="/assets/images/android_core_holodark/ic_action_make_available_offline.png" />
+                        <div aria-label="menu" class="md-button handle md-fab md-hue-1" aria-label="Move your card">
+                             <md-icon class="material-icons" aria-label="Menu">pets</md-icon>
                         </div>
                     </md-fab-trigger>
                     <md-fab-actions>
                         <md-button class="md-fab md-raised btn-0" aria-label="Refresh">
-                            Refresh
+                            <md-icon class="material-icons" aria-label="Refresh">refresh</md-icon>
+// TODO !6
                         </md-button>
-                        <md-button class="md-fab md-raised btn-1" aria-label="Edit">
-                            Edit
+                        <md-button class="md-fab md-raised md-primary btn-1" aria-label="Edit">
+                            <md-icon class="material-icons" aria-label="Edit">settings</md-icon>
+// TODO !6
                         </md-button>
                         <md-button class="md-fab md-raised btn-2" aria-label="Resize">
-                            Resize
+                            <md-icon class="material-icons" aria-label="Resize">photo_size_select_small</md-icon>
+// TODO !6
                         </md-button>
-                        <md-button class="md-fab md-raised btn-3" aria-label="Remove">
-                            Remove
+                        <md-button class="md-fab md-raised md-warn btn-3" aria-label="Remove">
+                            <md-icon class="material-icons" aria-label="Remove">delete_forever</md-icon>
+// TODO !3
                         </md-button>
                     </md-fab-actions>
                 </md-fab-speed-dial>
@@ -41,14 +41,15 @@
     </div>
 
     <div class="component_edit_dialog" style="display:none;"><!--
-        TODO !0
+        {{{block "component_settings"}}}
     ---></div>
 
     <script>
       app.controllerProvider.register("CardCtrl-{{component.id}}", ($rootScope, $scope, $interval, $mdDialog, $http) => {
         $scope.edition = $rootScope.edition
         this.speedDialOpened = false
-        // TODO !0
+
+        {{{block "component_js"}}}
       });
     </script>
 </div>

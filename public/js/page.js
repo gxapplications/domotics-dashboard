@@ -60,10 +60,6 @@
 	    open: function open() {
 	      $rootScope.edition.active = true;
 	      // $rootScope.grid.gridStack.gridList('reflow')
-	    },
-	    selectedComponent: false,
-	    selectComponent: function selectComponent(id) {
-	      $rootScope.edition.selectedComponent = id;
 	    }
 	  };
 	  $scope.edition = $rootScope.edition;

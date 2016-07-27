@@ -20,6 +20,7 @@ if (!exists) {
   db.serialize(() => {
     db.run('CREATE TABLE accounts (password TEXT)')
     db.run('CREATE TABLE pages (slug TEXT, name TEXT, last_access INTEGER, positions TEXT, layout INTEGER)')
+    db.run('CREATE TABLE components (id INTEGER, type INTEGER)')
   })
 }
 
@@ -67,11 +68,26 @@ db.getPageBySlug = function (slug, callback) {
 }
 
 db.getComponentById = function (slug, id, callback) {
-  db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, row) => {
-    if (err) {
-      return callback(err)
+  db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
+    if (err || !pageRow) {
+      return callback(err, null, null)
     }
-    return callback(err, row, {id: id}) // TODO !0
+    db.get('SELECT * FROM components WHERE id=? LIMIT 1', id, (err, componentRow) => {
+      if (err || !componentRow) {
+        return callback(err, pageRow, null)
+      }
+      return callback(err, pageRow, componentRow)
+    })
+  })
+}
+
+db.createComponent = function (slug, payload, callback) {
+  db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, row) => {
+    if (err || !row) {
+      return callback(err, null, null)
+    }
+    // TODO !0: create, store and return component
+    return callback(err, row, {id: 69})
   })
 }
 

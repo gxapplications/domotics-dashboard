@@ -176,12 +176,28 @@ server.route({
     if (!request.context.api) {
       return reply.redirect('/') // User is not connected yet!
     }
-    db.getComponentById(request.params.slug, request.payload.id, (err, page, component) => {
+
+    // Retrieve case (not a GET because we need complex data in the payload)
+    if (request.payload.id) {
+      db.getComponentById(request.params.slug, request.payload.id, (err, page, component) => {
+        Hoek.assert(!err, err)
+        if (!page) {
+          return reply.redirect('/')
+        }
+        if (!component) {
+          return reply({}).code(404)
+        }
+        return reply.view('component', {'page': page, 'component': component}, {'layout': false})
+      })
+    }
+
+    // Creation case
+    db.createComponent(request.params.slug, request.payload, (err, page, component) => {
       Hoek.assert(!err, err)
       if (!page) {
         return reply.redirect('/')
       }
-      reply.view('component', {'page': page, 'component': component}, {'layout': false})
+      return reply.view('component', {'page': page, 'component': component}, {'layout': false})
     })
   }
 })
