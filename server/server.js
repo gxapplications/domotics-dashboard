@@ -211,6 +211,14 @@ server.route({
     }
   }
 })
+server.route({
+  method: 'PATCH',
+  path: '/{slug}/component/{id}',
+  handler: function (request, reply) {
+    // TODO !2: update component element in DB
+    console.log(request.payload)
+  }
+})
 
 // exports
 export default server
