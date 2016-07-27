@@ -170,6 +170,16 @@ server.route({
   }
 })
 server.route({
+  method: 'PATCH',
+  path: '/{slug}',
+  handler: function (request, reply) {
+    // TODO !0: update page element in DB
+    console.log(request.payload)
+  }
+})
+
+// Components
+server.route({
   method: 'POST',
   path: '/{slug}/component',
   handler: function (request, reply) {
@@ -189,16 +199,16 @@ server.route({
         }
         return reply.view('component', {'page': page, 'component': component}, {'layout': false})
       })
+    } else {
+      // Creation case
+      db.createComponent(request.params.slug, request.payload, (err, page, component) => {
+        Hoek.assert(!err, err)
+        if (!page) {
+          return reply.redirect('/')
+        }
+        return reply.view('component', {'page': page, 'component': component}, {'layout': false})
+      })
     }
-
-    // Creation case
-    db.createComponent(request.params.slug, request.payload, (err, page, component) => {
-      Hoek.assert(!err, err)
-      if (!page) {
-        return reply.redirect('/')
-      }
-      return reply.view('component', {'page': page, 'component': component}, {'layout': false})
-    })
   }
 })
 

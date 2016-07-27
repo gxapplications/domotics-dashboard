@@ -20,7 +20,7 @@ if (!exists) {
   db.serialize(() => {
     db.run('CREATE TABLE accounts (password TEXT)')
     db.run('CREATE TABLE pages (slug TEXT, name TEXT, last_access INTEGER, positions TEXT, layout INTEGER)')
-    db.run('CREATE TABLE components (id INTEGER, type INTEGER)')
+    db.run('CREATE TABLE components (id INTEGER PRIMARY KEY, type INTEGER)')
   })
 }
 
@@ -86,8 +86,9 @@ db.createComponent = function (slug, payload, callback) {
     if (err || !row) {
       return callback(err, null, null)
     }
-    // TODO !0: create, store and return component
-    return callback(err, row, {id: 69})
+    db.run('INSERT INTO components (id, type) VALUES (NULL, ?)', payload.type, function (err) {
+      return callback(err, row, Object.assign({id: this.lastID}, payload))
+    })
   })
 }
 

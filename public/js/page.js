@@ -65,8 +65,7 @@
 	  $scope.edition = $rootScope.edition;
 
 	  $scope.grid = {
-	    // positions: window.initGridPositions, // TODO !1: retablir une data depuis la DB quand la sauvegarde sera OK
-	    positions: [{ id: 1, w: 1, h: 1, x: 0, y: 0 }, { id: 2, w: 1, h: 2, x: 0, y: 1 }, { id: 3, w: 2, h: 2, x: 1, y: 0 }, { id: 4, w: 1, h: 1, x: 1, y: 2 }, { id: 5, w: 2, h: 1, x: 2, y: 2 }],
+	    positions: window.initGridPositions.length ? window.initGridPositions : [{ id: 1, w: 1, h: 1, x: 0, y: 0 }, { id: 2, w: 1, h: 2, x: 0, y: 1 }, { id: 3, w: 2, h: 2, x: 1, y: 0 }, { id: 4, w: 1, h: 1, x: 1, y: 2 }, { id: 5, w: 2, h: 1, x: 2, y: 2 }], // TODO !5: remove fake data when CRUD will be OK
 	    layout: window.initGridLayout,
 	    loaderUrl: window.gridComponentLoaderUrl,
 	    onLayoutChange: function onLayoutChange() {
@@ -80,7 +79,18 @@
 	      $scope.grid.gridStack = $('#grid').gridStack({
 	        matrix: $scope.grid.positions,
 	        onChange: function onChange(changedItems, mx) {
-	          // TODO !1
+	          $.ajax({
+	            url: window.gridPageUpdaterUrl,
+	            method: 'PATCH',
+	            data: {
+	              'positions': mx
+	            }
+	          }).done(function () {
+	            $scope.grid.positions = mx;
+	            // TODO !1
+	          }).fail(function () {
+	            // TODO !1
+	          });
 	        },
 	        lanes: $scope.grid.layout,
 	        elementPrototype: 'li.position-card',
@@ -105,7 +115,7 @@
 	    }, 900);
 	  });
 
-	  // TODO !1: register here with a socket, and listen to update $scope.states :)
+	  // TODO !7: register here with a socket, and listen to update $scope.states :)
 	});
 
 /***/ }
