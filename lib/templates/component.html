@@ -4,7 +4,7 @@
         <div flex layout-padding>
             {{{block "component_content"}}}
 
-            // TODO !4
+            // TODO !5
         </div>
 
         <div class="fabSpeedDialCircle" ng-show="edition.active"
@@ -19,19 +19,18 @@
                     <md-fab-actions>
                         <md-button class="md-fab md-raised btn-0" aria-label="Refresh">
                             <md-icon class="material-icons" aria-label="Refresh">refresh</md-icon>
-// TODO !6
+// TODO !3
                         </md-button>
                         <md-button class="md-fab md-raised md-primary btn-1" aria-label="Edit">
                             <md-icon class="material-icons" aria-label="Edit">settings</md-icon>
-// TODO !6
+// TODO !4
                         </md-button>
                         <md-button class="md-fab md-raised btn-2" aria-label="Resize">
                             <md-icon class="material-icons" aria-label="Resize">photo_size_select_small</md-icon>
-// TODO !6
+// TODO !2
                         </md-button>
-                        <md-button class="md-fab md-raised md-warn btn-3" aria-label="Remove">
+                        <md-button class="md-fab md-raised md-warn btn-3" aria-label="Remove" ng-click="edition.removeComponent({{component.id}})">
                             <md-icon class="material-icons" aria-label="Remove">delete_forever</md-icon>
-// TODO !3
                         </md-button>
                     </md-fab-actions>
                 </md-fab-speed-dial>

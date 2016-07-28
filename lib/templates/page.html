@@ -27,11 +27,10 @@
 {{/extend}}
 
 <div layout="column" flex ng-controller="PageControls" class="page-controller" ng-class="{'editing': (edition.active)}">
-    <md-toolbar md-scroll-shrink ng-if="true"
-                class="md-whiteframe-6dp page-toolbar-static" ng-class="{'hidden': (!edition.active)}">
+    <md-toolbar ng-if="true" class="md-whiteframe-6dp page-toolbar-static" ng-class="{'hidden': (!edition.active)}">
         <div class="md-toolbar-tools">
             <h3>
-                <span>{{page.name}} (editing)</span>
+                <span>{{page.name}} (editing) TODO 6</span>
             </h3>
             <span flex></span>
             <md-button class="md-fab md-hue-1" aria-label="Close edit mode" ng-click="edition.close()">
@@ -49,7 +48,7 @@
                 </h3>
                 <span flex></span>
                 <md-button class="md-fab md-hue-2" aria-label="Open edit mode" ng-click="edition.open()">
-		    <md-icon class="material-icons" aria-label="Edit">mode_edit</md-icon>
+		            <md-icon class="material-icons" aria-label="Edit">mode_edit</md-icon>
                 </md-button>
             </div>
         </md-toolbar>
@@ -72,13 +71,18 @@
         </md-content>
     </div>
 
-    <div layout="row" flex layout-align="space-between stretch" class="page-editors" ng-class="{'editing': (edition.active)}">
-        <div  layout="column" layout-align="left center" class="left-bar">
-            TODO !6
-        </div>
-        <div  layout="column" layout-align="right center" class="right-bar">
-            TODO !6
-        </div>
-    </div>
+    <md-content layout="column" layout-align="left center" class="page-editor left-bar" ng-class="{'editing': (edition.active)}">
+        <md-button class="md-fab" aria-label="Add component type 1" ng-click="edition.addComponent(1, 1, 1)">
+            <md-icon class="material-icons" aria-label="Add type 1">add</md-icon>
+        </md-button>
+        TODO !5
+    </md-content>
+    <md-content layout="column" layout-align="right center" class="page-editor right-bar" ng-class="{'editing': (edition.active)}">
+        <md-button class="md-fab" aria-label="Add component type 1" ng-click="edition.addComponent(1, 1, 1)">
+            <md-icon class="material-icons" aria-label="Add type 1">add</md-icon>
+        </md-button>
+        TODO !5
+    </md-content>
+
 </div>
 

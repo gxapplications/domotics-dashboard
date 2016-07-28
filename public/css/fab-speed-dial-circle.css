@@ -4,7 +4,7 @@
   bottom: 0px;
   left: 0px;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 .fabSpeedDialCircle .md-is-open .btn-0 {
   position: absolute;
@@ -16,7 +16,7 @@
   bottom: 0px;
   left: 0px;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 .fabSpeedDialCircle .md-is-open .btn-1 {
   position: absolute;
@@ -28,7 +28,7 @@
   bottom: 0px;
   left: 0px;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 .fabSpeedDialCircle .md-is-open .btn-2 {
   position: absolute;
@@ -40,7 +40,7 @@
   bottom: 0px;
   left: 0px;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 .fabSpeedDialCircle .md-is-open .btn-3 {
   position: absolute;
@@ -52,7 +52,7 @@
   bottom: 0px;
   left: 0px;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 .fabSpeedDialCircle .md-is-open .btn-4 {
   position: absolute;
@@ -64,7 +64,7 @@
   bottom: 0px;
   left: 0px;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 .fabSpeedDialCircle .md-is-open .btn-5 {
   position: absolute;
@@ -76,7 +76,7 @@
   bottom: 0px;
   left: 0px;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 .fabSpeedDialCircle .md-is-open .btn-6 {
   position: absolute;
@@ -88,7 +88,7 @@
   bottom: 0px;
   left: 0px;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
 }
 .fabSpeedDialCircle .md-is-open .btn-7 {
   position: absolute;

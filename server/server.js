@@ -213,22 +213,19 @@ server.route({
           return reply.redirect('/')
         }
         if (!component) {
-          return reply.view('component', {'page': page, 'component': {id: request.payload.id}}, {'layout': false}) // FIXME !4: to remove !
-          // return reply({}).code(404)
+          return reply({}).code(404)
         }
         return reply.view('component', {'page': page, 'component': component}, {'layout': false})
       })
     } else {
-      // TODO !0: bouton simple pour ajouter un component de type 1 (sur les sidebars rouges pour le moment)
-      // TODO !1: ajout de component en base (POST sur /{slug}/component) puis mise a jour de la jqgrid avec l'ID renvoyé... et sauvegarde dans la page
-
       // Creation case
       db.createComponent(request.params.slug, request.payload, (err, page, component) => {
         Hoek.assert(!err, err)
         if (!page) {
           return reply.redirect('/')
         }
-        return reply.view('component', {'page': page, 'component': component}, {'layout': false})
+        return reply(component.id)
+        //return reply.view('component', {'page': page, 'component': component}, {'layout': false})
       })
     }
   }
@@ -241,7 +238,18 @@ server.route({
       return reply.redirect('/') // User is not connected yet!
     }
 
-    // TODO !2: update component element in DB
+    // TODO !1: update component element in DB
+    console.log(request.payload)
+  }
+})
+server.route({
+  method: 'DELETE',
+  path: '/{slug}/component/{id}',
+  handler: function (request, reply) {
+    if (!request.context.api) {
+      return reply.redirect('/') // User is not connected yet!
+    }
+    // TODO !0: delete component element in DB
     console.log(request.payload)
   }
 })

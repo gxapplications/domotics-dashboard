@@ -60,12 +60,75 @@
 	    open: function open() {
 	      $rootScope.edition.active = true;
 	      // $rootScope.grid.gridStack.gridList('reflow')
+	    },
+	    addComponent: function addComponent(type, width, height) {
+	      var position = $scope.grid.gridStack.findFreeSpaceXY(width, height);
+	      // eslint-disable-next-line no-undef
+	      $.post(window.gridComponentLoaderUrl, {
+	        'type': type,
+	        'position': position,
+	        'dimensions': { 'w': width, 'h': height }
+	      }).done(function (data) {
+	        $scope.grid.positions.push({ 'id': data, 'w': width, 'h': height, 'x': position['x'], 'y': position['y'] });
+	        // eslint-disable-next-line no-undef
+	        $($scope.grid.init()); // reinit gridStack
+
+	        // eslint-disable-next-line no-undef
+	        $.ajax({
+	          url: window.gridPageUpdaterUrl,
+	          method: 'PATCH',
+	          data: {
+	            positions: $scope.grid.positions
+	          }
+	        }).done(function () {
+	          $mdToast.show($mdToast.simple().textContent('New position saved!').position('bottom right').hideDelay(3000));
+	        }).fail(function () {
+	          $mdToast.show($mdToast.simple().textContent('Positions NOT saved!').theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
+	            if (response === 'ok') {
+	              window.location.reload();
+	            }
+	          });
+	        });
+	      }).fail(function () {
+	        $mdToast.show($mdToast.simple().textContent('Component NOT added!').theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
+	          if (response === 'ok') {
+	            window.location.reload();
+	          }
+	        });
+	      });
+	    },
+	    removeComponent: function removeComponent(id) {
+	      alert(id);
+	      // TODO !1
+	      /*
+	       // remove component from matrix
+	       var newMatrix = [];
+	       for (var i = 0; i < matrix.length; i++) {
+	       if (matrix[i]['id'] != componentId) {
+	       newMatrix.push(matrix[i]);
+	       }
+	       }
+	       matrix = newMatrix;
+	       // update DB (remove component and update page)
+	       $.post(
+	       '{{ path("_component_remove", {'page_id': page.id}) }}',
+	       {
+	       'matrix': matrix,
+	       'id': componentId
+	       }
+	       ).done(function(data) {
+	       $(init()); // reinit gridStack
+	       $scope.toolbar.notifications.postSuccess('Component removed with success!');
+	       }).fail(function() {
+	       $scope.toolbar.notifications.postError('Error removing component!');
+	       });
+	       */
 	    }
 	  };
 	  $scope.edition = $rootScope.edition;
 
 	  $scope.grid = {
-	    positions: window.initGridPositions.length ? window.initGridPositions : [{ id: 1, w: 1, h: 1, x: 0, y: 0 }, { id: 2, w: 1, h: 2, x: 0, y: 1 }, { id: 3, w: 2, h: 2, x: 1, y: 0 }, { id: 4, w: 1, h: 1, x: 1, y: 2 }, { id: 5, w: 2, h: 1, x: 2, y: 2 }], // TODO !5: remove fake data when CRUD will be OK
+	    positions: window.initGridPositions,
 	    layout: window.initGridLayout,
 	    loaderUrl: window.gridComponentLoaderUrl,
 	    onLayoutChange: function onLayoutChange() {
@@ -84,26 +147,15 @@
 	            url: window.gridPageUpdaterUrl,
 	            method: 'PATCH',
 	            data: {
-	              'positions': mx
+	              positions: mx
 	            }
 	          }).done(function () {
 	            $scope.grid.positions = mx;
-	            /* $mdToast.show(
-	               $mdToast.simple()
-	                 .textContent('Positions saved!')
-	                 .position('bottom right')
-	                 .hideDelay(3000)
-	             );*/
-
-	            $mdToast.show($mdToast.simple().textContent('Positions NOT saved!').theme("errorToast").action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
-	              if (response == 'ok') {
-	                alert('You clicked the \'UNDO\' action.'); // TODO !0: reload
-	              }
-	            });
+	            $mdToast.show($mdToast.simple().textContent('Positions saved!').position('bottom right').hideDelay(3000));
 	          }).fail(function () {
-	            $mdToast.show($mdToast.simple().textContent('Positions NOT saved!').theme("errorToast").action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
-	              if (response == 'ok') {
-	                alert('You clicked the \'UNDO\' action.'); // TODO !0: reload
+	            $mdToast.show($mdToast.simple().textContent('Positions NOT saved!').theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
+	              if (response === 'ok') {
+	                window.location.reload();
 	              }
 	            });
 	          });
@@ -128,7 +180,7 @@
 	    $($scope.grid.init());
 	    window.setTimeout(function () {
 	      $scope.grid.gridStack.gridList('reflow');
-	    }, 900);
+	    }, 800);
 	  });
 
 	  // TODO !7: register here with a socket, and listen to update $scope.states :)
