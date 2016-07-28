@@ -2,6 +2,7 @@
 
 import config from 'config'
 import Hapi from 'hapi'
+import HapiQs from 'hapi-qs'
 import Vision from 'vision'
 import Handlebars from 'handlebars'
 import ExtendBlock from 'handlebars-extend-block'
@@ -64,6 +65,13 @@ server.register(Inert, (err) => {
       file: Path.join(__dirname, '..', 'public', 'images', 'home.png')
     }
   })
+})
+
+// Query string and Payload parsing
+server.register({
+  register: HapiQs
+}, (err) => {
+  Hoek.assert(!err, err)
 })
 
 // Context middleware
@@ -160,6 +168,7 @@ server.route({
     if (!request.context.api) {
       return reply.redirect('/') // User is not connected yet!
     }
+
     db.getPageBySlug(request.params.slug, (err, page) => {
       Hoek.assert(!err, err)
       if (!page) {
@@ -173,8 +182,17 @@ server.route({
   method: 'PATCH',
   path: '/{slug}',
   handler: function (request, reply) {
-    // TODO !0: update page element in DB
-    console.log(request.payload)
+    if (!request.context.api) {
+      return reply.redirect('/') // User is not connected yet!
+    }
+
+    db.updatePageBySlug(request.params.slug, request.payload, (err, page) => {
+      Hoek.assert(!err, err)
+      if (!page) {
+        return reply.redirect('/')
+      }
+      reply.view('page', {'page': page, 'md-primary': 'teal', 'states': request.context.states})
+    })
   }
 })
 
@@ -195,11 +213,15 @@ server.route({
           return reply.redirect('/')
         }
         if (!component) {
-          return reply({}).code(404)
+          return reply.view('component', {'page': page, 'component': {id: request.payload.id}}, {'layout': false}) // FIXME !4: to remove !
+          // return reply({}).code(404)
         }
         return reply.view('component', {'page': page, 'component': component}, {'layout': false})
       })
     } else {
+      // TODO !0: bouton simple pour ajouter un component de type 1 (sur les sidebars rouges pour le moment)
+      // TODO !1: ajout de component en base (POST sur /{slug}/component) puis mise a jour de la jqgrid avec l'ID renvoyé... et sauvegarde dans la page
+
       // Creation case
       db.createComponent(request.params.slug, request.payload, (err, page, component) => {
         Hoek.assert(!err, err)
@@ -215,6 +237,10 @@ server.route({
   method: 'PATCH',
   path: '/{slug}/component/{id}',
   handler: function (request, reply) {
+    if (!request.context.api) {
+      return reply.redirect('/') // User is not connected yet!
+    }
+
     // TODO !2: update component element in DB
     console.log(request.payload)
   }

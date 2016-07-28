@@ -79,6 +79,7 @@
 	      $scope.grid.gridStack = $('#grid').gridStack({
 	        matrix: $scope.grid.positions,
 	        onChange: function onChange(changedItems, mx) {
+	          // eslint-disable-next-line no-undef
 	          $.ajax({
 	            url: window.gridPageUpdaterUrl,
 	            method: 'PATCH',
@@ -87,9 +88,24 @@
 	            }
 	          }).done(function () {
 	            $scope.grid.positions = mx;
-	            // TODO !1
+	            /* $mdToast.show(
+	               $mdToast.simple()
+	                 .textContent('Positions saved!')
+	                 .position('bottom right')
+	                 .hideDelay(3000)
+	             );*/
+
+	            $mdToast.show($mdToast.simple().textContent('Positions NOT saved!').theme("errorToast").action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
+	              if (response == 'ok') {
+	                alert('You clicked the \'UNDO\' action.'); // TODO !0: reload
+	              }
+	            });
 	          }).fail(function () {
-	            // TODO !1
+	            $mdToast.show($mdToast.simple().textContent('Positions NOT saved!').theme("errorToast").action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
+	              if (response == 'ok') {
+	                alert('You clicked the \'UNDO\' action.'); // TODO !0: reload
+	              }
+	            });
 	          });
 	        },
 	        lanes: $scope.grid.layout,

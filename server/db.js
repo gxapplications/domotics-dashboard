@@ -56,13 +56,27 @@ db.getLastAccessedPageSlug = function (callback, createIfNotFound = false) {
 }
 
 db.getPageBySlug = function (slug, callback) {
-  db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, row) => {
-    if (err) {
-      return callback(err)
+  db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
+    if (err || !pageRow) {
+      return callback(err, null, null)
     }
     const now = (new Date()).getTime()
     db.run('UPDATE pages SET last_access=? WHERE slug=?', now, slug, (err) => {
-      return callback(err, row)
+      return callback(err, pageRow)
+    })
+  })
+}
+
+db.updatePageBySlug = function (slug, payload, callback) {
+  db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
+    if (err || !pageRow) {
+      return callback(err, null, null)
+    }
+
+    const now = (new Date()).getTime()
+    Object.assign(pageRow, payload, {now})
+    db.run('UPDATE pages SET name=?, last_access=?, positions=?, layout=? WHERE slug=?', pageRow.name, pageRow.now, JSON.stringify(pageRow.positions), pageRow.layout, slug, (err) => {
+      return callback(err, pageRow)
     })
   })
 }
