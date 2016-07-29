@@ -44,6 +44,7 @@
 /* 0 */
 /***/ function(module, exports) {
 
+	/* eslint-disable no-undef */
 	'use strict';
 
 	// import Nes from 'nes'
@@ -56,6 +57,7 @@
 	    $mdDialog.cancel();
 	  };
 	  $scope.answer = function (answer) {
+	    alert('click'); // TODO !0 : la dialog precompilee ne declenche pas answer() !
 	    $mdDialog.hide(answer);
 	  };
 	}
@@ -75,17 +77,14 @@
 	    },
 	    addComponent: function addComponent(type, width, height) {
 	      var position = $scope.grid.gridStack.findFreeSpaceXY(width, height);
-	      // eslint-disable-next-line no-undef
 	      $.post(window.gridComponentLoaderUrl, {
 	        'type': type,
 	        'position': position,
 	        'dimensions': { 'w': width, 'h': height }
 	      }).done(function (data) {
 	        $scope.grid.positions.push({ 'id': data, 'w': width, 'h': height, 'x': position['x'], 'y': position['y'] });
-	        // eslint-disable-next-line no-undef
 	        $($scope.grid.init()); // reinit gridStack
 
-	        // eslint-disable-next-line no-undef
 	        $.ajax({
 	          url: window.gridPageUpdaterUrl,
 	          method: 'PATCH',
@@ -123,10 +122,8 @@
 	          id: id
 	        }
 	      }).done(function (data) {
-	        // eslint-disable-next-line no-undef
 	        $($scope.grid.init()); // reinit gridStack
 
-	        // eslint-disable-next-line no-undef
 	        $.ajax({
 	          url: window.gridPageUpdaterUrl,
 	          method: 'PATCH',
@@ -146,13 +143,18 @@
 	        $scope.toolbar.notifications.postError('Error removing component!');
 	      });
 	    },
-	    resizeComponentDialog: function resizeComponentDialog(event) {
+	    resizeComponentDialog: function resizeComponentDialog(id, event) {
 	      $mdDialog.show({
-	        controller: DialogController,
+	        //controller: DialogController,
 	        contentElement: '#componentSizes',
 	        parent: angular.element(document.body),
 	        targetEvent: event,
-	        clickOutsideToClose: true
+	        clickOutsideToClose: true,
+	        locals: {
+	          answer: function answer(toto) {
+	            alert(toto);
+	          }
+	        }
 	      }).then(function (result) {
 	        alert('TODO You decided to name your dog ' + result + '. ANSWER case?');
 	      }, function () {
@@ -161,7 +163,9 @@
 	    }
 	  };
 	  $scope.edition = $rootScope.edition;
-
+	  $scope.answer = function (toto) {
+	    alert(toto);
+	  };
 	  $scope.grid = {
 	    positions: window.initGridPositions,
 	    layout: window.initGridLayout,
@@ -173,11 +177,9 @@
 	    },
 	    gridStack: null,
 	    init: function init() {
-	      // eslint-disable-next-line no-undef
 	      $scope.grid.gridStack = $('#grid').gridStack({
 	        matrix: $scope.grid.positions,
 	        onChange: function onChange(changedItems, mx) {
-	          // eslint-disable-next-line no-undef
 	          $.ajax({
 	            url: window.gridPageUpdaterUrl,
 	            method: 'PATCH',
@@ -211,7 +213,6 @@
 	  $scope.$watch('grid.layout', $scope.grid.onLayoutChange);
 
 	  $document.ready(function () {
-	    // eslint-disable-next-line no-undef
 	    $($scope.grid.init());
 	    window.setTimeout(function () {
 	      $scope.grid.gridStack.gridList('reflow');
