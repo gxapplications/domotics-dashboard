@@ -209,10 +209,7 @@ server.route({
     if (request.payload.id) {
       db.getComponentById(request.params.slug, request.payload.id, (err, page, component) => {
         Hoek.assert(!err, err)
-        if (!page) {
-          return reply.redirect('/')
-        }
-        if (!component) {
+        if (!page || !component) {
           return reply({}).code(404)
         }
         return reply.view('component', {'page': page, 'component': component}, {'layout': false})
@@ -222,10 +219,13 @@ server.route({
       db.createComponent(request.params.slug, request.payload, (err, page, component) => {
         Hoek.assert(!err, err)
         if (!page) {
-          return reply.redirect('/')
+          return reply({}).code(404)
+        }
+        if (!component) {
+          return reply({}).code(500)
         }
         return reply(component.id)
-        //return reply.view('component', {'page': page, 'component': component}, {'layout': false})
+        // return reply.view('component', {'page': page, 'component': component}, {'layout': false})
       })
     }
   }
@@ -238,8 +238,13 @@ server.route({
       return reply.redirect('/') // User is not connected yet!
     }
 
-    // TODO !1: update component element in DB
-    console.log(request.payload)
+    db.updateComponent(request.params.slug, request.params.id, request.payload, (err, page, component) => {
+      Hoek.assert(!err, err)
+      if (!page || !component) {
+        return reply({}).code(404)
+      }
+      return reply.view('component', {'page': page, 'component': component}, {'layout': false})
+    })
   }
 })
 server.route({
@@ -249,8 +254,11 @@ server.route({
     if (!request.context.api) {
       return reply.redirect('/') // User is not connected yet!
     }
-    // TODO !0: delete component element in DB
-    console.log(request.payload)
+
+    db.deleteComponent(request.params.id, (err) => {
+      Hoek.assert(!err, err)
+      return reply({status: 'ok'})
+    })
   }
 })
 

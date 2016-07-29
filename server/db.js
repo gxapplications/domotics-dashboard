@@ -96,12 +96,36 @@ db.getComponentById = function (slug, id, callback) {
 }
 
 db.createComponent = function (slug, payload, callback) {
-  db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, row) => {
-    if (err || !row) {
+  db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
+    if (err || !pageRow) {
       return callback(err, null, null)
     }
     db.run('INSERT INTO components (id, type) VALUES (NULL, ?)', payload.type, function (err) {
-      return callback(err, row, Object.assign({id: this.lastID}, payload))
+      return callback(err, pageRow, Object.assign({id: this.lastID}, payload))
+    })
+  })
+}
+
+db.deleteComponent = function (id, callback) {
+  db.run('DELETE FROM components WHERE id=?', id, function (err) {
+    return callback(err)
+  })
+}
+
+db.updateComponent = function (slug, id, payload, callback) {
+  db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
+    if (err || !pageRow) {
+      return callback(err, null, null)
+    }
+    db.get('SELECT * FROM components WHERE id=? LIMIT 1', id, (err, componentRow) => {
+      if (err || !componentRow) {
+        return callback(err, pageRow, null)
+      }
+
+      Object.assign(componentRow, payload)
+      db.run('UPDATE components SET type=? WHERE id=?', componentRow.type, id, (err) => {
+        return callback(err, pageRow, componentRow)
+      })
     })
   })
 }

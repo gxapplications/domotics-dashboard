@@ -48,7 +48,19 @@
 
 	// import Nes from 'nes'
 
-	window.app.controller('PageControls', function ($rootScope, $scope, $document, $http, $window, $mdToast) {
+	function DialogController($scope, $mdDialog) {
+	  $scope.hide = function () {
+	    $mdDialog.hide();
+	  };
+	  $scope.cancel = function () {
+	    $mdDialog.cancel();
+	  };
+	  $scope.answer = function (answer) {
+	    $mdDialog.hide(answer);
+	  };
+	}
+
+	window.app.controller('PageControls', function ($rootScope, $scope, $document, $http, $window, $mdToast, $mdDialog) {
 	  $scope.states = window.initStates;
 
 	  $rootScope.edition = {
@@ -98,31 +110,54 @@
 	      });
 	    },
 	    removeComponent: function removeComponent(id) {
-	      alert(id);
-	      // TODO !1
-	      /*
-	       // remove component from matrix
-	       var newMatrix = [];
-	       for (var i = 0; i < matrix.length; i++) {
-	       if (matrix[i]['id'] != componentId) {
-	       newMatrix.push(matrix[i]);
-	       }
-	       }
-	       matrix = newMatrix;
-	       // update DB (remove component and update page)
-	       $.post(
-	       '{{ path("_component_remove", {'page_id': page.id}) }}',
-	       {
-	       'matrix': matrix,
-	       'id': componentId
-	       }
-	       ).done(function(data) {
-	       $(init()); // reinit gridStack
-	       $scope.toolbar.notifications.postSuccess('Component removed with success!');
-	       }).fail(function() {
-	       $scope.toolbar.notifications.postError('Error removing component!');
-	       });
-	       */
+	      // remove component from matrix
+	      $scope.grid.positions = $scope.grid.positions.filter(function (item) {
+	        return item.id !== id;
+	      });
+
+	      // update DB (remove component and update page)
+	      $.ajax({
+	        url: window.gridComponentLoaderUrl + '/' + id,
+	        method: 'DELETE',
+	        data: {
+	          id: id
+	        }
+	      }).done(function (data) {
+	        // eslint-disable-next-line no-undef
+	        $($scope.grid.init()); // reinit gridStack
+
+	        // eslint-disable-next-line no-undef
+	        $.ajax({
+	          url: window.gridPageUpdaterUrl,
+	          method: 'PATCH',
+	          data: {
+	            positions: $scope.grid.positions
+	          }
+	        }).done(function () {
+	          $mdToast.show($mdToast.simple().textContent('Component removed!').position('bottom right').hideDelay(3000));
+	        }).fail(function () {
+	          $mdToast.show($mdToast.simple().textContent('Positions NOT saved!').theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
+	            if (response === 'ok') {
+	              window.location.reload();
+	            }
+	          });
+	        });
+	      }).fail(function () {
+	        $scope.toolbar.notifications.postError('Error removing component!');
+	      });
+	    },
+	    resizeComponentDialog: function resizeComponentDialog(event) {
+	      $mdDialog.show({
+	        controller: DialogController,
+	        contentElement: '#componentSizes',
+	        parent: angular.element(document.body),
+	        targetEvent: event,
+	        clickOutsideToClose: true
+	      }).then(function (result) {
+	        alert('TODO You decided to name your dog ' + result + '. ANSWER case?');
+	      }, function () {
+	        alert('TODO You didn\'t name your dog. CANCEL case?');
+	      });
 	    }
 	  };
 	  $scope.edition = $rootScope.edition;
@@ -183,7 +218,7 @@
 	    }, 800);
 	  });
 
-	  // TODO !7: register here with a socket, and listen to update $scope.states :)
+	  // TODO !9: register here with a socket, and listen to update $scope.states :)
 	});
 
 /***/ }
