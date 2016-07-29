@@ -8,7 +8,7 @@
 }
 .fabSpeedDialCircle .md-is-open .btn-0 {
   position: absolute;
-  transform: rotate(200deg) translate(61.2px) rotate(-200deg);
+  transform: rotate(270deg) translate(61.2px) rotate(-270deg);
   opacity: 1;
 }
 .fabSpeedDialCircle .btn-1 {
@@ -20,7 +20,7 @@
 }
 .fabSpeedDialCircle .md-is-open .btn-1 {
   position: absolute;
-  transform: rotate(245deg) translate(61.2px) rotate(-245deg);
+  transform: rotate(315deg) translate(61.2px) rotate(-315deg);
   opacity: 1;
 }
 .fabSpeedDialCircle .btn-2 {
@@ -32,7 +32,7 @@
 }
 .fabSpeedDialCircle .md-is-open .btn-2 {
   position: absolute;
-  transform: rotate(290deg) translate(61.2px) rotate(-290deg);
+  transform: rotate(360deg) translate(61.2px) rotate(-360deg);
   opacity: 1;
 }
 .fabSpeedDialCircle .btn-3 {
@@ -44,55 +44,7 @@
 }
 .fabSpeedDialCircle .md-is-open .btn-3 {
   position: absolute;
-  transform: rotate(335deg) translate(61.2px) rotate(-335deg);
-  opacity: 1;
-}
-.fabSpeedDialCircle .btn-4 {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  opacity: 0;
-  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
-}
-.fabSpeedDialCircle .md-is-open .btn-4 {
-  position: absolute;
-  transform: rotate(380deg) translate(61.2px) rotate(-380deg);
-  opacity: 1;
-}
-.fabSpeedDialCircle .btn-5 {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  opacity: 0;
-  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
-}
-.fabSpeedDialCircle .md-is-open .btn-5 {
-  position: absolute;
-  transform: rotate(425deg) translate(61.2px) rotate(-425deg);
-  opacity: 1;
-}
-.fabSpeedDialCircle .btn-6 {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  opacity: 0;
-  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
-}
-.fabSpeedDialCircle .md-is-open .btn-6 {
-  position: absolute;
-  transform: rotate(470deg) translate(61.2px) rotate(-470deg);
-  opacity: 1;
-}
-.fabSpeedDialCircle .btn-7 {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  opacity: 0;
-  transition: all 0.2s cubic-bezier(0.55, 0, 0.55, 0.2);
-}
-.fabSpeedDialCircle .md-is-open .btn-7 {
-  position: absolute;
-  transform: rotate(515deg) translate(61.2px) rotate(-515deg);
+  transform: rotate(405deg) translate(61.2px) rotate(-405deg);
   opacity: 1;
 }
 .fabSpeedDialCircle .text-capitalize {

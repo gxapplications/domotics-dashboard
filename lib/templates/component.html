@@ -1,4 +1,5 @@
-<div id="component-{{component.id}}" flex layout-fill layout-align="center stretch" class="gridlist-card md-whiteframe-6dp {{{block "card_css"}}}">
+<div id="component-{{component.id}}" flex layout-fill layout-align="center stretch"
+     class="gridlist-card md-whiteframe-6dp {{{block 'card_css'}}}">
     <div ng-controller="CardCtrl-{{component.id}} as ctrl" layout="column" layout-fill layout-align="space-around stretch">
 
         <div flex layout-padding>
@@ -17,19 +18,16 @@
                         </div>
                     </md-fab-trigger>
                     <md-fab-actions>
-                        <md-button class="md-fab md-raised btn-0" aria-label="Refresh">
-                            <md-icon class="material-icons" aria-label="Refresh">refresh</md-icon>
-// TODO !3
-                        </md-button>
-                        <md-button class="md-fab md-raised md-primary btn-1" aria-label="Edit">
+                        <md-button class="md-fab md-raised md-primary btn-0" aria-label="Edit"
+                                   ng-click="ctrl.configure($event)">
                             <md-icon class="material-icons" aria-label="Edit">settings</md-icon>
-// TODO !4
                         </md-button>
-                        <md-button class="md-fab md-raised btn-2" aria-label="Resize" ng-click="edition.resizeComponentDialog({{component.id}}, $event)">
+                        <md-button class="md-fab md-raised md-primary md-hue-2 btn-1" aria-label="Resize"
+                                   ng-click="edition.resizeComponentDialog({{component.id}}, $event)">
                             <md-icon class="material-icons" aria-label="Resize">photo_size_select_small</md-icon>
-// TODO !2
                         </md-button>
-                        <md-button class="md-fab md-raised md-warn btn-3" aria-label="Remove" ng-click="edition.removeComponent({{component.id}})">
+                        <md-button class="md-fab md-raised md-warn btn-2" aria-label="Remove"
+                                   ng-click="edition.removeComponent({{component.id}})">
                             <md-icon class="material-icons" aria-label="Remove">delete_forever</md-icon>
                         </md-button>
                     </md-fab-actions>
@@ -40,13 +38,66 @@
     </div>
 
     <div class="component_edit_dialog" style="display:none;"><!--
-        {{{block "component_settings"}}}
+        {{!-- The content below is html-commented to ensure it will not be "angularized" during init of the component. The dialog will do it instead. --}}
+        <md-dialog name="componentEditForm-{{component.id}}" aria-label="Settings dialog">
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <md-icon aria-label="Settings" class="material-icons md-14">settings</md-icon>&nbsp;&nbsp;
+                    <h2 flex>Edit component's properties</h2>
+                </div>
+            </md-toolbar>
+            <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
+                {{{block "component_settings"}}}
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                {{{block "component_actions"}}}
+            </md-dialog-actions>
+        </md-dialog>
     ---></div>
 
     <script>
-      app.controllerProvider.register("CardCtrl-{{component.id}}", ($rootScope, $scope, $interval, $mdDialog, $http) => {
+      app.controllerProvider.register('CardCtrl-{{component.id}}', function ($rootScope, $scope, $interval, $mdDialog, $http) {
         $scope.edition = $rootScope.edition
         this.speedDialOpened = false
+        $scope.component = {{tojson component}}
+
+        this.configure = function($event) {
+          var content = $("div#component-{{component.id}} div.component_edit_dialog").html().substring(4) // removes <!--
+          content = content.substr(0, content.length-4) // removes --->
+          $mdDialog.show({
+            parent: angular.element(document.body),
+            clickOutsideToClose: true,
+            targetEvent: $event,
+            closeTo: '#component-{{component.id}}',
+            scope: $scope, // use parent scope in template
+            preserveScope: true, // do not forget this if use parent scope
+            onRemoving: function() {
+              // TODO !0: refresh
+            },
+            template: content,
+            controller: function($scope, $mdDialog) {
+              $scope.cancelConfig = function() {
+                $mdDialog.hide()
+                // TODO !0: refresh
+              }
+              $scope.saveConfig = function() {
+                $mdDialog.hide();
+                $.post(
+                    window.gridComponentLoaderUrl + '/{{component.id}}',
+                    { 'component': $scope.component }
+                  ).done(function() {
+                    // TODO !0 Toast SUCCESS
+                    // TODO !0: refresh
+                  }).fail(function() {
+                    // TODO !0 Toast FAIL
+                    // TODO !0: refresh
+                  })
+              }
+
+              {{{block "component_script"}}}
+            }
+          })
+        }
 
         {{{block "component_js"}}}
       });

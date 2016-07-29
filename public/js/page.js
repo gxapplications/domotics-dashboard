@@ -42,25 +42,14 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	/* eslint-disable no-undef */
 	'use strict';
 
-	// import Nes from 'nes'
+	var _resizerDialog = __webpack_require__(1);
 
-	function DialogController($scope, $mdDialog) {
-	  $scope.hide = function () {
-	    $mdDialog.hide();
-	  };
-	  $scope.cancel = function () {
-	    $mdDialog.cancel();
-	  };
-	  $scope.answer = function (answer) {
-	    alert('click'); // TODO !0 : la dialog precompilee ne declenche pas answer() !
-	    $mdDialog.hide(answer);
-	  };
-	}
+	// import Nes from 'nes'
 
 	window.app.controller('PageControls', function ($rootScope, $scope, $document, $http, $window, $mdToast, $mdDialog) {
 	  $scope.states = window.initStates;
@@ -111,7 +100,7 @@
 	    removeComponent: function removeComponent(id) {
 	      // remove component from matrix
 	      $scope.grid.positions = $scope.grid.positions.filter(function (item) {
-	        return item.id !== id;
+	        return item.id != id; // !!! no "===" here !!!
 	      });
 
 	      // update DB (remove component and update page)
@@ -144,28 +133,22 @@
 	      });
 	    },
 	    resizeComponentDialog: function resizeComponentDialog(id, event) {
+	      var component = $scope.grid.positions.find(function (c) {
+	        return c.id == id;
+	      }); // !!! no "===" here !!!
 	      $mdDialog.show({
-	        //controller: DialogController,
-	        contentElement: '#componentSizes',
+	        controller: _resizerDialog.dialogController,
+	        template: (0, _resizerDialog.dialogTemplate)(component),
 	        parent: angular.element(document.body),
 	        targetEvent: event,
-	        clickOutsideToClose: true,
-	        locals: {
-	          answer: function answer(toto) {
-	            alert(toto);
-	          }
-	        }
+	        clickOutsideToClose: true
 	      }).then(function (result) {
-	        alert('TODO You decided to name your dog ' + result + '. ANSWER case?');
-	      }, function () {
-	        alert('TODO You didn\'t name your dog. CANCEL case?');
+	        $scope.grid.gridStack.resizeItem($('#grid li[data-id="' + id + '"]'), result.w, result.h);
 	      });
 	    }
 	  };
 	  $scope.edition = $rootScope.edition;
-	  $scope.answer = function (toto) {
-	    alert(toto);
-	  };
+
 	  $scope.grid = {
 	    positions: window.initGridPositions,
 	    layout: window.initGridLayout,
@@ -221,6 +204,36 @@
 
 	  // TODO !9: register here with a socket, and listen to update $scope.states :)
 	});
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	/* eslint-disable no-undef */
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var dialogController = exports.dialogController = function dialogController($scope, $mdDialog) {
+	  $scope.hide = function () {
+	    $mdDialog.hide();
+	  };
+	  $scope.cancel = function () {
+	    $mdDialog.cancel();
+	  };
+	  $scope.answer = function (answer) {
+	    $mdDialog.hide(answer);
+	  };
+	};
+
+	var hue = function hue(component, x, y) {
+	  return x <= component.w && y <= component.h ? 'md-hue-3' : 'md-hue-1';
+	};
+
+	var dialogTemplate = exports.dialogTemplate = function dialogTemplate(component) {
+	  return '\n  <md-dialog layout-padding>\n    <h2>Choose width and height</h2>\n    <table>\n    <tr>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 1, 1) + '" ng-click="answer({w:1, h:1})">1x1</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 2, 1) + '" ng-click="answer({w:2, h:1})">2x1</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 3, 1) + '" ng-click="answer({w:3, h:1})">3x1</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 4, 1) + '" ng-click="answer({w:4, h:1})">4x1</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 5, 1) + '" ng-click="answer({w:5, h:1})">5x1</md-button>\n      </td>\n    </tr>\n    <tr>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 1, 2) + '" ng-click="answer({w:1, h:2})">1x2</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 2, 2) + '" ng-click="answer({w:2, h:2})">2x2</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 3, 2) + '" ng-click="answer({w:3, h:2})">3x2</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 4, 2) + '" ng-click="answer({w:4, h:2})">4x2</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 5, 2) + '" ng-click="answer({w:5, h:2})">5x2</md-button>\n      </td>\n    </tr>\n    <tr>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 1, 3) + '" ng-click="answer({w:1, h:3})">1x3</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 2, 3) + '" ng-click="answer({w:2, h:3})">2x3</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 3, 3) + '" ng-click="answer({w:3, h:3})">3x3</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 4, 3) + '" ng-click="answer({w:4, h:3})">4x3</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 5, 3) + '" ng-click="answer({w:5, h:3})">5x3</md-button>\n      </td>\n    </tr>\n    <tr>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 1, 4) + '" ng-click="answer({w:1, h:4})">1x4</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 2, 4) + '" ng-click="answer({w:2, h:4})">2x4</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 3, 4) + '" ng-click="answer({w:3, h:4})">3x4</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 4, 4) + '" ng-click="answer({w:4, h:4})">4x4</md-button>\n      </td>\n      <td>\n        <md-button class="md-raised md-accent ' + hue(component, 5, 4) + '" ng-click="answer({w:5, h:4})">5x4</md-button>\n      </td>\n    </tr>\n    </table>\n  </md-dialog>\n';
+	};
 
 /***/ }
 /******/ ]);
