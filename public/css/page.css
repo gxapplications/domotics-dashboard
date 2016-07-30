@@ -142,3 +142,8 @@ button > img {
     right: -10%;
     z-index: 0;
 }
+.page-editor button div.md-grid-text {
+    white-space: normal;
+    line-height: normal;
+    padding: 0.2rem 0rem;
+}

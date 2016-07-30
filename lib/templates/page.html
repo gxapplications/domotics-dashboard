@@ -72,15 +72,46 @@
     </div>
 
     <md-content layout="column" layout-align="left center" class="page-editor left-bar" ng-class="{'editing': (edition.active)}">
-        <md-button class="md-fab" aria-label="Add component type 1" ng-click="edition.addComponent(1, 1, 1)">
-            <md-icon class="material-icons" aria-label="Add type 1">add</md-icon>
-        </md-button>
-        TODO !5
+        TODO !7
     </md-content>
     <md-content layout="column" layout-align="right center" class="page-editor right-bar" ng-class="{'editing': (edition.active)}">
-        <md-button class="md-fab" aria-label="Add component type 1" ng-click="edition.addComponent(1, 1, 1)">
-            <md-icon class="material-icons" aria-label="Add type 1">add</md-icon>
-        </md-button>
-        TODO !5
+        <md-list layout="column" layout-align="stretch top">
+            <md-list-item>
+                <div>
+                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(1, 1, 1)">
+                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                        <md-icon class="material-icons" aria-label="Play scenario">play_circle_outline</md-icon>
+                        <div class="md-grid-text"> Play scenario </div>
+                    </md-button>
+                </div>
+            </md-list-item>
+            <md-list-item>
+                <div>
+                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(2, 1, 1)">
+                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                        <md-icon class="material-icons" aria-label="Scenario Activation">tune</md-icon>
+                        <div class="md-grid-text"> Scenario activation </div>
+                    </md-button>
+                </div>
+            </md-list-item>
+            <md-list-item>
+                <div>
+                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(3, 1, 1)">
+                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                        <md-icon class="material-icons" aria-label="Domotic On Off">settings_power</md-icon>
+                        <div class="md-grid-text"> Domotic Oo/Off </div>
+                    </md-button>
+                </div>
+            </md-list-item>
+            <md-list-item>
+                <div>
+                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(4, 1, 1)">
+                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                        <md-icon class="material-icons" aria-label="Heating modes">brightness_4</md-icon>
+                        <div class="md-grid-text"> Heating modes </div>
+                    </md-button>
+                </div>
+            </md-list-item>
+        </md-list>
     </md-content>
 </div>

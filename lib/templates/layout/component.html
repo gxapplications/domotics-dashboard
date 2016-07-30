@@ -1,13 +1,9 @@
-OLD TEMPLATE, NOT USED ANYMORE ! TO DELETE !
-
 <div id="component-{{component.id}}" flex layout-fill layout-align="center stretch"
      class="gridlist-card md-whiteframe-6dp {{{block 'card_css'}}}">
     <div ng-controller="CardCtrl-{{component.id}} as ctrl" layout="column" layout-fill layout-align="space-around stretch">
 
         <div flex layout-padding>
-            {{#> (cardContent) componentId=component.id }}
-                Type {{component.type}} not supported yet.
-            {{/cardContent}}
+            {{{content}}}
         </div>
 
         <div class="fabSpeedDialCircle" ng-show="edition.active"
@@ -48,14 +44,7 @@ OLD TEMPLATE, NOT USED ANYMORE ! TO DELETE !
                     <h2 flex>Edit component's properties</h2>
                 </div>
             </md-toolbar>
-            {{#> settingsForm componentId=component.id }}
-                <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
-                  TODO !0 : name at least !
-                </md-dialog-content>
-                <md-dialog-actions layout="row">
-                  TODO !0 : save and cancel at least
-                </md-dialog-actions>
-            {{/settingsForm}}
+            {{{block "settingsForm"}}}
         </md-dialog>
     ---></div>
 
@@ -110,14 +99,12 @@ OLD TEMPLATE, NOT USED ANYMORE ! TO DELETE !
                 })
               }
 
-              {{#> settingsScript componentId=component.id }}
-              {{/settingsScript}}
+              {{{block "settingsScript"}}}
             }
           })
         }
 
-        {{#> controllerScript componentId=component.id }}
-        {{/controllerScript}}
+        {{{block "controllerScript"}}}
       })
     </script>
 </div>

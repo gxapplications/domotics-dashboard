@@ -212,7 +212,10 @@ server.route({
         if (!page || !component) {
           return reply({}).code(404)
         }
-        return reply.view('component', {'page': page, 'component': component}, {'layout': false})
+        return reply.view('component/' + component.type, {
+            'page': page,
+            'component': component,
+        }, {'layout': 'component'})
       })
     } else {
       // Creation case
@@ -225,7 +228,6 @@ server.route({
           return reply({}).code(500)
         }
         return reply(component.id)
-        // return reply.view('component', {'page': page, 'component': component}, {'layout': false})
       })
     }
   }

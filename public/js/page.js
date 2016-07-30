@@ -145,6 +145,25 @@
 	      }).then(function (result) {
 	        $scope.grid.gridStack.resizeItem($('#grid li[data-id="' + id + '"]'), result.w, result.h);
 	      });
+	    },
+	    refreshComponent: function refreshComponent(id) {
+	      var componentCard = $('li.position-card[data-id="' + id + '"] > .inner', $scope.grid.gridStack).first();
+	      $.ajax({
+	        url: window.gridComponentLoaderUrl,
+	        method: 'POST',
+	        data: {
+	          id: id
+	        }
+	      }).done(function (data) {
+	        componentCard.html(data);
+	        $scope.grid.gridStack.compileAngularElement(componentCard);
+	      }).fail(function () {
+	        $mdToast.show($mdToast.simple().textContent('Component NOT refreshed!').theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
+	          if (response === 'ok') {
+	            window.location.reload();
+	          }
+	        });
+	      });
 	    }
 	  };
 	  $scope.edition = $rootScope.edition;
