@@ -1,16 +1,76 @@
-
-Type 1
+{{ng-open}}component.configuration[0].title{{ng-close}}
 
 {{#extend "settingsForm"}}
- POUET
+  <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
+
+      <form name="componentForm" layout="column" flex layout-fill>
+          <section>
+              <md-subheader class="md-accent">Scenario Play</md-subheader>
+              <md-list layout="column" layout-padding>
+                  <md-list-item>
+                      <md-input-container flex>
+                          <label>Title</label>
+                          <input ng-model="component.configuration[0].title" required name="component_title" md-maxlength="64" />
+                      </md-input-container>
+                  </md-list-item>
+                  <md-list-item>
+                      <md-input-container flex>
+                          <label>Icon</label>
+                          TODO
+                      </md-input-container>
+                  </md-list-item>
+                  <md-list-item>
+                      <md-input-container flex>
+                          <label>Description</label>
+                          <textarea ng-model="component.configuration[0].description" columns="1" md-maxlength="256"></textarea>
+                      </md-input-container>
+                  </md-list-item>
+                  <md-list-item>
+                      <md-select placeholder="Scenario linked" ng-model="component.configuration[0].scenario" flex>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.onDemandScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                  </md-list-item>
+                  <md-list-item>
+                      <md-input-container flex>
+                          <label>Delayed play action (in minutes)</label>
+                          <input required type="number" step="any" name="component_delay_0" ng-model="component.configuration[0].delay" min="0" max="1440" required>
+                          <div ng-messages="componentForm.component_delay_0.$error">
+                              <div ng-message="required">If you want immediate play action, please indicate 0.</div>
+                              <div ng-message="min">Impossible to go back in time, Marty!</div>
+                              <div ng-message="max">1440 minutes max. Equivalent to 24hrs.</div>
+                          </div>
+                      </md-input-container>
+                  </md-list-item>
+              </md-list>
+          </section>
+          <md-divider></md-divider>
+          TODO, next...
+      </form>
+    TODO:
+      - icon
+      [
+        - delay
+        - scenario ID (list of playable scenarii)
+      ]
+  </md-dialog-content>
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="cancelConfig()"><md-icon aria-label="block" class="material-icons md-14">block</md-icon> Cancel</md-button>
+    <md-button class="md-primary md-raised" ng-click="saveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
+  </md-dialog-actions>
 {{/extend}}
 
 <script>
   {{#extend "settingsScript"}}
-    alert('test1')
+    // TODO !0: pb de delay qui est une string au lieu de int ! fix avant post, ou apres recup server ?
   {{/extend}}
 
   {{#extend "controllerScript"}}
-    alert('test2')
+    // Default values assignment
+    $scope.component = $scope.edition.tools.assignDeep({
+        configuration: [
+            {title: 'Play !', icon: '', description: '', scenario: '', delay: 0}
+        ]
+    }, $scope.component)
   {{/extend}}
 </script>

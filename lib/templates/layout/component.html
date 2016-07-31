@@ -51,8 +51,11 @@
     <script>
       app.controllerProvider.register('CardCtrl-{{component.id}}', function ($rootScope, $scope, $mdDialog, $mdToast) {
         $scope.edition = $rootScope.edition
+        $scope.states = $rootScope.states
         this.speedDialOpened = false
         $scope.component = {{tojson component}}
+        $scope.component.configuration = {{{component.configuration}}}
+        $scope.component.extra_component = {{{component.extra_component}}}
 
         this.configure = function($event) {
           var content = $("div#component-{{component.id}} div.component_edit_dialog").html().substring(4) // removes <!--
@@ -75,10 +78,11 @@
               }
               $scope.saveConfig = function() {
                 $mdDialog.hide();
-                $.post(
-                    window.gridComponentLoaderUrl + '/{{component.id}}',
-                    { 'component': $scope.component }
-                ).done(function() {
+                $.ajax({
+                  url: window.gridComponentLoaderUrl + '/{{component.id}}',
+                  method: 'PATCH',
+                  data: $scope.component
+                }).done(function() {
                   $mdToast.show(
                     $mdToast.simple()
                       .textContent('Settings saved!')

@@ -20,7 +20,7 @@ if (!exists) {
   db.serialize(() => {
     db.run('CREATE TABLE accounts (password TEXT)')
     db.run('CREATE TABLE pages (slug TEXT, name TEXT, last_access INTEGER, positions TEXT, layout INTEGER)')
-    db.run('CREATE TABLE components (id INTEGER PRIMARY KEY, type INTEGER)')
+    db.run('CREATE TABLE components (id INTEGER PRIMARY KEY, type INTEGER, configuration TEXT, extra_component TEXT)')
   })
 }
 
@@ -42,7 +42,8 @@ db.getLastAccessedPageSlug = function (callback, createIfNotFound = false) {
     }
     if (!row && createIfNotFound) {
       const now = (new Date()).getTime()
-      db.run('INSERT INTO pages (slug, name, last_access, positions, layout) VALUES (\"default\", \"Default Home\", ?, \"[]\", 4)', now, (err) => {
+      db.run('INSERT INTO pages (slug, name, last_access, positions, layout) VALUES (\"default\", \"Default Home\", ?, \"[]\", 4)',
+          now, (err) => {
         return callback(err, 'default')
       })
     } else {
@@ -74,9 +75,11 @@ db.updatePageBySlug = function (slug, payload, callback) {
     }
 
     const now = (new Date()).getTime()
-    Object.assign(pageRow, payload, {now})
-    db.run('UPDATE pages SET name=?, last_access=?, positions=?, layout=? WHERE slug=?', pageRow.name, pageRow.now, JSON.stringify(pageRow.positions), pageRow.layout, slug, (err) => {
-      return callback(err, pageRow)
+    let page = {slug: 'default', name: 'Default Home', positions: [], layout: 4}
+    Object.assign(page, pageRow, payload, {now})
+    db.run('UPDATE pages SET name=?, last_access=?, positions=?, layout=? WHERE slug=?',
+        page.name, page.now, JSON.stringify(page.positions), page.layout, slug, (err) => {
+      return callback(err, page)
     })
   })
 }
@@ -100,8 +103,12 @@ db.createComponent = function (slug, payload, callback) {
     if (err || !pageRow) {
       return callback(err, null, null)
     }
-    db.run('INSERT INTO components (id, type) VALUES (NULL, ?)', payload.type, function (err) {
-      return callback(err, pageRow, Object.assign({id: this.lastID}, payload))
+
+    let component = {type: 1, configuration: {}, extra_component: {}}
+    Object.assign(component, payload)
+    db.run('INSERT INTO components (id, type, configuration, extra_component) VALUES (NULL, ?, ?, ?)',
+        component.type, JSON.stringify(component.configuration), JSON.stringify(component.extra_component), function (err) {
+      return callback(err, pageRow, Object.assign({id: this.lastID}, component))
     })
   })
 }
@@ -122,9 +129,11 @@ db.updateComponent = function (slug, id, payload, callback) {
         return callback(err, pageRow, null)
       }
 
-      Object.assign(componentRow, payload)
-      db.run('UPDATE components SET type=? WHERE id=?', componentRow.type, id, (err) => {
-        return callback(err, pageRow, componentRow)
+      let component = {type: 1, configuration: {}, extra_component: {}}
+      Object.assign(component, componentRow, payload)
+      db.run('UPDATE components SET type=?, configuration=?, extra_component=? WHERE id=?',
+          component.type, JSON.stringify(component.configuration), JSON.stringify(component.extra_component), id, (err) => {
+        return callback(err, pageRow, component)
       })
     })
   })
