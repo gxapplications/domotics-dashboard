@@ -3,6 +3,7 @@
 import Sqlite from 'sqlite3'
 import fs from 'fs'
 import Path from 'path'
+import _ from 'lodash'
 
 const file = Path.join(__dirname, '..', 'var', 'data.db')
 const exists = fs.existsSync(file)
@@ -24,6 +25,31 @@ if (!exists) {
   })
 }
 
+// Tools
+db.typeFixer = function (data, attributePath, transformer) {
+  // Adding [*] wildcard support for arrays
+  if (attributePath.match(/\[\*\]/)) {
+    const matches = attributePath.match(/(^.*?\[\*\])(.*$)/)
+    let idx = 0
+    while (_.has(data, matches[1].replace('*', idx))) {
+      data = db.typeFixer(data, matches[1].replace('*', idx) + matches[2], transformer)
+      idx++
+    }
+  } else {
+    if (_.has(data, attributePath)) {
+      _.update(data, attributePath, transformer)
+    }
+  }
+  return data
+}
+db.stringify = function (data, attributesToNumber = []) {
+  attributesToNumber.forEach((attributePath) => {
+    data = db.typeFixer(data, attributePath, (n) => { return Number(n) })
+  })
+  return JSON.stringify(data)
+}
+
+// Accounts management
 db.storePassword = function (password) {
   db.serialize(() => {
     db.run('DELETE from accounts')
@@ -35,6 +61,7 @@ db.getPassword = function (callback) {
   db.get('SELECT password FROM accounts LIMIT 1', callback)
 }
 
+// Pages
 db.getLastAccessedPageSlug = function (callback, createIfNotFound = false) {
   db.get('SELECT slug FROM pages ORDER BY last_access DESC LIMIT 1', (err, row) => {
     if (err) {
@@ -55,7 +82,6 @@ db.getLastAccessedPageSlug = function (callback, createIfNotFound = false) {
   })
   // No last_access update here
 }
-
 db.getPageBySlug = function (slug, callback) {
   db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
     if (err || !pageRow) {
@@ -67,7 +93,6 @@ db.getPageBySlug = function (slug, callback) {
     })
   })
 }
-
 db.updatePageBySlug = function (slug, payload, callback) {
   db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
     if (err || !pageRow) {
@@ -84,6 +109,7 @@ db.updatePageBySlug = function (slug, payload, callback) {
   })
 }
 
+// Components
 db.getComponentById = function (slug, id, callback) {
   db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
     if (err || !pageRow) {
@@ -97,7 +123,6 @@ db.getComponentById = function (slug, id, callback) {
     })
   })
 }
-
 db.createComponent = function (slug, payload, callback) {
   db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
     if (err || !pageRow) {
@@ -107,18 +132,16 @@ db.createComponent = function (slug, payload, callback) {
     let component = {type: 1, configuration: {}, extra_component: {}}
     Object.assign(component, payload)
     db.run('INSERT INTO components (id, type, configuration, extra_component) VALUES (NULL, ?, ?, ?)',
-        component.type, JSON.stringify(component.configuration), JSON.stringify(component.extra_component), function (err) {
+        component.type, db.stringify(component.configuration, ['[*].delay']), db.stringify(component.extra_component), function (err) {
       return callback(err, pageRow, Object.assign({id: this.lastID}, component))
     })
   })
 }
-
 db.deleteComponent = function (id, callback) {
   db.run('DELETE FROM components WHERE id=?', id, function (err) {
     return callback(err)
   })
 }
-
 db.updateComponent = function (slug, id, payload, callback) {
   db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
     if (err || !pageRow) {
@@ -132,7 +155,7 @@ db.updateComponent = function (slug, id, payload, callback) {
       let component = {type: 1, configuration: {}, extra_component: {}}
       Object.assign(component, componentRow, payload)
       db.run('UPDATE components SET type=?, configuration=?, extra_component=? WHERE id=?',
-          component.type, JSON.stringify(component.configuration), JSON.stringify(component.extra_component), id, (err) => {
+          component.type, db.stringify(component.configuration, ['[*].delay']), db.stringify(component.extra_component), id, (err) => {
         return callback(err, pageRow, component)
       })
     })

@@ -7,17 +7,16 @@
           <section>
               <md-subheader class="md-accent">Scenario Play</md-subheader>
               <md-list layout="column" layout-padding>
-                  <md-list-item>
-                      <md-input-container flex>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-input-container flex="80">
                           <label>Title</label>
                           <input ng-model="component.configuration[0].title" required name="component_title" md-maxlength="64" />
                       </md-input-container>
-                  </md-list-item>
-                  <md-list-item>
-                      <md-input-container flex>
-                          <label>Icon</label>
-                          TODO
-                      </md-input-container>
+                      <md-select placeholder="Icon" ng-model="component.configuration[0].icon" style="margin-left: 1rem;" flex="20">
+                          <md-option ng-value="icon" ng-repeat="icon in edition.tools.icons">
+                            <md-icon class="material-icons" aria-label="{{ng-open}}icon{{ng-close}}" style="color: #64DD17;">{{ng-open}}icon{{ng-close}}</md-icon>
+                          </md-option>
+                      </md-select>
                   </md-list-item>
                   <md-list-item>
                       <md-input-container flex>
@@ -25,13 +24,17 @@
                           <textarea ng-model="component.configuration[0].description" columns="1" md-maxlength="256"></textarea>
                       </md-input-container>
                   </md-list-item>
-                  <md-list-item>
-                      <md-select placeholder="Scenario linked" ng-model="component.configuration[0].scenario" flex>
+              </md-list>
+          </section>
+          <md-divider></md-divider>
+          <section>
+              <md-subheader class="md-accent">Scenarii to trigger</md-subheader>
+              <md-list layout="column" layout-padding>
+                  <md-list-item layout="row" layout-align="space-between stretch"> TODO !0: boucler de 0 à 5 ! Mais breaker à n+1 où n n'a pas de scenario ! (pour avoir une section vide en fin de liste à chaque fois).
+                      <md-select placeholder="Scenario linked" ng-model="component.configuration[0].scenario" flex="60">
                           <md-option ng-value="scenario.id" ng-repeat="scenario in states.onDemandScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
                       </md-select>
-                  </md-list-item>
-                  <md-list-item>
-                      <md-input-container flex>
+                      <md-input-container flex="40" style="margin-left: 1rem;">
                           <label>Delayed play action (in minutes)</label>
                           <input required type="number" step="any" name="component_delay_0" ng-model="component.configuration[0].delay" min="0" max="1440" required>
                           <div ng-messages="componentForm.component_delay_0.$error">
@@ -44,14 +47,7 @@
               </md-list>
           </section>
           <md-divider></md-divider>
-          TODO, next...
       </form>
-    TODO:
-      - icon
-      [
-        - delay
-        - scenario ID (list of playable scenarii)
-      ]
   </md-dialog-content>
   <md-dialog-actions layout="row">
     <span flex></span>
@@ -61,10 +57,6 @@
 {{/extend}}
 
 <script>
-  {{#extend "settingsScript"}}
-    // TODO !0: pb de delay qui est une string au lieu de int ! fix avant post, ou apres recup server ?
-  {{/extend}}
-
   {{#extend "controllerScript"}}
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
