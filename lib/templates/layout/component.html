@@ -1,10 +1,7 @@
 <div id="component-{{component.id}}" flex layout-fill layout-align="center stretch"
-     class="gridlist-card md-whiteframe-6dp {{{block 'card_css'}}}">
+     ng-class="{{{block 'cardCss'}}}">
     <div ng-controller="CardCtrl-{{component.id}} as ctrl" layout="column" layout-fill layout-align="space-around stretch">
-
-        <div flex layout-padding>
-            {{{content}}}
-        </div>
+        {{{content}}}
 
         <div class="fabSpeedDialCircle" ng-show="edition.active"
              style="height: 0; width: 0; overflow: display;">

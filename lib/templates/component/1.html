@@ -1,4 +1,19 @@
-{{ng-open}}component.configuration[0].title{{ng-close}}
+<md-button class="md-raised md-primary component-button" flex
+           ng-disabled="isDisabled(component.configuration[0].scenario, state)"
+           ng-class="{'md-hue-3': (state == 3), 'md-hue-1': (state == 2)}"
+           ng-click="play({{component.id}})">
+        <div layout="column" flex>
+            <h2 style="text-overflow: ellipsis; white-space: normal;">
+                <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration '0.icon'}}</md-icon>
+                {{parsejson component.configuration '0.title'}}
+            </h2>
+            <div style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
+                {{parsejson component.configuration '0.description'}}
+            </div>
+        </div>
+</md-button>
+
+{{#extend "cardCss"}}{'md-whiteframe-6dp': !edition.active, 'gridlist-card': edition.active}{{/extend}}
 
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
@@ -34,6 +49,7 @@
                           ng-repeat="i in getScCountToDisplay(scCount) track by $index">
                       <md-select placeholder="Scenario linked" ng-model="component.configuration[$index].scenario"
                                  ng-change="scCountUpdater()" flex="60">
+                          <md-option ng-value="">None / remove line</md-option>
                           <md-option ng-value="scenario.id" ng-repeat="scenario in states.onDemandScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
                       </md-select>
                       <md-input-container flex="40" style="margin-left: 1rem;">
@@ -54,7 +70,7 @@
   <md-dialog-actions layout="row">
     <span flex></span>
     <md-button ng-click="cancelConfig()"><md-icon aria-label="block" class="material-icons md-14">block</md-icon> Cancel</md-button>
-    <md-button class="md-primary md-raised" ng-click="saveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
+    <md-button class="md-primary md-raised" ng-click="preSaveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
   </md-dialog-actions>
 {{/extend}}
 
@@ -66,18 +82,41 @@
             {title: 'Play !', icon: '', description: '', scenario: '', delay: 0}
         ]
     }, $scope.component)
+
+    // to control state
+    $scope.state = 1 // TODO !0: init, selon ???
+    $scope.isDisabled = function (scenario, state) {
+      return (!scenario || state === 1)
+    }
+    $scope.play = function(id) {
+      // TODO !1
+    }
   {{/extend}}
   {{#extend "settingsScript"}}
-    $scope.scCount = 0
+    // lines count to display is dynamic
     $scope.scCountUpdater = function () {
-      $scope.scCount = 4
-      // TODO !0: affecter au component.configuration[$index].scenario max
-      // qui a un scenario non vide. Boucler de 0 à 5 anyway (trous possible)
-      // TODO !0: updater le formulaire ?
+      $scope.scCount = 0
+      for (let i of [0, 1, 2, 3, 4, 5]) {
+          if ($scope.component && $scope.component.configuration[i] && $scope.component.configuration[i].scenario &&
+                  ($scope.component.configuration[i].scenario > 0 || $scope.component.configuration[i].scenario.length > 0)) {
+              $scope.scCount = i+1
+          }
+      }
+      return $scope.scCount
     }
     $scope.getScCountToDisplay = function (n) {
       n = (n >= 4) ? 4 : n // Max 5 elements
       return new Array(n+1)
+    }
+    $scope.scCount = $scope.scCountUpdater()
+
+    // remove lines without scenario, except first line...
+    $scope.preSaveConfig = function () {
+      var config = $scope.component.configuration.filter(function (item, idx) {
+          return idx === 0 || (item.scenario && (item.scenario > 0 || item.scenario.length > 0))
+      })
+      $scope.component.configuration = config
+      $scope.saveConfig()
     }
   {{/extend}}
 </script>
