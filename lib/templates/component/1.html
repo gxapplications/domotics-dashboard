@@ -30,14 +30,16 @@
           <section>
               <md-subheader class="md-accent">Scenarii to trigger</md-subheader>
               <md-list layout="column" layout-padding>
-                  <md-list-item layout="row" layout-align="space-between stretch"> TODO !0: boucler de 0 à 5 ! Mais breaker à n+1 où n n'a pas de scenario ! (pour avoir une section vide en fin de liste à chaque fois).
-                      <md-select placeholder="Scenario linked" ng-model="component.configuration[0].scenario" flex="60">
+                  <md-list-item layout="row" layout-align="space-between stretch"
+                          ng-repeat="i in getScCountToDisplay(scCount) track by $index">
+                      <md-select placeholder="Scenario linked" ng-model="component.configuration[$index].scenario"
+                                 ng-change="scCountUpdater()" flex="60">
                           <md-option ng-value="scenario.id" ng-repeat="scenario in states.onDemandScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
                       </md-select>
                       <md-input-container flex="40" style="margin-left: 1rem;">
                           <label>Delayed play action (in minutes)</label>
-                          <input required type="number" step="any" name="component_delay_0" ng-model="component.configuration[0].delay" min="0" max="1440" required>
-                          <div ng-messages="componentForm.component_delay_0.$error">
+                          <input required type="number" step="any" name="component_delay[$index]" ng-model="component.configuration[$index].delay" min="0" max="1440" required>
+                          <div ng-messages="componentForm.component_delay[$index].$error">
                               <div ng-message="required">If you want immediate play action, please indicate 0.</div>
                               <div ng-message="min">Impossible to go back in time, Marty!</div>
                               <div ng-message="max">1440 minutes max. Equivalent to 24hrs.</div>
@@ -64,5 +66,18 @@
             {title: 'Play !', icon: '', description: '', scenario: '', delay: 0}
         ]
     }, $scope.component)
+  {{/extend}}
+  {{#extend "settingsScript"}}
+    $scope.scCount = 0
+    $scope.scCountUpdater = function () {
+      $scope.scCount = 4
+      // TODO !0: affecter au component.configuration[$index].scenario max
+      // qui a un scenario non vide. Boucler de 0 à 5 anyway (trous possible)
+      // TODO !0: updater le formulaire ?
+    }
+    $scope.getScCountToDisplay = function (n) {
+      n = (n >= 4) ? 4 : n // Max 5 elements
+      return new Array(n+1)
+    }
   {{/extend}}
 </script>

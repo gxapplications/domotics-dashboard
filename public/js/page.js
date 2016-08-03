@@ -293,7 +293,7 @@
 	states.init = function () {
 	    states.onDemandScenarii.load();
 	    // TODO !8: register here with a socket, and listen to update $scope.states :)
-	    console.log(states);
+	    //console.log(states)
 	};
 
 	exports.default = states;
