@@ -10,6 +10,7 @@ import Hoek from 'hoek'
 import Inert from 'inert'
 import Path from 'path'
 import CryptoJS from 'crypto-js'
+import Nes from 'nes'
 
 import myfoxWrapperApi from 'myfox-wrapper-api'
 import db from './db'
@@ -74,7 +75,11 @@ server.register({
   Hoek.assert(!err, err)
 })
 
-// Context middleware
+// Nes socket service and Context middleware
+server.register(Nes, (err) => {
+  Hoek.assert(!err, err)
+  server.subscription('/socket/{id}')
+})
 server.register(context, (err) => {
   Hoek.assert(!err, err)
 })
@@ -213,8 +218,8 @@ server.route({
           return reply({}).code(404)
         }
         return reply.view('component/' + component.type, {
-            'page': page,
-            'component': component,
+          'page': page,
+          'component': component
         }, {'layout': 'component'})
       })
     } else {
@@ -247,7 +252,7 @@ server.route({
       }
       return reply.view('component/' + component.type, {
         'page': page,
-        'component': component,
+        'component': component
       }, {'layout': 'component'})
     })
   }

@@ -1,16 +1,16 @@
 <md-button class="md-raised md-primary component-button" flex
-           ng-disabled="isDisabled(component.configuration[0].scenario, state)"
-           ng-class="{'md-hue-3': (state == 3), 'md-hue-1': (state == 2)}"
-           ng-click="play({{component.id}})">
-        <div layout="column" flex>
-            <h2 style="text-overflow: ellipsis; white-space: normal;">
-                <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration '0.icon'}}</md-icon>
-                {{parsejson component.configuration '0.title'}}
-            </h2>
-            <div style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
-                {{parsejson component.configuration '0.description'}}
-            </div>
-        </div>
+       ng-disabled="isDisabled(component.configuration[0].scenario, state)"
+       ng-class="{'md-hue-3': (state == 3), 'md-hue-1': (state == 2)}"
+       ng-click="play({{component.id}})">
+  <div layout="column" flex>
+    <h2 style="text-overflow: ellipsis; white-space: normal;">
+      <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration '0.icon'}}</md-icon>
+      {{parsejson component.configuration '0.title' 'Settings needed'}}
+    </h2>
+    <div style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
+      {{parsejson component.configuration '0.description'}}
+    </div>
+  </div>
 </md-button>
 
 {{#extend "cardCss"}}{'md-whiteframe-6dp': !edition.active, 'gridlist-card': edition.active}{{/extend}}
@@ -84,14 +84,19 @@
     }, $scope.component)
 
     // to control state
-    $scope.state = 1 // TODO !0: init, selon ???
+    $scope.state = 0 // TODO !1: init, selon une valeur par defaut (0) OU un algo basé sur $scope.states.macro[{{component.id}}]
     $scope.isDisabled = function (scenario, state) {
       return (!scenario || state === 1)
     }
     $scope.play = function(id) {
-      // TODO !1
+        alert(id);
+      // TODO !0:   Appeler l'API pour lancer le play.
+      // TODO !0: - Il faut une nouvelle route serveur je pense...
+      // TODO !0: - il faut envoyer $scope.component.configuration entier (toutes les etapes), mais format different ?
+      // TODO !0: - il faut pouvoir forcer une macro ID ! sinon on la retrouvera pas... (adapter library myfox-wrapper-api)
     }
   {{/extend}}
+
   {{#extend "settingsScript"}}
     // lines count to display is dynamic
     $scope.scCountUpdater = function () {

@@ -70,9 +70,9 @@ db.getLastAccessedPageSlug = function (callback, createIfNotFound = false) {
     if (!row && createIfNotFound) {
       const now = (new Date()).getTime()
       db.run('INSERT INTO pages (slug, name, last_access, positions, layout) VALUES (\"default\", \"Default Home\", ?, \"[]\", 4)',
-          now, (err) => {
-        return callback(err, 'default')
-      })
+        now, (err) => {
+          return callback(err, 'default')
+        })
     } else {
       if (row) {
         return callback(null, row.slug)
@@ -103,9 +103,9 @@ db.updatePageBySlug = function (slug, payload, callback) {
     let page = {slug: 'default', name: 'Default Home', positions: [], layout: 4}
     Object.assign(page, pageRow, payload, {now})
     db.run('UPDATE pages SET name=?, last_access=?, positions=?, layout=? WHERE slug=?',
-        page.name, page.now, JSON.stringify(page.positions), page.layout, slug, (err) => {
-      return callback(err, page)
-    })
+      page.name, page.now, JSON.stringify(page.positions), page.layout, slug, (err) => {
+        return callback(err, page)
+      })
   })
 }
 
@@ -132,9 +132,9 @@ db.createComponent = function (slug, payload, callback) {
     let component = {type: 1, configuration: {}, extra_component: {}}
     Object.assign(component, payload)
     db.run('INSERT INTO components (id, type, configuration, extra_component) VALUES (NULL, ?, ?, ?)',
-        component.type, db.stringify(component.configuration, ['[*].delay']), db.stringify(component.extra_component), function (err) {
-      return callback(err, pageRow, Object.assign({id: this.lastID}, component))
-    })
+      component.type, db.stringify(component.configuration, ['[*].delay']), db.stringify(component.extra_component), function (err) {
+        return callback(err, pageRow, Object.assign({id: this.lastID}, component))
+      })
   })
 }
 db.deleteComponent = function (id, callback) {
@@ -155,9 +155,9 @@ db.updateComponent = function (slug, id, payload, callback) {
       let component = {type: 1, configuration: {}, extra_component: {}}
       Object.assign(component, componentRow, payload)
       db.run('UPDATE components SET type=?, configuration=?, extra_component=? WHERE id=?',
-          component.type, db.stringify(component.configuration, ['[*].delay']), db.stringify(component.extra_component), id, (err) => {
-        return callback(err, pageRow, component)
-      })
+        component.type, db.stringify(component.configuration, ['[*].delay']), db.stringify(component.extra_component), id, (err) => {
+          return callback(err, pageRow, component)
+        })
     })
   })
 }
