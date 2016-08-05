@@ -14,6 +14,7 @@ import Nes from 'nes'
 
 import myfoxWrapperApi from 'myfox-wrapper-api'
 import db from './db'
+import actions from './actions'
 import context from '../lib/middlewares/context'
 
 // Stateful instance
@@ -207,7 +208,7 @@ server.route({
   path: '/{slug}/component',
   handler: function (request, reply) {
     if (!request.context.api) {
-      return reply.redirect('/') // User is not connected yet!
+      return reply({}).code(403) // User is not connected yet!
     }
 
     // Retrieve case (not a GET because we need complex data in the payload)
@@ -242,7 +243,7 @@ server.route({
   path: '/{slug}/component/{id}',
   handler: function (request, reply) {
     if (!request.context.api) {
-      return reply.redirect('/') // User is not connected yet!
+      return reply({}).code(403) // User is not connected yet!
     }
 
     db.updateComponent(request.params.slug, request.params.id, request.payload, (err, page, component) => {
@@ -268,6 +269,28 @@ server.route({
     db.deleteComponent(request.params.id, (err) => {
       Hoek.assert(!err, err)
       return reply({status: 'ok'})
+    })
+  }
+})
+
+// Actions
+server.route({
+  method: 'POST',
+  path: '/{slug}/component/{id}/action/{action?}',
+  handler: function (request, reply) {
+    if (!request.context.api) {
+      return reply({}).code(403) // User is not connected yet!
+    }
+
+    // Retrieve component
+    db.getComponentById(request.params.slug, request.params.id, (err, page, component) => {
+      Hoek.assert(!err, err)
+      if (!page || !component) {
+        return reply({}).code(404)
+      }
+
+      // Call actions switch
+      return actions(api, reply, page, component, request.params.action, request.payload)
     })
   }
 })

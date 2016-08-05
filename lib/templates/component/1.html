@@ -1,6 +1,6 @@
 <md-button class="md-raised md-primary component-button" flex
-       ng-disabled="isDisabled(component.configuration[0].scenario, state)"
-       ng-class="{'md-hue-3': (state == 3), 'md-hue-1': (state == 2)}"
+       ng-disabled="isDisabled(component.configuration[0].scenario, states.macro.c_{{component.id}}.state, processingState)"
+       ng-class="{ 'md-warn': processingState === 'error', 'md-hue-1': states.macro.c_{{component.id}}.state === 'progress' }"
        ng-click="play({{component.id}})">
   <div layout="column" flex>
     <h2 style="text-overflow: ellipsis; white-space: normal;">
@@ -78,29 +78,41 @@
   {{#extend "controllerScript"}}
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
-        configuration: [
-            {title: 'Play !', icon: '', description: '', scenario: '', delay: 0}
-        ]
-    }, $scope.component)
+      configuration: [
+        {title: 'Push me', icon: '', description: 'I\'m a button', scenario: '', delay: 0}
+      ]
+    }, $scope.component);
+    if (!$rootScope.states.macro.c_{{component.id}}) {
+      $rootScope.states.macro.c_{{component.id}} = {state: 'waiting'}
+    }
 
     // to control state
-    $scope.state = 0 // TODO !1: init, selon une valeur par defaut (0) OU un algo basé sur $scope.states.macro[{{component.id}}]
-    $scope.isDisabled = function (scenario, state) {
-      return (!scenario || state === 1)
+    $scope.processingState = 'waiting'; // or 'processing', 'error'
+    $scope.isDisabled = function (scenario, remoteState, processingState) {
+      return (!scenario || remoteState === 1|| processingState === 'processing')
     }
     $scope.play = function(id) {
-        alert(id);
-      // TODO !0:   Appeler l'API pour lancer le play.
-      // TODO !0: - Il faut une nouvelle route serveur je pense...
-      // TODO !0: - il faut envoyer $scope.component.configuration entier (toutes les etapes), mais format different ?
-      // TODO !0: - il faut pouvoir forcer une macro ID ! sinon on la retrouvera pas... (adapter library myfox-wrapper-api)
-    }
+      $scope.processingState = 'processing'
+      $.post('/{{page.slug}}/component/{{component.id}}/action', {})
+        .done(function() {
+          alert( "success" );
+          $scope.processingState = 'waiting'
+          // TODO !1: lire la réponse
+
+          //$rootScope.states.macro.c_{{component.id}}.state='progress'
+        })
+        .fail(function() {
+          alert( "error" );
+          $scope.processingState = 'error'
+          // TODO !1: afficher toast (ou dans description du bouton ?)
+        })
+    };
   {{/extend}}
 
   {{#extend "settingsScript"}}
     // lines count to display is dynamic
     $scope.scCountUpdater = function () {
-      $scope.scCount = 0
+      $scope.scCount = 0;
       for (let i of [0, 1, 2, 3, 4, 5]) {
           if ($scope.component && $scope.component.configuration[i] && $scope.component.configuration[i].scenario &&
                   ($scope.component.configuration[i].scenario > 0 || $scope.component.configuration[i].scenario.length > 0)) {
@@ -108,20 +120,20 @@
           }
       }
       return $scope.scCount
-    }
+    };
     $scope.getScCountToDisplay = function (n) {
-      n = (n >= 4) ? 4 : n // Max 5 elements
+      n = (n >= 4) ? 4 : n; // Max 5 elements
       return new Array(n+1)
-    }
-    $scope.scCount = $scope.scCountUpdater()
+    };
+    $scope.scCount = $scope.scCountUpdater();
 
     // remove lines without scenario, except first line...
     $scope.preSaveConfig = function () {
       var config = $scope.component.configuration.filter(function (item, idx) {
           return idx === 0 || (item.scenario && (item.scenario > 0 || item.scenario.length > 0))
-      })
-      $scope.component.configuration = config
+      });
+      $scope.component.configuration = config;
       $scope.saveConfig()
-    }
+    };
   {{/extend}}
 </script>
