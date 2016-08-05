@@ -5,14 +5,18 @@ const actions = function (api, reply, page, component, action = null, payload = 
   switch (component.type) {
     case 1:
       // 1: Scenario play
-      let actions = component.configuration.map((item) => {
+      let actions = JSON.parse(component.configuration).map((item) => {
         return {id: item.scenario, action: 'play', delay: item.delay}
       })
       const firstAction = actions.shift()
 
-      // TODO !0: - il faut pouvoir forcer une macro ID ! sinon on la retrouvera pas... (adapter library myfox-wrapper-api)
-      api.callScenarioAction(firstAction, () => {
-        // TODO !0: err, reply(???)
+      console.log(actions, firstAction, ...actions)
+
+      api.callScenarioAction(firstAction, (err, data) => {
+        if (err) {
+          console.log(err)
+        }
+        // TODO !0: err, reply(???), gérer le retour ! peut etre direct, pour par suivi de macroId, selon config.
       }, macroId, ...actions)
       break
 

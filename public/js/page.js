@@ -459,6 +459,7 @@
 
 	        this._ws = null;
 	        this._reconnection = null;
+	        this._reconnectionTimer = null;
 	        this._ids = 0; // Id counter
 	        this._requests = {}; // id -> { callback, timeout }
 	        this._subscriptions = {}; // path -> [callbacks]
@@ -522,6 +523,9 @@
 
 	        var ws = new Client.WebSocket(this._url, this._settings.ws); // Settings used by node.js only
 	        this._ws = ws;
+
+	        clearTimeout(this._reconnectionTimer);
+	        this._reconnectionTimer = null;
 
 	        var finalize = function finalize(err) {
 
@@ -627,6 +631,8 @@
 	    Client.prototype._disconnect = function (callback, isInternal) {
 
 	        this._reconnection = null;
+	        clearTimeout(this._reconnectionTimer);
+	        this._reconnectionTimer = null;
 	        var requested = this._disconnectRequested || !isInternal; // Retain true
 
 	        if (this._disconnectListeners) {
@@ -707,11 +713,7 @@
 	        this._reconnection.wait = this._reconnection.wait + this._reconnection.delay;
 
 	        var timeout = Math.min(this._reconnection.wait, this._reconnection.maxDelay);
-	        setTimeout(function () {
-
-	            if (!_this2._reconnection) {
-	                return;
-	            }
+	        this._reconnectionTimer = setTimeout(function () {
 
 	            _this2._connect(_this2._reconnection.settings, false, function (err) {
 
