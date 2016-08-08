@@ -1,6 +1,6 @@
 <md-button class="md-raised md-primary component-button" flex
        ng-disabled="isDisabled(component.configuration[0].scenario, states.macro.c_{{component.id}}.state, processingState)"
-       ng-class="{ 'md-warn': processingState === 'error', 'md-hue-1': states.macro.c_{{component.id}}.state === 'progress' }"
+       ng-class="{ 'md-warn': processingState === 'error', 'md-hue-1': states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed' }"
        ng-click="play({{component.id}})">
   <div layout="column" flex>
     <h2 style="text-overflow: ellipsis; white-space: normal;">
@@ -83,7 +83,7 @@
       ]
     }, $scope.component);
     if (!$rootScope.states.macro.c_{{component.id}}) {
-      $rootScope.states.macro.c_{{component.id}} = {state: 'waiting'}
+      $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}
     }
 
     // to control state
@@ -96,17 +96,22 @@
       $.post('/{{page.slug}}/component/{{component.id}}/action', {})
         .done(function(data) {
           $scope.processingState = 'waiting'
-
-          // TODO !1: lire la réponse: pas id (macroId) : pas de delay, pas d'autre action. Sinon, delay OU autres actions.
-
-console.log("#####", data);
-
-          //$rootScope.states.macro.c_{{component.id}}.state='progress'
+          $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
+          // TODO !9: recuperer le temps restant ou la date de prochaine echeance dans data, pour un mini chrono "xx s left" dans le coin du bouton ?
+          // TODO !9: recupere le nombre d'etapes total et l'etape en cours, pour une pagination "x/y" dans l'autre coin du bouton ?
         })
         .fail(function() {
-          alert( "error" );
           $scope.processingState = 'error'
-          // TODO !1: afficher toast (ou dans description du bouton ?)
+          $mdToast.show(
+            $mdToast.simple()
+              .textContent('Error during Scenario play action!')
+              .theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent')
+              .position('bottom right').hideDelay(6000)
+          ).then(function (response) {
+            if (response === 'ok') {
+              window.location.reload()
+            }
+          })
         })
     };
   {{/extend}}

@@ -301,6 +301,7 @@
 	states.socketClient = new _nes2.default.Client('ws://' + window.location.host);
 	states.socketClient.updater = function (label) {
 	  return function (update, flags) {
+	    console.log('WS Update received for label ' + label + ': ', update);
 	    states[label] = update;
 	    // TODO !3: updater angular ou il s'en sort tout seul ?
 	  };
