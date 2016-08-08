@@ -94,10 +94,12 @@
     $scope.play = function(id) {
       $scope.processingState = 'processing'
       $.post('/{{page.slug}}/component/{{component.id}}/action', {})
-        .done(function() {
-          alert( "success" );
+        .done(function(data) {
           $scope.processingState = 'waiting'
-          // TODO !1: lire la réponse
+
+          // TODO !1: lire la réponse: pas id (macroId) : pas de delay, pas d'autre action. Sinon, delay OU autres actions.
+
+console.log("#####", data);
 
           //$rootScope.states.macro.c_{{component.id}}.state='progress'
         })

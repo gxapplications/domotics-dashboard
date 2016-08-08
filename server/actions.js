@@ -6,17 +6,16 @@ const actions = function (api, reply, page, component, action = null, payload = 
     case 1:
       // 1: Scenario play
       let actions = JSON.parse(component.configuration).map((item) => {
-        return {id: item.scenario, action: 'play', delay: item.delay}
+        return {id: item.scenario, action: 'play', delay: item.delay * 60000}
       })
       const firstAction = actions.shift()
-
-      console.log(actions, firstAction, ...actions)
 
       api.callScenarioAction(firstAction, (err, data) => {
         if (err) {
           console.log(err)
+          reply(err).code(500)
         }
-        // TODO !0: err, reply(???), gérer le retour ! peut etre direct, pour par suivi de macroId, selon config.
+        reply(data)
       }, macroId, ...actions)
       break
 
