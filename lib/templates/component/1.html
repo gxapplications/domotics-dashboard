@@ -97,8 +97,8 @@
         .done(function(data) {
           $scope.processingState = 'waiting'
           $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
-          // TODO !9: recuperer le temps restant ou la date de prochaine echeance dans data, pour un mini chrono "xx s left" dans le coin du bouton ?
-          // TODO !9: recupere le nombre d'etapes total et l'etape en cours, pour une pagination "x/y" dans l'autre coin du bouton ?
+          // TODO !9: recuperer le temps restant via calcul de $scope.component.configuration..., pour un mini chrono "xx s left" dans le coin du bouton ?
+          // TODO !1: recupere le nombre d'etapes total ($scope.component.configuration.length) et data.remaining, pour une pagination "x/y" dans l'autre coin du bouton ?
         })
         .fail(function() {
           $scope.processingState = 'error'

@@ -303,7 +303,6 @@
 	  return function (update, flags) {
 	    console.log('WS Update received for label ' + label + ': ', update);
 	    states[label] = update;
-	    // TODO !3: updater angular ou il s'en sort tout seul ?
 	  };
 	};
 	states.socketClient.error = function (label) {
@@ -316,7 +315,7 @@
 	states.socketClient.onError = function (err) {
 	  if (err) {
 	    console.error('Socket client unknown error: ' + err);
-	    // TODO !4: quand la socket est rompue coté serveur (Ctrl+C), on a des erreurs côté client:
+	    // TODO !2: quand la socket est rompue coté serveur (Ctrl+C), on a des erreurs côté client:
 	    // - il faut identifier l'erreur (err a identifier, 'Socket error' ?)
 	    // - il faut laisser faire un retry 5 fois, puis
 	    // - il faut fermer propre et faire apparaître un message sur l'UX
