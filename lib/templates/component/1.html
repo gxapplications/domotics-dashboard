@@ -1,7 +1,7 @@
-<md-button class="md-raised md-primary component-button" flex
+<md-button class="md-raised md-primary component-button" flex id="component-button-{{component.id}}"
        ng-disabled="isDisabled(component.configuration[0].scenario, states.macro.c_{{component.id}}.state, processingState)"
        ng-class="{ 'md-warn': processingState === 'error', 'md-hue-1': states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed' }"
-       ng-click="play({{component.id}})">
+       ng-click="play()">
   <div layout="column" flex>
     <h2 style="text-overflow: ellipsis; white-space: normal;">
       <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration '0.icon'}}</md-icon>
@@ -11,6 +11,7 @@
       {{parsejson component.configuration '0.description'}}
     </div>
   </div>
+  <div class="step"></div>
 </md-button>
 
 {{#extend "cardCss"}}{'md-whiteframe-6dp': !edition.active, 'gridlist-card': edition.active}{{/extend}}
@@ -91,17 +92,17 @@
     $scope.isDisabled = function (scenario, remoteState, processingState) {
       return (!scenario || remoteState === 1|| processingState === 'processing')
     }
-    $scope.play = function(id) {
+    $scope.play = function() {
       $scope.processingState = 'processing'
       $.post('/{{page.slug}}/component/{{component.id}}/action', {})
         .done(function(data) {
           $scope.processingState = 'waiting'
           $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
-          // TODO !9: recuperer le temps restant via calcul de $scope.component.configuration..., pour un mini chrono "xx s left" dans le coin du bouton ?
-          // TODO !1: recupere le nombre d'etapes total ($scope.component.configuration.length) et data.remaining, pour une pagination "x/y" dans l'autre coin du bouton ?
+          $scope.updateStepCounter()
         })
         .fail(function() {
           $scope.processingState = 'error'
+          $scope.updateStepCounter()
           $mdToast.show(
             $mdToast.simple()
               .textContent('Error during Scenario play action!')
@@ -113,7 +114,19 @@
             }
           })
         })
-    };
+    }
+    $scope.updateStepCounter = function() {
+      const state = $rootScope.states.macro.c_{{component.id}}
+      const remaining = state.remaining + ((state.state === 'delayed')? 1 : 0)
+      if (remaining > 0 && state.state !== 'finished') {
+        const stepsLabel = remaining + '/' + $scope.component.configuration.length;
+        $('#component-button-{{component.id}} div.step').html(stepsLabel);
+      } else {
+          $('#component-button-{{component.id}} div.step').html('');
+      }
+      // TODO !9: recuperer le temps restant via calcul de $scope.component.configuration..., pour un mini chrono "xx s left" dans le coin du bouton ?
+      // TODO !1: rappeler cette fonction des que $rootScope.states.macro.c_{{component.id}} change !
+    }
   {{/extend}}
 
   {{#extend "settingsScript"}}
