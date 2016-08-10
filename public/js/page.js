@@ -63,6 +63,8 @@
 	  $rootScope.states = _states2.default;
 	  $scope.states = $rootScope.states;
 
+	  $scope.page = window.initPage;
+
 	  $rootScope.edition = {
 	    active: false,
 	    close: function close() {
@@ -305,37 +307,41 @@
 	    states[label] = update;
 	  };
 	};
-	states.socketClient.error = function (label) {
+	states.socketClient.onSubscriptionError = function (label) {
 	  return function (err) {
 	    if (err) {
 	      console.error('Socket client transmission error: ' + err);
 	    }
 	  };
 	};
+	states.socketClient.error = false;
 	states.socketClient.onError = function (err) {
 	  if (err) {
-	    console.error('Socket client unknown error: ' + err);
-	    // TODO !2: quand la socket est rompue coté serveur (Ctrl+C), on a des erreurs côté client:
-	    // - il faut identifier l'erreur (err a identifier, 'Socket error' ?)
-	    // - il faut laisser faire un retry 5 fois, puis
-	    // - il faut fermer propre et faire apparaître un message sur l'UX
+	    console.error('Socket client error: ' + err);
+	    if (err.toString() === 'Error: Socket error') {
+	      states.socketClient.error = true;
+	      // TODO !0: Mettre un Toast rouge sur l'UX ?
+	    }
 	  }
+	};
+	states.socketClient.onConnect = function () {
+	  states.socketClient.error = false;
 	};
 
 	// Init step
 	states.init = function () {
 	  states.onDemandScenarii.load();
-	  states.socketClient.connect(function (err) {
+	  states.socketClient.connect({ retries: 10 }, function (err) {
 	    if (err) {
-	      console.error('Socket client connection failure!');
+	      console.error('Socket client connection failure: ', err);
 	      return;
 	    }
-	    states.socketClient.subscribe('/socket/status', states.socketClient.updater('status'), states.socketClient.error('status'));
-	    states.socketClient.subscribe('/socket/alarm', states.socketClient.updater('alarm'), states.socketClient.error('alarm'));
-	    states.socketClient.subscribe('/socket/scenarii', states.socketClient.updater('scenarii'), states.socketClient.error('scenarii'));
-	    states.socketClient.subscribe('/socket/data', states.socketClient.updater('data'), states.socketClient.error('data'));
-	    states.socketClient.subscribe('/socket/heat', states.socketClient.updater('heat'), states.socketClient.error('heat'));
-	    states.socketClient.subscribe('/socket/macro', states.socketClient.updater('macro'), states.socketClient.error('macro'));
+	    states.socketClient.subscribe('/socket/status', states.socketClient.updater('status'), states.socketClient.onSubscriptionError('status'));
+	    states.socketClient.subscribe('/socket/alarm', states.socketClient.updater('alarm'), states.socketClient.onSubscriptionError('alarm'));
+	    states.socketClient.subscribe('/socket/scenarii', states.socketClient.updater('scenarii'), states.socketClient.onSubscriptionError('scenarii'));
+	    states.socketClient.subscribe('/socket/data', states.socketClient.updater('data'), states.socketClient.onSubscriptionError('data'));
+	    states.socketClient.subscribe('/socket/heat', states.socketClient.updater('heat'), states.socketClient.onSubscriptionError('heat'));
+	    states.socketClient.subscribe('/socket/macro', states.socketClient.updater('macro'), states.socketClient.onSubscriptionError('macro'));
 	  });
 	};
 

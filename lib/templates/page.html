@@ -11,6 +11,7 @@
 {{#extend "js"}}
   // Initialization vars, from template engine to Angular app scope
   var initStates = {{tojson states}}
+  var initPage = {{tojson page}}
   var initGridPositions = {{{page.positions}}}
   var initGridLayout = {{page.layout}}
   var gridComponentLoaderUrl = '/{{page.slug}}/component'
@@ -29,9 +30,15 @@
 <div layout="column" flex ng-controller="PageControls" class="page-controller" ng-class="{'editing': (edition.active)}">
     <md-toolbar ng-if="true" class="md-whiteframe-6dp page-toolbar-static" ng-class="{'hidden': (!edition.active)}">
         <div class="md-toolbar-tools">
-            <h3>
-                <span>{{page.name}} (editing) TODO 6</span>
-            </h3>
+            <form name="pageHeaderForm">
+                <md-input-container md-no-float class="md-block" style="margin-bottom: 0;">
+                    <input required name="pageName" placeholder="Page name" ng-model="page.name">
+                    <div ng-messages="pageHeaderForm.pageName.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+            </form>
+TODO !2: save page changes when click on Edit Off!
             <span flex></span>
             <md-button class="md-fab md-hue-1" aria-label="Close edit mode" ng-click="edition.close()">
                 <md-icon class="material-icons" aria-label="Finish Edition">done_all</md-icon>
@@ -47,6 +54,11 @@
                     <span>{{page.name}}</span>
                 </h3>
                 <span flex></span>
+                <md-icon class="material-icons" aria-label="Web socket OK" ng-hide="states.socketClient.error">sync</md-icon>
+                <md-button class="md-warn" aria-label="Reload page" ng-show="states.socketClient.error" onclick="window.location.reload()">
+                    <md-icon class="material-icons" aria-label="Web socket problem">sync_problem</md-icon>
+                    Sync error | Reload
+                </md-button>
                 <md-button class="md-fab md-hue-2" aria-label="Open edit mode" ng-click="edition.open()">
 		            <md-icon class="material-icons" aria-label="Edit">mode_edit</md-icon>
                 </md-button>
@@ -72,7 +84,11 @@
     </div>
 
     <md-content layout="column" layout-align="left center" class="page-editor left-bar" ng-class="{'editing': (edition.active)}">
-        TODO !4: slider avec nombre de colonnes ?
+        <md-slider-container flex="40">
+            <md-slider md-discrete ng-model="page.layout" min="1" max="7" step="1" aria-label="Column count" md-vertical></md-slider>
+            <h5>Column count</h5>
+        </md-slider-container>
+TODO !2: changement dynamique avec le slider, en plus de la sauvegarde quand click on Edit Off!
     </md-content>
     <md-content layout="column" layout-align="right center" class="page-editor right-bar" ng-class="{'editing': (edition.active)}">
         <md-list layout="column" layout-align="stretch top">
@@ -112,7 +128,7 @@
                     </md-button>
                 </div>
             </md-list-item>
-            TODO !3: scroll au lieu de compresser ! pour petits ecrans, ca fait moche
+TODO !1: scroll au lieu de compresser ! pour petits ecrans, ca fait moche
         </md-list>
     </md-content>
 </div>
