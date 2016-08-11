@@ -15,6 +15,14 @@
       "refresher-validity": {
         "callHome": 3600
       }
+    },
+    "web-socket": {
+      "options": {
+        "retries": 10,
+        "delay": 2000,
+        "maxDelay": 8000
+      },
+      "alert-from-retry": 4
     }
   }
 }

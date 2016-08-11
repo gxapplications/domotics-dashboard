@@ -103,16 +103,7 @@
         .fail(function() {
           $scope.processingState = 'error'
           $scope.updateStepCounter()
-          $mdToast.show(
-            $mdToast.simple()
-              .textContent('Error during Scenario play action!')
-              .theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent')
-              .position('bottom right').hideDelay(6000)
-          ).then(function (response) {
-            if (response === 'ok') {
-              window.location.reload()
-            }
-          })
+          $rootScope.events.errorEvent('Error during Scenario play action!')
         })
     }
     $scope.updateStepCounter = function() {

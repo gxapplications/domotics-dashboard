@@ -79,23 +79,10 @@
                   method: 'PATCH',
                   data: $scope.component
                 }).done(function() {
-                  $mdToast.show(
-                    $mdToast.simple()
-                      .textContent('Settings saved!')
-                      .position('bottom right').hideDelay(3000)
-                  )
+                  $rootScope.events.successEvent('Settings saved!')
                   $scope.edition.refreshComponent({{component.id}})
                 }).fail(function() {
-                  $mdToast.show(
-                    $mdToast.simple()
-                      .textContent('Settings NOT saved!')
-                      .theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent')
-                      .position('bottom right').hideDelay(6000)
-                  ).then(function (response) {
-                    if (response === 'ok') {
-                      window.location.reload()
-                    }
-                  })
+                  $rootScope.events.errorEvent('Settings NOT saved!')
                 })
               }
 

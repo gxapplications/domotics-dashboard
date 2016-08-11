@@ -57,14 +57,29 @@
 
 	var _icons2 = _interopRequireDefault(_icons);
 
+	var _events = __webpack_require__(6);
+
+	var _events2 = _interopRequireDefault(_events);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	window.app.controller('PageControls', function ($rootScope, $scope, $document, $http, $window, $mdToast, $mdDialog) {
+	  $rootScope.events = new _events2.default($mdToast);
+	  $scope.events = $rootScope;
+
+	  // States
 	  $rootScope.states = _states2.default;
 	  $scope.states = $rootScope.states;
+	  $scope.$watch('states.socketClient.errorCount', function (newValue, oldValue) {
+	    if (newValue >= 4) {
+	      $scope.events.errorEvent('Web socket connection error!');
+	    }
+	  });
 
+	  // Page entity
 	  $scope.page = window.initPage;
 
+	  // Edition mode
 	  $rootScope.edition = {
 	    active: false,
 	    close: function close() {
@@ -90,20 +105,12 @@
 	            positions: $scope.grid.positions
 	          }
 	        }).done(function () {
-	          $mdToast.show($mdToast.simple().textContent('New position saved!').position('bottom right').hideDelay(3000));
+	          $scope.events.successEvent('New position saved!');
 	        }).fail(function () {
-	          $mdToast.show($mdToast.simple().textContent('Positions NOT saved!').theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
-	            if (response === 'ok') {
-	              window.location.reload();
-	            }
-	          });
+	          $scope.events.errorEvent('Positions NOT saved!');
 	        });
 	      }).fail(function () {
-	        $mdToast.show($mdToast.simple().textContent('Component NOT added!').theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
-	          if (response === 'ok') {
-	            window.location.reload();
-	          }
-	        });
+	        $scope.events.errorEvent('Component NOT added!');
 	      });
 	    },
 	    removeComponent: function removeComponent(id) {
@@ -130,16 +137,12 @@
 	            positions: $scope.grid.positions
 	          }
 	        }).done(function () {
-	          $mdToast.show($mdToast.simple().textContent('Component removed!').position('bottom right').hideDelay(3000));
+	          $scope.events.successEvent('Component removed!');
 	        }).fail(function () {
-	          $mdToast.show($mdToast.simple().textContent('Positions NOT saved!').theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
-	            if (response === 'ok') {
-	              window.location.reload();
-	            }
-	          });
+	          $scope.events.errorEvent('Positions NOT saved!');
 	        });
 	      }).fail(function () {
-	        $scope.toolbar.notifications.postError('Error removing component!');
+	        $scope.events.errorEvent('Error removing component!');
 	      });
 	    },
 	    resizeComponentDialog: function resizeComponentDialog(id, event) {
@@ -169,20 +172,17 @@
 	        componentCard.html(data);
 	        $scope.grid.gridStack.compileAngularElement(componentCard);
 	      }).fail(function () {
-	        $mdToast.show($mdToast.simple().textContent('Component NOT refreshed!').theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
-	          if (response === 'ok') {
-	            window.location.reload();
-	          }
-	        });
+	        $scope.events.errorEvent('Component NOT refreshed!');
 	      });
 	    },
 	    tools: {
-	      assignDeep: __webpack_require__(6),
+	      assignDeep: __webpack_require__(7),
 	      icons: Object.keys(_icons2.default)
 	    }
 	  };
 	  $scope.edition = $rootScope.edition;
 
+	  // Grid object
 	  $scope.grid = {
 	    positions: window.initGridPositions,
 	    layout: window.initGridLayout,
@@ -205,13 +205,9 @@
 	            }
 	          }).done(function () {
 	            $scope.grid.positions = mx;
-	            $mdToast.show($mdToast.simple().textContent('Positions saved!').position('bottom right').hideDelay(3000));
+	            $scope.events.successEvent('Positions saved!');
 	          }).fail(function () {
-	            $mdToast.show($mdToast.simple().textContent('Positions NOT saved!').theme('errorToast').action('RELOAD').highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(6000)).then(function (response) {
-	              if (response === 'ok') {
-	                window.location.reload();
-	              }
-	            });
+	            $scope.events.errorEvent('Positions NOT saved!');
 	          });
 	        },
 	        lanes: $scope.grid.layout,
@@ -229,6 +225,7 @@
 	  };
 	  $scope.$watch('grid.layout', $scope.grid.onLayoutChange);
 
+	  // Init
 	  $document.ready(function () {
 	    $($scope.grid.init());
 	    $scope.states.init();
@@ -315,23 +312,25 @@
 	  };
 	};
 	states.socketClient.error = false;
+	states.socketClient.errorCount = 0;
 	states.socketClient.onError = function (err) {
 	  if (err) {
 	    console.error('Socket client error: ' + err);
 	    if (err.toString() === 'Error: Socket error') {
 	      states.socketClient.error = true;
-	      // TODO !0: Mettre un Toast rouge sur l'UX ?
+	      states.socketClient.errorCount++;
 	    }
 	  }
 	};
 	states.socketClient.onConnect = function () {
 	  states.socketClient.error = false;
+	  states.socketClient.errorCount = 0;
 	};
 
 	// Init step
 	states.init = function () {
 	  states.onDemandScenarii.load();
-	  states.socketClient.connect({ retries: 10 }, function (err) {
+	  states.socketClient.connect({ retries: 10, delay: 2000, maxDelay: 8000 }, function (err) {
 	    if (err) {
 	      console.error('Socket client connection failure: ', err);
 	      return;
@@ -1099,7 +1098,6 @@
 /* 5 */
 /***/ function(module, exports) {
 
-	/* eslint-disable no-undef */
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -2044,6 +2042,54 @@
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Events = function () {
+	  function Events(toaster) {
+	    _classCallCheck(this, Events);
+
+	    this.toaster = toaster;
+	  }
+
+	  _createClass(Events, [{
+	    key: 'successEvent',
+	    value: function successEvent(message) {
+	      var duration = arguments.length <= 1 || arguments[1] === undefined ? 3000 : arguments[1];
+
+	      this.toaster.show(this.toaster.simple().textContent(message).position('bottom right').hideDelay(duration));
+	    }
+	  }, {
+	    key: 'errorEvent',
+	    value: function errorEvent(message) {
+	      var actionLabel = arguments.length <= 1 || arguments[1] === undefined ? 'RELOAD' : arguments[1];
+	      var action = arguments.length <= 2 || arguments[2] === undefined ? window.location.reload : arguments[2];
+	      var duration = arguments.length <= 3 || arguments[3] === undefined ? 6000 : arguments[3];
+
+	      this.toaster.show(this.toaster.simple().textContent(message).theme('errorToast').action(actionLabel).highlightAction(true).highlightClass('md-accent').position('bottom right').hideDelay(duration)).then(function (response) {
+	        if (response === 'ok') {
+	          action();
+	        }
+	      });
+	    }
+	  }]);
+
+	  return Events;
+	}();
+
+	exports.default = Events;
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -2055,9 +2101,9 @@
 
 	'use strict';
 
-	var isPrimitive = __webpack_require__(7);
-	var assignSymbols = __webpack_require__(8);
-	var typeOf = __webpack_require__(9);
+	var isPrimitive = __webpack_require__(8);
+	var assignSymbols = __webpack_require__(9);
+	var typeOf = __webpack_require__(10);
 
 	function assign(target/*, objects*/) {
 	  target = target || {};
@@ -2124,7 +2170,7 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	/*!
@@ -2143,7 +2189,7 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	/*!
@@ -2189,10 +2235,10 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var isBuffer = __webpack_require__(14);
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var isBuffer = __webpack_require__(15);
 	var toString = Object.prototype.toString;
 
 	/**
@@ -2306,10 +2352,10 @@
 	  return 'object';
 	};
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11).Buffer))
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -2322,9 +2368,9 @@
 
 	'use strict'
 
-	var base64 = __webpack_require__(11)
-	var ieee754 = __webpack_require__(12)
-	var isArray = __webpack_require__(13)
+	var base64 = __webpack_require__(12)
+	var ieee754 = __webpack_require__(13)
+	var isArray = __webpack_require__(14)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -3861,10 +3907,10 @@
 	  return i
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -3994,7 +4040,7 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -4084,7 +4130,7 @@
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -4095,7 +4141,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	/**
