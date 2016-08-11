@@ -65,7 +65,7 @@
 
 	window.app.controller('PageControls', function ($rootScope, $scope, $document, $http, $window, $mdToast, $mdDialog) {
 	  $rootScope.events = new _events2.default($mdToast);
-	  $scope.events = $rootScope;
+	  $scope.events = $rootScope.events;
 
 	  // States
 	  $rootScope.states = _states2.default;
@@ -78,6 +78,10 @@
 
 	  // Page entity
 	  $scope.page = window.initPage;
+	  $scope.$watch('page.layout', function () {
+	    if ($scope.grid.gridStack !== null) // cancel effect at init
+	      $scope.grid.gridStack.setLanes($scope.page.layout);
+	  });
 
 	  // Edition mode
 	  $rootScope.edition = {

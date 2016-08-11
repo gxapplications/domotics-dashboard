@@ -38,7 +38,6 @@
                     </div>
                 </md-input-container>
             </form>
-TODO !2: save page changes when click on Edit Off!
             <span flex></span>
             <md-button class="md-fab md-hue-1" aria-label="Close edit mode" ng-click="edition.close()">
                 <md-icon class="material-icons" aria-label="Finish Edition">done_all</md-icon>
@@ -84,14 +83,17 @@ TODO !2: save page changes when click on Edit Off!
     </div>
 
     <md-content layout="column" layout-align="left center" class="page-editor left-bar" ng-class="{'editing': (edition.active)}">
-        <md-slider-container flex="40">
-            <md-slider md-discrete ng-model="page.layout" min="1" max="7" step="1" aria-label="Column count" md-vertical></md-slider>
+        <div flex="nogrow">
+            Trucs pas hauts ici...
+        </div>
+        <md-slider-container flex="50">
+            <md-slider md-discrete ng-model="page.layout" min="1" max="6" step="1"
+                       aria-label="Column count" md-vertical style=""></md-slider>
             <h5>Column count</h5>
         </md-slider-container>
-TODO !2: changement dynamique avec le slider, en plus de la sauvegarde quand click on Edit Off!
     </md-content>
     <md-content layout="column" layout-align="right center" class="page-editor right-bar" ng-class="{'editing': (edition.active)}">
-        <md-list layout="column" layout-align="stretch top">
+        <md-list layout="column" layout-align="stretch top" flex="noshrink">
             <md-list-item>
                 <div>
                     <md-button class="md-grid-item-content" ng-click="edition.addComponent(1, 1, 1)">
@@ -128,7 +130,6 @@ TODO !2: changement dynamique avec le slider, en plus de la sauvegarde quand cli
                     </md-button>
                 </div>
             </md-list-item>
-TODO !1: scroll au lieu de compresser ! pour petits ecrans, ca fait moche
         </md-list>
     </md-content>
 </div>
