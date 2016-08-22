@@ -4,6 +4,7 @@ import Sqlite from 'sqlite3'
 import fs from 'fs'
 import Path from 'path'
 import _ from 'lodash'
+import slugify from 'slug'
 
 const file = Path.join(__dirname, '..', 'var', 'data.db')
 const exists = fs.existsSync(file)
@@ -47,6 +48,17 @@ db.stringify = function (data, attributesToNumber = []) {
     data = db.typeFixer(data, attributePath, (n) => { return Number(n) })
   })
   return JSON.stringify(data)
+}
+db.findNewSlug = function (prefix, query, callback, suffix = 0) {
+  db.get(query, prefix + (suffix || ''), (err, row) => {
+    if (err) {
+      return callback(err)
+    }
+    if (!row) {
+      return callback(null, prefix + (suffix || ''))
+    }
+    return db.findNewSlug(prefix, query, callback, suffix + 1)
+  })
 }
 
 // Accounts management
@@ -102,10 +114,27 @@ db.updatePageBySlug = function (slug, payload, callback) {
     const now = (new Date()).getTime()
     let page = {slug: 'default', name: 'Default Home', positions: [], layout: 4}
     Object.assign(page, pageRow, payload, {now})
-    db.run('UPDATE pages SET name=?, last_access=?, positions=?, layout=? WHERE slug=?',
-      page.name, page.now, JSON.stringify(page.positions), page.layout, slug, (err) => {
-        return callback(err, page)
+
+    // Compute new slug from page name, with unicity
+    if (payload.name !== pageRow.name) {
+      let newSlug = slugify(page.name)
+      db.findNewSlug(newSlug, 'SELECT * FROM pages WHERE slug=? LIMIT 1', (err, suffixedSlug) => {
+        if (err) {
+          return callback(err, null)
+        }
+
+        db.run('UPDATE pages SET name=?, last_access=?, positions=?, layout=?, slug=? WHERE slug=?',
+          page.name, page.now, JSON.stringify(page.positions), page.layout, suffixedSlug, slug, (err) => {
+            page.slug = suffixedSlug
+            return callback(err, page)
+          })
       })
+    } else {
+      db.run('UPDATE pages SET name=?, last_access=?, positions=?, layout=? WHERE slug=?',
+        page.name, page.now, JSON.stringify(page.positions), page.layout, slug, (err) => {
+          return callback(err, page)
+        })
+    }
   })
 }
 

@@ -197,7 +197,7 @@ server.route({
       if (!page) {
         return reply.redirect('/')
       }
-      reply.view('page', {'page': page, 'md-primary': 'teal', 'states': request.context.states})
+      reply(page)
     })
   }
 })
