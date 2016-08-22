@@ -19,7 +19,13 @@ const actions = function (api, reply, page, component, action = null, payload = 
       }, macroId, ...actions)
       break
 
-    // TODO !3: other actions
+    case 2:
+      // 2: Scenario activation
+      // TODO !3
+
+      break
+
+    // TODO !9: other actions
     default:
       // Action not (yet) supported
       reply({}).code(418)

@@ -101,7 +101,6 @@
 	          name: $scope.page.name
 	        }
 	      }).done(function (updatedPage) {
-	        console.log(updatedPage);
 	        if ($scope.page.slug !== updatedPage.slug) {
 	          $scope.events.warningEvent('Changes saved! Needs redirection...');
 	          window.location = '/' + updatedPage.slug;
@@ -2100,7 +2099,8 @@
 	    value: function warningEvent(message) {
 	      var duration = arguments.length <= 1 || arguments[1] === undefined ? 6000 : arguments[1];
 
-	      this.toaster.show(this.toaster.simple().textContent(message).theme('errorToast').position('bottom right').hideDelay(duration));
+	      this.toaster.show(this.toaster.simple().textContent(message).theme('errorToast') // TODO !1: warning theme...
+	      .position('bottom right').hideDelay(duration));
 	    }
 	  }, {
 	    key: 'errorEvent',
