@@ -211,11 +211,10 @@
 	  // Grid object
 	  $scope.grid = {
 	    positions: window.initGridPositions,
-	    layout: window.initGridLayout,
 	    loaderUrl: window.gridComponentLoaderUrl,
 	    onLayoutChange: function onLayoutChange() {
 	      if ($scope.grid.gridStack !== null) {
-	        $scope.grid.gridStack.setLanes($scope.grid.layout);
+	        $scope.grid.gridStack.setLanes($scope.page.layout);
 	      }
 	    },
 	    gridStack: null,
@@ -227,7 +226,8 @@
 	            url: window.gridPageUpdaterUrl,
 	            method: 'PATCH',
 	            data: {
-	              positions: mx
+	              positions: mx,
+	              layout: $scope.page.layout
 	            }
 	          }).done(function () {
 	            $scope.grid.positions = mx;
@@ -236,7 +236,7 @@
 	            $scope.events.errorEvent('Positions NOT saved!');
 	          });
 	        },
-	        lanes: $scope.grid.layout,
+	        lanes: $scope.page.layout,
 	        elementPrototype: 'li.position-card',
 	        elementLoaderUrl: $scope.grid.loaderUrl,
 	        draggableParams: {
@@ -249,7 +249,7 @@
 	      });
 	    }
 	  };
-	  $scope.$watch('grid.layout', $scope.grid.onLayoutChange);
+	  //$scope.$watch('page.layout', $scope.grid.onLayoutChange)
 
 	  // Init
 	  $document.ready(function () {
@@ -321,6 +321,17 @@
 	    return { id: id, label: states.scenarii.value[id].name };
 	  });
 	};
+	states.activableScenarii = []; // void before initialization
+	states.activableScenarii.load = function () {
+	  if (states.activableScenarii.length > 0) {
+	    return;
+	  }
+	  states.activableScenarii = Object.keys(states.scenarii.value).filter(function (id) {
+	    return states.scenarii.value[id].type !== 1;
+	  }).map(function (id) {
+	    return { id: id, label: states.scenarii.value[id].name };
+	  });
+	};
 
 	// Socket
 	states.socketClient = new _nes2.default.Client('ws://' + window.location.host);
@@ -356,6 +367,7 @@
 	// Init step
 	states.init = function () {
 	  states.onDemandScenarii.load();
+	  states.activableScenarii.load();
 	  states.socketClient.connect({ retries: 10, delay: 2000, maxDelay: 8000 }, function (err) {
 	    if (err) {
 	      console.error('Socket client connection failure: ', err);
@@ -2099,8 +2111,7 @@
 	    value: function warningEvent(message) {
 	      var duration = arguments.length <= 1 || arguments[1] === undefined ? 6000 : arguments[1];
 
-	      this.toaster.show(this.toaster.simple().textContent(message).theme('errorToast') // TODO !1: warning theme...
-	      .position('bottom right').hideDelay(duration));
+	      this.toaster.show(this.toaster.simple().textContent(message).theme('errorToast').position('bottom right').hideDelay(duration));
 	    }
 	  }, {
 	    key: 'errorEvent',

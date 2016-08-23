@@ -1,5 +1,25 @@
-
-TODO !2: Button, state, action, etc...
+<md-button class="md-raised md-primary component-button" flex id="component-button-{{component.id}}"
+           ng-disabled="isDisabled(component.configuration.scenario, states.macro.c_{{component.id}}.state, processingState)"
+           ng-class="{
+             'md-warn': processingState === 'error',
+             'md-hue-1': states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed'
+           }"
+           ng-click="play()">
+    <div layout="column" flex>
+        <h2 style="text-overflow: ellipsis; white-space: normal;">
+            <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration 'icon'}}</md-icon>
+            {{parsejson component.configuration 'title' 'Settings needed'}}
+        </h2>
+        <div style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
+            {{parsejson component.configuration 'description'}}
+        </div>
+    </div>
+    <div class="step"></div>
+    <div class="switch">
+        <md-switch md-no-ink ng-model="activationState" aria-label="Activation state"
+                   ng-disabled="isDisabled(component.configuration.scenario, states.macro.c_{{component.id}}.state, processingState)"></md-switch>
+    </div>
+</md-button>
 
 {{#extend "cardCss"}}{'md-whiteframe-6dp': !edition.active, 'gridlist-card': edition.active}{{/extend}}
 
@@ -42,8 +62,8 @@ TODO !2: Button, state, action, etc...
                       </md-input-container>
                   </md-list-item>
                   <md-list-item layout="row" layout-align="space-between stretch">
-                      <md-input-container flex="40" style="margin-left: 1rem;">
-                          <label>And after delay (in minutes)</label>
+                      <md-input-container flex="70" style="margin-left: 1rem;">
+                          <label>And reset state after delay (in minutes)</label>
                           <input required type="number" step="any" name="component_reset_delay" ng-model="component.configuration.reset_delay" min="0" max="1440" required>
                           <div ng-messages="componentForm.component_reset_delay.$error">
                               <div ng-message="required">If you do not want to reset state, please indicate 0.</div>
@@ -51,7 +71,7 @@ TODO !2: Button, state, action, etc...
                               <div ng-message="max">1440 minutes max. Equivalent to 24hrs.</div>
                           </div>
                       </md-input-container>
-                      <md-select placeholder="Reset action" ng-model="component.configuration.reset_action" flex="60">
+                      <md-select placeholder="Reset action" ng-model="component.configuration.reset_action" flex="30">
                           <md-option value="on">ON</md-option>
                           <md-option value="off">OFF</md-option>
                       </md-select>
@@ -82,9 +102,42 @@ TODO !2: Button, state, action, etc...
     // to control state
     $scope.processingState = 'waiting'; // or 'processing', 'error'
     $scope.isDisabled = function (scenario, remoteState, processingState) {
-      return (!scenario || remoteState === 1|| processingState === 'processing')
+      return (!scenario || remoteState === 1 || processingState === 'processing')
     }
-
-    // TODO !1
+    $scope.activationState = false
+    $scope.play = function() {
+      $scope.activationState = !$scope.activationState // For UI behavior only
+      $scope.processingState = 'processing'
+      $.post('/{{page.slug}}/component/{{component.id}}/action/' + ($scope.activationState ? 'off' : 'on'), {})
+        .done(function(data) {
+          $scope.processingState = 'waiting'
+          $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
+          $scope.updateStepCounter()
+          $scope.updateSwitch()
+        })
+        .fail(function() {
+          $scope.processingState = 'error'
+          $scope.updateStepCounter()
+          $rootScope.events.errorEvent('Error during Scenario play action!')
+        })
+    }
+    $scope.updateStepCounter = function() {
+      const state = $rootScope.states.macro.c_{{component.id}}
+      const remaining = state.remaining + ((state.state === 'delayed')? 1 : 0)
+      if (remaining > 0 && state.state !== 'finished') {
+        const stepsLabel = remaining + '/' + $scope.component.configuration.length;
+        $('#component-button-{{component.id}} div.step').html(stepsLabel);
+      } else {
+          $('#component-button-{{component.id}} div.step').html('');
+      }
+      // TODO !7: recuperer le temps restant via calcul de $scope.component.configuration...
+      // TODO !7: ...pour un mini chrono "xx s left" dans le coin du bouton ?
+    }
+    $scope.updateSwitch = function() {
+      const active = $scope.states.scenarii.value[$scope.component.configuration.scenario].active
+      $scope.activationState = (active && active === '1') ? true : false
+    }
+    $scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter)
+    $scope.$watch('states.scenarii.value[' + $scope.component.configuration.scenario + ']', $scope.updateSwitch)
   {{/extend}}
 </script>

@@ -1,6 +1,9 @@
 <md-button class="md-raised md-primary component-button" flex id="component-button-{{component.id}}"
        ng-disabled="isDisabled(component.configuration[0].scenario, states.macro.c_{{component.id}}.state, processingState)"
-       ng-class="{ 'md-warn': processingState === 'error', 'md-hue-1': states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed' }"
+       ng-class="{
+         'md-warn': processingState === 'error',
+         'md-hue-1': states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed'
+       }"
        ng-click="play()">
   <div layout="column" flex>
     <h2 style="text-overflow: ellipsis; white-space: normal;">

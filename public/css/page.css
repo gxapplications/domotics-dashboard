@@ -167,3 +167,14 @@ button.component-button div.step {
     right: 0.4rem;
     font-size: 0.6rem;
 }
+button.component-button div.switch {
+    position: absolute;
+    top: 0;
+    height: 0;
+    right: 0.6rem;
+    font-size: 0.6rem;
+    zoom: 1.1;
+}
+button.component-button div.switch > md-switch > div._md-container {
+    cursor: pointer;
+}

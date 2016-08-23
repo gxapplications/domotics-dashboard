@@ -21,7 +21,8 @@ const actions = function (api, reply, page, component, action = null, payload = 
 
     case 2:
       // 2: Scenario activation
-      // TODO !3
+      // TODO !1: call API !
+      // TODO !2: fix issue on API repo (cf github) for state.scenarii update
 
       break
 
