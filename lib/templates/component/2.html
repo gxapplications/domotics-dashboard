@@ -1,7 +1,7 @@
 
-Type 2
-TODO !3: Scenario activation
+TODO !2: Button, state, action, etc...
 
+{{#extend "cardCss"}}{'md-whiteframe-6dp': !edition.active, 'gridlist-card': edition.active}{{/extend}}
 
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
@@ -29,7 +29,7 @@ TODO !3: Scenario activation
                   </md-list-item>
                   <md-list-item layout="row" layout-align="space-between stretch">
                       <md-select placeholder="Scenario linked" ng-model="component.configuration.scenario" flex="60">
-                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.onDemandScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
                       </md-select>
                       <md-input-container flex="40" style="margin-left: 1rem;">
                           <label>Delayed action (in minutes)</label>
@@ -41,32 +41,50 @@ TODO !3: Scenario activation
                           </div>
                       </md-input-container>
                   </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-input-container flex="40" style="margin-left: 1rem;">
+                          <label>And after delay (in minutes)</label>
+                          <input required type="number" step="any" name="component_reset_delay" ng-model="component.configuration.reset_delay" min="0" max="1440" required>
+                          <div ng-messages="componentForm.component_reset_delay.$error">
+                              <div ng-message="required">If you do not want to reset state, please indicate 0.</div>
+                              <div ng-message="min">Impossible to go back in time, Marty!</div>
+                              <div ng-message="max">1440 minutes max. Equivalent to 24hrs.</div>
+                          </div>
+                      </md-input-container>
+                      <md-select placeholder="Reset action" ng-model="component.configuration.reset_action" flex="60">
+                          <md-option value="on">ON</md-option>
+                          <md-option value="off">OFF</md-option>
+                      </md-select>
+                  </md-list-item>
               </md-list>
           </section>
           <md-divider></md-divider>
-
-          TODO !2: Scenario activation settings
-          - configuration.titre, configuration.icon
-          - configuration.scenario
-          - configuration.delay
-          - configuration.reset_delay: 'au bout de X minutes,'
-          - configuration.reset_action: 'forcer à ON/OFF si necessaire.'
-
       </form>
   </md-dialog-content>
   <md-dialog-actions layout="row">
     <span flex></span>
     <md-button ng-click="cancelConfig()"><md-icon aria-label="block" class="material-icons md-14">block</md-icon> Cancel</md-button>
-    <md-button class="md-primary md-raised" ng-click="preSaveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
+    <md-button class="md-primary md-raised" ng-click="saveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
   </md-dialog-actions>
 {{/extend}}
 
 <script>
-  {{#extend "settingsScript"}}
-    alert('TODO !1')
-  {{/extend}}
-
   {{#extend "controllerScript"}}
-    alert('TODO !3')
+    // Default values assignment
+    $scope.component = $scope.edition.tools.assignDeep({
+      configuration:
+        {title: 'Push me', icon: '', description: 'I\'m a button', scenario: '', delay: 0, reset_delay: 0, reset_action: 'off'}
+    }, $scope.component);
+    if (!$rootScope.states.macro.c_{{component.id}}) {
+      $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}
+    }
+
+    // to control state
+    $scope.processingState = 'waiting'; // or 'processing', 'error'
+    $scope.isDisabled = function (scenario, remoteState, processingState) {
+      return (!scenario || remoteState === 1|| processingState === 'processing')
+    }
+
+    // TODO !1
   {{/extend}}
 </script>
