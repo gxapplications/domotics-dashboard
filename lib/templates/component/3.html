@@ -1,34 +1,12 @@
-<md-button class="md-raised md-primary component-button" flex id="component-button-{{component.id}}"
-           ng-disabled="isDisabled(component.configuration.scenario, states.macro.c_{{component.id}}.state, processingState)"
-           ng-class="{
-             'md-warn': processingState === 'error',
-             'md-hue-1': states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed'
-           }"
-           ng-click="play()">
-    <div layout="column" flex>
-        <h2 style="text-overflow: ellipsis; white-space: normal;">
-            <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration 'icon'}}</md-icon>
-            {{parsejson component.configuration 'title' 'Settings needed'}}
-        </h2>
-        <div style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
-            {{parsejson component.configuration 'description'}}
-        </div>
-    </div>
-    <div class="step"></div>
-    <div class="switch">
-        <md-switch md-no-ink ng-model="activationState" aria-label="Activation state"
-                   ng-disabled="true"></md-switch>
-    </div>
-</md-button>
-
-{{#extend "cardCss"}}{'md-whiteframe-6dp': !edition.active, 'gridlist-card': edition.active}{{/extend}}
+Type 3
+TODO !2
 
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
 
       <form name="componentForm" layout="column" flex layout-fill>
           <section>
-              <md-subheader class="md-accent">Scenario Activation</md-subheader>
+              <md-subheader class="md-accent">Domotic switch</md-subheader>
               <md-list layout="column" layout-padding>
                   <md-list-item layout="row" layout-align="space-between stretch">
                       <md-input-container flex="80">
@@ -48,8 +26,8 @@
                       </md-input-container>
                   </md-list-item>
                   <md-list-item layout="row" layout-align="space-between stretch">
-                      <md-select placeholder="Scenario linked" ng-model="component.configuration.scenario" flex="60">
-                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      <md-select placeholder="Domotic switch linked" ng-model="component.configuration.domotic" flex="60">
+                          <md-option ng-value="id" ng-repeat="(id, domotic) in states.domotic.value">{{ng-open}}domotic.name{{ng-close}}</md-option>
                       </md-select>
                       <md-input-container flex="40" style="margin-left: 1rem;">
                           <label>Delayed action (in minutes)</label>
@@ -93,7 +71,7 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration:
-        {title: 'Scenario', icon: '', description: 'ON/OFF', scenario: '', delay: 0, reset_delay: 0, reset_action: 'off'}
+        {title: 'Domotic switch', icon: '', description: 'ON/OFF', domotic: '', delay: 0, reset_delay: 0, reset_action: 'off'}
     }, $scope.component);
     if (!$rootScope.states.macro.c_{{component.id}}) {
       $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}
@@ -101,55 +79,11 @@
 
     // to control state
     $scope.processingState = 'waiting'; // or 'processing', 'error'
-    $scope.isDisabled = function (scenario, remoteState, processingState) {
-      return (!scenario || remoteState === 1 || processingState === 'processing')
-    }
-    $scope.activationState = false
-    $scope.play = function() {
-      $scope.processingState = 'processing'
-      const toActivate = !$scope.activationState
-      $.post('/{{page.slug}}/component/{{component.id}}/action/' + (toActivate ? 'on' : 'off'), {})
-        .done(function(data) {
-          $scope.processingState = 'waiting'
-          $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
-          $scope.updateStepCounter()
-          $scope.updateSwitch(toActivate)
-        })
-        .fail(function() {
-          $scope.processingState = 'error'
-          $scope.updateStepCounter()
-          $rootScope.events.errorEvent('Error during Scenario play action!')
-        })
+    $scope.isDisabled = function (domotic, remoteState, processingState) {
+      return (!domotic || remoteState === 1 || processingState === 'processing')
     }
 
-    $scope.updateStepCounter = function() {
-      const state = $rootScope.states.macro.c_{{component.id}}
-      if (state) {
-        const remaining = state.remaining + ((state.state === 'delayed') ? 1 : 0)
-        if (remaining > 0 && state.state !== 'finished') {
-          const stepsLabel = (3 - remaining) + '/2'
-          $('#component-button-{{component.id}} div.step').html(stepsLabel)
-        } else {
-          $('#component-button-{{component.id}} div.step').html('')
-        }
-        // TODO !7: recuperer le temps restant via calcul de $scope.component.configuration...
-        // TODO !7: ...pour un mini chrono sous forme de progress circular qui entoure le step counter
-      }
-    }
-    $scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter)
-    // FIXME !1: trouver un moyen de unwatch avant de re-watch, sinon au refresh d'un component, on cumule les watchers
-
-    if ($scope.component.configuration && $scope.component.configuration.scenario > 0) {
-      $scope.updateSwitch = function (forceActivation) {
-        if (forceActivation === undefined) {
-            const active = $scope.states.scenarii.value[$scope.component.configuration.scenario].active
-            forceActivation = (active && active === '1')
-        }
-        $scope.activationState = forceActivation
-      }
-      $scope.$watch('states.scenarii.value[' + $scope.component.configuration.scenario + ']', $scope.updateSwitch.bind(null, undefined))
-      $scope.$watch('states.macro.c_{{component.id}}', $scope.updateSwitch.bind(null, undefined))
-      // FIXME !1: trouver un moyen de unwatch avant de re-watch, sinon au refresh d'un component, on cumule les watchers
-    }
+    // TODO !2: deux boutons monotables (ON et OFF) l'un à coté de l'autre, le titre et la desc sont au-dessus. Les compteurs dans le coin bas droit
+    // TODO !3: quand on lance l'action et succes, on suppose qsue le bouton cliqué indique l'état du domotic switch, donc y placer md-hue-1 pendant 10 secondes.
   {{/extend}}
 </script>

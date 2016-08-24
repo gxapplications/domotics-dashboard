@@ -83,7 +83,7 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration: [
-        {title: 'Push me', icon: '', description: 'I\'m a button', scenario: '', delay: 0}
+        {title: 'Scenario', icon: '', description: 'Play', scenario: '', delay: 0}
       ]
     }, $scope.component);
     if (!$rootScope.states.macro.c_{{component.id}}) {
@@ -111,17 +111,20 @@
     }
     $scope.updateStepCounter = function() {
       const state = $rootScope.states.macro.c_{{component.id}}
-      const remaining = state.remaining + ((state.state === 'delayed')? 0 : 1)
-      if (remaining > 0 && state.state !== 'finished') {
-        const stepsLabel = remaining + '/' + $scope.component.configuration.length
-        $('#component-button-{{component.id}} div.step').html(stepsLabel)
-      } else {
+      if (state) {
+        const remaining = state.remaining + ((state.state === 'delayed') ? 1 : 0)
+        if (remaining > 0 && state.state !== 'finished') {
+          const stepsLabel = ($scope.component.configuration.length - remaining + 1) + '/' + $scope.component.configuration.length
+          $('#component-button-{{component.id}} div.step').html(stepsLabel)
+        } else {
           $('#component-button-{{component.id}} div.step').html('')
+        }
+        // TODO !7: recuperer le temps restant via calcul de $scope.component.configuration...
+        // TODO !7: ...pour un mini chrono sous forme de progress circular qui entoure le step counter
       }
-      // TODO !7: recuperer le temps restant via calcul de $scope.component.configuration...
-      // TODO !7: ...pour un mini chrono "xx s left" dans le coin du bouton ?
     }
     $scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter)
+    // FIXME !1: trouver un moyen de unwatch avant de re-watch, sinon au refresh d'un component, on cumule les watchers
   {{/extend}}
 
   {{#extend "settingsScript"}}
