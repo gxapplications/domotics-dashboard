@@ -249,7 +249,6 @@
 	      });
 	    }
 	  };
-	  //$scope.$watch('page.layout', $scope.grid.onLayoutChange)
 
 	  // Init
 	  $document.ready(function () {

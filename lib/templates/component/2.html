@@ -106,38 +106,48 @@
     }
     $scope.activationState = false
     $scope.play = function() {
-      $scope.activationState = !$scope.activationState // For UI behavior only
       $scope.processingState = 'processing'
-      $.post('/{{page.slug}}/component/{{component.id}}/action/' + ($scope.activationState ? 'off' : 'on'), {})
+      const toActivate = !$scope.activationState
+      $.post('/{{page.slug}}/component/{{component.id}}/action/' + (toActivate ? 'on' : 'off'), {})
         .done(function(data) {
           $scope.processingState = 'waiting'
           $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
           $scope.updateStepCounter()
-          $scope.updateSwitch()
+          $scope.updateSwitch(toActivate)
         })
         .fail(function() {
           $scope.processingState = 'error'
           $scope.updateStepCounter()
           $rootScope.events.errorEvent('Error during Scenario play action!')
         })
+      $scope.activationState = toActivate // For UI behavior only
     }
+
     $scope.updateStepCounter = function() {
       const state = $rootScope.states.macro.c_{{component.id}}
-      const remaining = state.remaining + ((state.state === 'delayed')? 1 : 0)
+      const remaining = state.remaining + ((state.state === 'delayed')? 0 : 1)
       if (remaining > 0 && state.state !== 'finished') {
-        const stepsLabel = remaining + '/' + $scope.component.configuration.length;
-        $('#component-button-{{component.id}} div.step').html(stepsLabel);
+        const stepsLabel = remaining + '/2'
+        $('#component-button-{{component.id}} div.step').html(stepsLabel)
       } else {
-          $('#component-button-{{component.id}} div.step').html('');
+          $('#component-button-{{component.id}} div.step').html('')
       }
       // TODO !7: recuperer le temps restant via calcul de $scope.component.configuration...
       // TODO !7: ...pour un mini chrono "xx s left" dans le coin du bouton ?
     }
-    $scope.updateSwitch = function() {
-      const active = $scope.states.scenarii.value[$scope.component.configuration.scenario].active
-      $scope.activationState = (active && active === '1') ? true : false
-    }
     $scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter)
-    $scope.$watch('states.scenarii.value[' + $scope.component.configuration.scenario + ']', $scope.updateSwitch)
+
+
+    if ($scope.component.configuration && $scope.component.configuration.scenario > 0) {
+      $scope.updateSwitch = function (forceActivation) {
+        if (forceActivation === undefined) {
+            const active = $scope.states.scenarii.value[$scope.component.configuration.scenario].active
+            forceActivation = (active && active === '1')
+        }
+        $scope.activationState = forceActivation
+      }
+      $scope.$watch('states.scenarii.value[' + $scope.component.configuration.scenario + ']', $scope.updateSwitch.bind(null, undefined))
+      $scope.$watch('states.macro.c_{{component.id}}', $scope.updateSwitch.bind(null, undefined))
+    }
   {{/extend}}
 </script>

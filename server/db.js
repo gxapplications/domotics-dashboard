@@ -116,7 +116,7 @@ db.updatePageBySlug = function (slug, payload, callback) {
     Object.assign(page, pageRow, payload, {now})
 
     // Compute new slug from page name, with unicity
-    if (payload.name && payload.name !== pageRow.name) {
+    if (payload && payload.name && payload.name !== pageRow.name) {
       let newSlug = slugify(page.name)
       db.findNewSlug(newSlug, 'SELECT * FROM pages WHERE slug=? LIMIT 1', (err, suffixedSlug) => {
         if (err) {

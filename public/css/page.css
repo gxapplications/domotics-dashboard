@@ -175,6 +175,6 @@ button.component-button div.switch {
     font-size: 0.6rem;
     zoom: 1.1;
 }
-button.component-button div.switch > md-switch > div._md-container {
+button.component-button div.switch > md-switch:not([disabled]) > div._md-container {
     cursor: pointer;
 }
