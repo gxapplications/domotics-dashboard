@@ -53,6 +53,13 @@
         $scope.component.configuration = {{{component.configuration}}}
         $scope.component.extra_component = {{{component.extra_component}}}
 
+        // Cleaners array
+        $rootScope.cleaners['CardCtrl-{{component.id}}'] = []
+        this.addCleaner = function(cleaner) {
+          $rootScope.cleaners['CardCtrl-{{component.id}}'].push(cleaner)
+        }
+
+        // Configuration popup
         this.configure = function($event) {
           var content = $("div#component-{{component.id}} div.component_edit_dialog").html().substring(4) // removes <!--
           content = content.substr(0, content.length-4) // removes --->

@@ -136,8 +136,7 @@
         // TODO !7: ...pour un mini chrono sous forme de progress circular qui entoure le step counter
       }
     }
-    $scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter)
-    // FIXME !1: trouver un moyen de unwatch avant de re-watch, sinon au refresh d'un component, on cumule les watchers
+    this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter))
 
     if ($scope.component.configuration && $scope.component.configuration.scenario > 0) {
       $scope.updateSwitch = function (forceActivation) {
@@ -147,9 +146,8 @@
         }
         $scope.activationState = forceActivation
       }
-      $scope.$watch('states.scenarii.value[' + $scope.component.configuration.scenario + ']', $scope.updateSwitch.bind(null, undefined))
-      $scope.$watch('states.macro.c_{{component.id}}', $scope.updateSwitch.bind(null, undefined))
-      // FIXME !1: trouver un moyen de unwatch avant de re-watch, sinon au refresh d'un component, on cumule les watchers
+      this.addCleaner($scope.$watch('states.scenarii.value[' + $scope.component.configuration.scenario + ']', $scope.updateSwitch.bind(null, undefined)))
+      this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateSwitch.bind(null, undefined)))
     }
   {{/extend}}
 </script>

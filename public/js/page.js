@@ -66,6 +66,7 @@
 	window.app.controller('PageControls', function ($rootScope, $scope, $document, $http, $window, $mdToast, $mdDialog) {
 	  $rootScope.events = new _events2.default($mdToast);
 	  $scope.events = $rootScope.events;
+	  $rootScope.cleaners = [];
 
 	  // States
 	  $rootScope.states = _states2.default;
@@ -154,6 +155,7 @@
 	          id: id
 	        }
 	      }).done(function (data) {
+	        console.log("REMOVE ALL COMPONENTS !"); // FIXME !1
 	        $($scope.grid.init()); // reinit gridStack
 
 	        $.ajax({
@@ -195,6 +197,8 @@
 	          id: id
 	        }
 	      }).done(function (data) {
+	        var cleaners = $rootScope.cleaners['CardCtrl-' + id];
+	        console.log("REMOVE COMPONENT", cleaners.length); // FIXME !1
 	        componentCard.html(data);
 	        $scope.grid.gridStack.compileAngularElement(componentCard);
 	      }).fail(function () {
@@ -4414,26 +4418,22 @@
 /* 15 */
 /***/ function(module, exports) {
 
-	/*!
-	 * Determine if an object is a Buffer
+	/**
+	 * Determine if an object is Buffer
 	 *
-	 * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
-	 * @license  MIT
+	 * Author:   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+	 * License:  MIT
+	 *
+	 * `npm install is-buffer`
 	 */
 
-	// The _isBuffer check is for Safari 5-7 support, because it's missing
-	// Object.prototype.constructor. Remove this eventually
 	module.exports = function (obj) {
-	  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
-	}
-
-	function isBuffer (obj) {
-	  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
-	}
-
-	// For Node v0.10 support. Remove this eventually.
-	function isSlowBuffer (obj) {
-	  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
+	  return !!(obj != null &&
+	    (obj._isBuffer || // For Safari 5-7 (missing Object.prototype.constructor)
+	      (obj.constructor &&
+	      typeof obj.constructor.isBuffer === 'function' &&
+	      obj.constructor.isBuffer(obj))
+	    ))
 	}
 
 
