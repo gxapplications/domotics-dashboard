@@ -5,10 +5,12 @@
 <div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
     <md-button class="md-raised md-primary component-button" md-theme="domoticStates"
                style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
-               flex id="component-button-{{component.id}}-on">ON</md-button>
+               ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
+               flex id="component-button-{{component.id}}-on" ng-click="turnOn()">ON</md-button>
     <md-button class="md-raised md-warn component-button" md-theme="domoticStates"
                style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
-               flex id="component-button-{{component.id}}-off">OFF</md-button>
+               ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
+               flex id="component-button-{{component.id}}-off" ng-click="turnOff()">OFF</md-button>
 </div>
 <div style="text-transform: none;text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem;">
     {{parsejson component.configuration 'description'}}
@@ -94,6 +96,14 @@
     $scope.processingState = 'waiting'; // or 'processing', 'error'
     $scope.isDisabled = function (domotic, remoteState, processingState) {
       return (!domotic || remoteState === 1 || processingState === 'processing')
+    }
+    $scope.turnOn = function() {
+      $scope.processingState = 'processing'
+
+    }
+    $scope.turnOff = function() {
+      $scope.processingState = 'processing'
+
     }
     // TODO !1: dynamique des clics sur les boutons
     // TODO !2: Les compteurs dans le coin bas droit ? où faire de la place ?
