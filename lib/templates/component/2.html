@@ -6,7 +6,7 @@
            }"
            ng-click="play()">
     <div layout="column" flex>
-        <h2 style="text-overflow: ellipsis; white-space: normal;">
+        <h2 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.9em;">
             <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration 'icon'}}</md-icon>
             {{parsejson component.configuration 'title' 'Settings needed'}}
         </h2>
@@ -140,7 +140,6 @@
 
     if ($scope.component.configuration && $scope.component.configuration.scenario > 0) {
       $scope.updateSwitch = function (forceActivation) {
-          console.log('a')
         if (forceActivation === undefined) {
             const active = $scope.states.scenarii.value[$scope.component.configuration.scenario].active
             forceActivation = (active && active === '1')

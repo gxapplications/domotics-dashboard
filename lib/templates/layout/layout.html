@@ -47,26 +47,31 @@
     var app = angular.module('GXDomoticsApp', ['ngMaterial', 'ngMessages'])
       app.config(function($mdThemingProvider, $controllerProvider, $httpProvider) {
         $mdThemingProvider.theme('default')
-          .primaryPalette('teal', {
+          .primaryPalette('teal', { // Default theme, UI colors
               'default': '900',
               'hue-1': '600',
               'hue-2': '300',
               'hue-3': 'A700'})
           .warnPalette('red')
-          .accentPalette('light-green', {
+          .accentPalette('light-green', { // Edition colors
               'default': '600',
               'hue-1': '700',
               'hue-2': '900',
               'hue-3': 'A700'
           })
-          .backgroundPalette('grey', {'default': '900'})
+          .backgroundPalette('grey', {'default': '900'}) // No white background
           .dark();
-        $mdThemingProvider.theme('errorToast')
-                  .primaryPalette('red')
-                  .warnPalette('orange')
-                  .accentPalette('yellow')
-                  .backgroundPalette('red', {'default': '900'})
-                  .dark();
+        $mdThemingProvider.theme('errorToast') // Toast levels colors
+          .primaryPalette('red')
+          .warnPalette('orange')
+          .accentPalette('yellow')
+          .backgroundPalette('red', {'default': '900'})
+          .dark();
+        $mdThemingProvider.theme('domoticStates')// Colors for domotic elements (alarm On/half/off, switch On/Off, ...)
+          .primaryPalette('green', {'default': '800'})
+          .warnPalette('red', {'default': '900'})
+          .accentPalette('yellow', {'default': '800'})
+          .dark();
         app.controllerProvider = $controllerProvider;
 
         // Do not encode POST data in Angular JSON format, but use jquery POST parameters format (query string)

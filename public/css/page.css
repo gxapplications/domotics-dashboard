@@ -160,6 +160,10 @@ button.component-button {
     margin: 0;
     position: relative;
 }
+button.component-button h2 {
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+}
 button.component-button div.step {
     position: absolute;
     bottom: 1.8rem;

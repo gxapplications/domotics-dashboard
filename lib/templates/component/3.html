@@ -1,5 +1,18 @@
-Type 3
-TODO !2
+<h2 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.7rem; margin-bottom: 0.3rem;">
+    <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration 'icon'}}</md-icon>
+    {{parsejson component.configuration 'title' 'Settings needed'}}
+</h2>
+<div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
+    <md-button class="md-raised md-primary component-button" md-theme="domoticStates"
+               style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
+               flex id="component-button-{{component.id}}-on">ON</md-button>
+    <md-button class="md-raised md-warn component-button" md-theme="domoticStates"
+               style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+               flex id="component-button-{{component.id}}-off">OFF</md-button>
+</div>
+<div style="text-transform: none;text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem;">
+    {{parsejson component.configuration 'description'}}
+</div>
 
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
@@ -82,8 +95,8 @@ TODO !2
     $scope.isDisabled = function (domotic, remoteState, processingState) {
       return (!domotic || remoteState === 1 || processingState === 'processing')
     }
-
-    // TODO !2: deux boutons monotables (ON et OFF) l'un à coté de l'autre, le titre et la desc sont au-dessus. Les compteurs dans le coin bas droit
-    // TODO !3: quand on lance l'action et succes, on suppose qsue le bouton cliqué indique l'état du domotic switch, donc y placer md-hue-1 pendant 10 secondes.
+    // TODO !1: dynamique des clics sur les boutons
+    // TODO !2: Les compteurs dans le coin bas droit ? où faire de la place ?
+    // TODO !3: quand action success, on suppose que le bouton cliqué indique l'état du domotic switch, donc y placer md-hue-x pendant 10 secondes.
   {{/extend}}
 </script>

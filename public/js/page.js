@@ -204,7 +204,7 @@
 	        }
 	      }).done(function (data) {
 	        // Run cleaners before to remove controller
-	        var cleaners = $rootScope.cleaners['CardCtrl-' + id];
+	        var cleaners = $rootScope.cleaners['CardCtrl-' + id] || [];
 	        cleaners.forEach(function (cleaner) {
 	          cleaner();
 	        });
