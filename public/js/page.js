@@ -66,7 +66,7 @@
 	window.app.controller('PageControls', function ($rootScope, $scope, $document, $http, $window, $mdToast, $mdDialog) {
 	  $rootScope.events = new _events2.default($mdToast);
 	  $scope.events = $rootScope.events;
-	  $rootScope.cleaners = [];
+	  $rootScope.cleaners = {};
 
 	  // States
 	  $rootScope.states = _states2.default;
@@ -155,7 +155,13 @@
 	          id: id
 	        }
 	      }).done(function (data) {
-	        console.log("REMOVE ALL COMPONENTS !"); // FIXME !1
+	        // Run cleaners before to remove controllers
+	        for (var cleaners in $rootScope.cleaners) {
+	          cleaners.forEach(function (cleaner) {
+	            cleaner();
+	          });
+	        }
+	        // This removes the controller from the DOM, but not on Angular app side
 	        $($scope.grid.init()); // reinit gridStack
 
 	        $.ajax({
@@ -197,8 +203,12 @@
 	          id: id
 	        }
 	      }).done(function (data) {
+	        // Run cleaners before to remove controller
 	        var cleaners = $rootScope.cleaners['CardCtrl-' + id];
-	        console.log("REMOVE COMPONENT", cleaners.length); // FIXME !1
+	        cleaners.forEach(function (cleaner) {
+	          cleaner();
+	        });
+	        // This removes the controller from the DOM, but not on Angular app side
 	        componentCard.html(data);
 	        $scope.grid.gridStack.compileAngularElement(componentCard);
 	      }).fail(function () {
