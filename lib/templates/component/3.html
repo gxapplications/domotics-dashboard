@@ -6,19 +6,19 @@
     <md-button class="md-raised md-primary component-button" md-theme="domoticStates"
                style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
-               flex id="component-button-{{component.id}}-on" ng-click="turnOn()">ON</md-button>
+               flex id="component-button-{{component.id}}-on" ng-click="play(true)">ON</md-button>
     <md-button class="md-raised md-warn component-button" md-theme="domoticStates"
                style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
-               flex id="component-button-{{component.id}}-off" ng-click="turnOff()">OFF</md-button>
+               flex id="component-button-{{component.id}}-off" ng-click="play(false)">OFF</md-button>
 </div>
 <div style="text-transform: none;text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem;">
     {{parsejson component.configuration 'description'}}
 </div>
+<div class="step"></div>
 
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
-
       <form name="componentForm" layout="column" flex layout-fill>
           <section>
               <md-subheader class="md-accent">Domotic switch</md-subheader>
@@ -97,16 +97,31 @@
     $scope.isDisabled = function (domotic, remoteState, processingState) {
       return (!domotic || remoteState === 1 || processingState === 'processing')
     }
-    $scope.turnOn = function() {
+    $scope.play = function(toActivate) {
       $scope.processingState = 'processing'
+      $.post('/{{page.slug}}/component/{{component.id}}/action/' + (toActivate ? 'on' : 'off'), {})
+        .done(function(data) {
+          $scope.processingState = 'waiting'
+          $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
+          $scope.updateStepCounter()
+          // $scope.updateSwitch(toActivate)
 
-    }
-    $scope.turnOff = function() {
-      $scope.processingState = 'processing'
+          // TODO !3: quand action success, on suppose que le bouton cliqué indique l'état du domotic switch, donc y placer md-hue-x pendant 10 secondes.
+        })
+        .fail(function() {
+          $scope.processingState = 'error'
+          $('div#component-{{component.id}}').parent('md-card').addClass('error')
+          $scope.updateStepCounter()
 
+          $rootScope.events.errorEvent('Error during Domotic switch action!')
+        })
     }
-    // TODO !1: dynamique des clics sur les boutons
-    // TODO !2: Les compteurs dans le coin bas droit ? où faire de la place ?
-    // TODO !3: quand action success, on suppose que le bouton cliqué indique l'état du domotic switch, donc y placer md-hue-x pendant 10 secondes.
+
+    $scope.updateStepCounter = function() {
+      // TODO !2: Les compteurs dans le coin bas droit. Si commentaire il y a de la place. Sinon, faire un peu de place !
+    }
+    this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter))
+
+
   {{/extend}}
 </script>

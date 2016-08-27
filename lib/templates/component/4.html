@@ -1,0 +1,29 @@
+<h2 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.7rem; margin-bottom: 0.3rem;">
+    <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration 'icon'}}</md-icon>
+    {{parsejson component.configuration 'title' 'Settings needed'}}
+</h2>
+<div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
+    Buttons TODO !5
+</div>
+<div style="text-transform: none;text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem;">
+    {{parsejson component.configuration 'description'}}
+</div>
+
+{{#extend "settingsForm"}}
+  <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
+      <form name="componentForm" layout="column" flex layout-fill>
+         TODO !5
+      </form>
+  </md-dialog-content>
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="cancelConfig()"><md-icon aria-label="block" class="material-icons md-14">block</md-icon> Cancel</md-button>
+    <md-button class="md-primary md-raised" ng-click="saveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
+  </md-dialog-actions>
+{{/extend}}
+
+<script>
+  {{#extend "controllerScript"}}
+    // TODO !5
+  {{/extend}}
+</script>

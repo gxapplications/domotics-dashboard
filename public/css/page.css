@@ -164,6 +164,13 @@ button.component-button h2 {
     margin-top: 0.3rem;
     margin-bottom: 0.3rem;
 }
+div[ng-controller] div.step {
+    position: absolute;
+    bottom: 1.1rem;
+    height: 0;
+    right: 0.4rem;
+    font-size: 0.6rem;
+}
 button.component-button div.step {
     position: absolute;
     bottom: 1.8rem;
@@ -171,6 +178,7 @@ button.component-button div.step {
     right: 0.4rem;
     font-size: 0.6rem;
 }
+
 
 /* md-switch disabled but colored like enabled one */
 button.component-button div.switch {
@@ -198,4 +206,8 @@ button.component-button div.switch > md-switch[disabled].md-checked ._md-thumb {
 }
 button.component-button div.switch > md-switch:not([disabled]) > div._md-container {
     cursor: pointer;
+}
+
+md-card.error {
+    background-color: #B71C1C;
 }
