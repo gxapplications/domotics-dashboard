@@ -6,13 +6,15 @@
     <md-button class="md-raised md-primary component-button" md-theme="domoticStates"
                style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
+               ng-class="{'md-hue-1': activationState == 'on'}"
                flex id="component-button-{{component.id}}-on" ng-click="play(true)">ON</md-button>
     <md-button class="md-raised md-warn component-button" md-theme="domoticStates"
                style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
+               ng-class="{'md-hue-1': activationState == 'off'}"
                flex id="component-button-{{component.id}}-off" ng-click="play(false)">OFF</md-button>
 </div>
-<div style="text-transform: none;text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem;">
+<div style="text-transform: none;text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0.4rem;">
     {{parsejson component.configuration 'description'}}
 </div>
 <div class="step"></div>
@@ -93,7 +95,8 @@
     }
 
     // to control state
-    $scope.processingState = 'waiting'; // or 'processing', 'error'
+    $scope.processingState = 'waiting' // or 'processing', 'error'
+    $scope.activationState = false // or 'on', 'off'
     $scope.isDisabled = function (domotic, remoteState, processingState) {
       return (!domotic || remoteState === 1 || processingState === 'processing')
     }
@@ -104,24 +107,51 @@
           $scope.processingState = 'waiting'
           $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
           $scope.updateStepCounter()
-          // $scope.updateSwitch(toActivate)
-
-          // TODO !3: quand action success, on suppose que le bouton cliqué indique l'état du domotic switch, donc y placer md-hue-x pendant 10 secondes.
+          $scope.updateSwitch(toActivate)
         })
         .fail(function() {
           $scope.processingState = 'error'
           $('div#component-{{component.id}}').parent('md-card').addClass('error')
           $scope.updateStepCounter()
-
           $rootScope.events.errorEvent('Error during Domotic switch action!')
         })
     }
 
     $scope.updateStepCounter = function() {
-      // TODO !2: Les compteurs dans le coin bas droit. Si commentaire il y a de la place. Sinon, faire un peu de place !
+      const state = $rootScope.states.macro.c_{{component.id}}
+      if (state) {
+        const remaining = state.remaining + ((state.state === 'delayed') ? 1 : 0)
+        if (remaining > 0 && state.state !== 'finished') {
+          const stepsLabel = (3 - remaining) + '/2'
+          $('#component-{{component.id}} div.step').html(stepsLabel)
+        } else {
+          $('#component-{{component.id}} div.step').html('')
+        }
+        // TODO !7: recuperer le temps restant via calcul de $scope.component.configuration...
+        // TODO !7: ...pour un mini chrono sous forme de progress circular qui entoure le step counter
+      }
     }
     this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter))
 
-
+    if ($scope.component.configuration && $scope.component.configuration.domotic > 0) {
+      $scope.updateSwitch = function (activation) {
+        if (activation === undefined) {
+          const state = $rootScope.states.macro.c_{{component.id}}
+          if (!state) {
+            $scope.activationState = false
+            return;
+          }
+          const remaining = state.remaining + ((state.state === 'delayed') ? 1 : 0)
+          // console.log(remaining, "####")
+          // A priori sur le cas complex maxi, 2 => selon le bouton appuyé. 1 => reset_action. 0 => aurait du etre declenché, mais je n'ai rien vu, pas normal !
+          // TODO !1: look $scope.states.macro.c_{{component.id}} to know the step just done and highlight proper switch (set activation to 'on' or 'off')
+        }
+        $scope.activationState = activation ? 'on' : 'off'
+        setTimeout(() => {
+          $scope.activationState = false
+        }, 60000)
+      }
+      this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateSwitch.bind(null, undefined)))
+    }
   {{/extend}}
 </script>
