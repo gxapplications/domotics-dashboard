@@ -60,6 +60,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
           delay: configuration.reset_delay * 60000
         })
       }
+      // TODO !0: l'API devrait mettre a jour le persistentState après avoir eu le 'ok', avec un nouvel attribut optionnel 'supposedState' à 'on' ou 'off'. Coté API.
       api.callDomoticAction(firstAction, (err, data) => {
         if (err) {
           console.log(err)

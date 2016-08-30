@@ -6,19 +6,19 @@
     <md-button class="md-raised md-primary component-button"
                style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{'md-hue-1': processingState == 'processing' && activationState == 'on'}"
+               ng-class="{'md-hue-1': (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed') && activationState == 'on'}"
                flex id="component-button-{{component.id}}-on" ng-click="play(true)">
-        <md-icon aria-label="state" style="color: {{ng-open}}activationState === 'on' ? '#00C853' : '#2E7D32'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}activationState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        <md-icon aria-label="state" style="color: {{ng-open}}supposedState === 'on' ? '#00C853' : '#2E7D32'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}supposedState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         ON
     </md-button>
     <md-button class="md-raised md-primary component-button"
                style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{'md-hue-1': processingState == 'processing' && activationState == 'off'}"
+               ng-class="{'md-hue-1': (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed') && activationState == 'off'}"
                flex id="component-button-{{component.id}}-off" ng-click="play(false)">
-        <md-icon aria-label="state" style="color: {{ng-open}}activationState === 'off' ? '#D50000' : '#B71C1C'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}activationState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        <md-icon aria-label="state" style="color: {{ng-open}}supposedState === 'off' ? '#D50000' : '#B71C1C'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}supposedState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         OFF
     </md-button>
 </div>
@@ -104,7 +104,8 @@
 
     // to control state
     $scope.processingState = 'waiting' // or 'processing', 'error'
-    $scope.activationState = false // or 'on', 'off'
+    $scope.activationState = false // or 'on' or 'off', is the last command sent by component: the last button pressed.
+    $scope.supposedState = false // or 'on' or 'off', is the supposed state of the domotic switch. Lifetime: 1 minute
     $scope.isDisabled = function (domotic, remoteState, processingState) {
       return (!domotic || remoteState === 1 || processingState === 'processing')
     }
@@ -147,26 +148,25 @@
     if ($scope.component.configuration && $scope.component.configuration.domotic > 0) {
       $scope.updateSwitch = function (activation) {
         if (activation === undefined) {
-          const state = $rootScope.states.macro.c_{{component.id}}
-          if (!state) {
-            $scope.activationState = false
-            return;
+          const state = $scope.states.domotic.value[$scope.component.configuration.domotic]
+          if (!state || state.supposedState === undefined) {
+              $scope.supposedState = false
+              $scope.activationState = false
+              return
           }
-          const remaining = state.remaining + ((state.state === 'delayed') ? 1 : 0)
-          if (isNaN(remaining)) {
-            return
+          $scope.activationState = state.supposedState
+          $scope.supposedState = state.supposedState
+        } else {
+          $scope.activationState = activation ? 'on' : 'off'
+          if ($rootScope.states.macro.c_{{component.id}}.state === 'finished') {
+            $scope.supposedState = activation ? 'on' : 'off'
           }
-          console.log(remaining, "####")
-          // FIXME !0: semble s'illuminer un peu n'importe comment
-          // A priori sur le cas complex maxi, 2 => selon le bouton appuyé. 1 => reset_action. 0 => aurait du etre declenché, mais je n'ai rien vu, pas normal !
-          // TODO !1: look $scope.states.macro.c_{{component.id}} to know the step just done and highlight proper switch (set activation to 'on' or 'off')
         }
-        $scope.activationState = activation ? 'on' : 'off'
         setTimeout(() => {
-          $scope.activationState = false
+          $scope.supposedState = false
         }, 60000)
       }
-      this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateSwitch.bind(null, undefined)))
+      this.addCleaner($scope.$watch('states.domotic.value[' + $scope.component.configuration.domotic + ']', $scope.updateSwitch.bind(null, undefined)))
     }
   {{/extend}}
 </script>
