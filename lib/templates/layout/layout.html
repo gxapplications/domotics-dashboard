@@ -67,15 +67,10 @@
           .accentPalette('yellow')
           .backgroundPalette('red', {'default': '900'})
           .dark();
-        $mdThemingProvider.theme('domoticStates')// Colors for domotic elements (alarm On/half/off, switch On/Off, ...)
-          .primaryPalette('green', {'default': '800'})
-          .warnPalette('red', {'default': '900'})
-          .accentPalette('yellow', {'default': '800'})
-          .dark();
         app.controllerProvider = $controllerProvider;
 
         // Do not encode POST data in Angular JSON format, but use jquery POST parameters format (query string)
-        $httpProvider.defaults.transformRequest = function(data){
+        $httpProvider.defaults.transformRequest = function(data) {
           if (data === undefined) return data;
           return $.param(data);
         }

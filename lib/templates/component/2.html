@@ -16,8 +16,8 @@
     </div>
     <div class="step"></div>
     <div class="switch">
-        <md-switch md-no-ink ng-model="activationState" aria-label="Activation state"
-                   ng-disabled="true"></md-switch>
+        <md-icon aria-label="state" style="color: {{ng-open}}activationState  ? '#00C853' : '#2E7D32'{{ng-close}}"
+            class="material-icons button-icon-48">{{ng-open}}activationState ? 'star' : 'star_border'{{ng-close}}</md-icon>
     </div>
 </md-button>
 
@@ -126,7 +126,10 @@
       if (state) {
         const remaining = state.remaining + ((state.state === 'delayed') ? 1 : 0)
         if (remaining > 0 && state.state !== 'finished') {
-          const stepsLabel = (3 - remaining) + '/2'
+          let stepsLabel = (2 - remaining) + '/1'
+          if ($scope.component.configuration.reset_delay > 0) {
+            stepsLabel = (3 - remaining) + '/2'
+          }
           $('#component-button-{{component.id}} div.step').html(stepsLabel)
         } else {
           $('#component-button-{{component.id}} div.step').html('')

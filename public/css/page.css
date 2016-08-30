@@ -183,29 +183,11 @@ button.component-button div.step {
 /* md-switch disabled but colored like enabled one */
 button.component-button div.switch {
     position: absolute;
-    top: 0.3rem;
+    top: 0;
     height: 0;
-    right: 0.2rem;
+    right: 0.3rem;
     font-size: 0.6rem;
     zoom: 1.05;
-}
-button.component-button div.switch > md-switch {
-    margin: 0;
-}
-button.component-button div.switch > md-switch[disabled] ._md-bar {
-    background-color: rgb(158, 158, 158) !important;
-}
-button.component-button div.switch > md-switch[disabled].md-checked ._md-bar {
-    background-color: rgba(124, 179, 66, 0.5) !important;
-}
-button.component-button div.switch > md-switch[disabled] ._md-thumb {
-    background-color: rgb(250, 250, 250) !important;
-}
-button.component-button div.switch > md-switch[disabled].md-checked ._md-thumb {
-    background-color: rgb(124, 179, 66) !important;
-}
-button.component-button div.switch > md-switch:not([disabled]) > div._md-container {
-    cursor: pointer;
 }
 
 md-card.error {

@@ -3,16 +3,24 @@
     {{parsejson component.configuration 'title' 'Settings needed'}}
 </h2>
 <div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
-    <md-button class="md-raised md-primary component-button" md-theme="domoticStates"
+    <md-button class="md-raised md-primary component-button"
                style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{'md-hue-1': activationState == 'on'}"
-               flex id="component-button-{{component.id}}-on" ng-click="play(true)">ON</md-button>
-    <md-button class="md-raised md-warn component-button" md-theme="domoticStates"
+               ng-class="{'md-hue-1': processingState == 'processing' && activationState == 'on'}"
+               flex id="component-button-{{component.id}}-on" ng-click="play(true)">
+        <md-icon aria-label="state" style="color: {{ng-open}}activationState === 'on' ? '#00C853' : '#2E7D32'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}activationState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        ON
+    </md-button>
+    <md-button class="md-raised md-primary component-button"
                style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{'md-hue-1': activationState == 'off'}"
-               flex id="component-button-{{component.id}}-off" ng-click="play(false)">OFF</md-button>
+               ng-class="{'md-hue-1': processingState == 'processing' && activationState == 'off'}"
+               flex id="component-button-{{component.id}}-off" ng-click="play(false)">
+        <md-icon aria-label="state" style="color: {{ng-open}}activationState === 'off' ? '#D50000' : '#B71C1C'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}activationState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        OFF
+    </md-button>
 </div>
 <div style="text-transform: none;text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0.4rem;">
     {{parsejson component.configuration 'description'}}
@@ -122,7 +130,10 @@
       if (state) {
         const remaining = state.remaining + ((state.state === 'delayed') ? 1 : 0)
         if (remaining > 0 && state.state !== 'finished') {
-          const stepsLabel = (3 - remaining) + '/2'
+          let stepsLabel = (2 - remaining) + '/1'
+          if ($scope.component.configuration.reset_delay > 0) {
+            stepsLabel = (3 - remaining) + '/2'
+          }
           $('#component-{{component.id}} div.step').html(stepsLabel)
         } else {
           $('#component-{{component.id}} div.step').html('')
@@ -142,7 +153,11 @@
             return;
           }
           const remaining = state.remaining + ((state.state === 'delayed') ? 1 : 0)
-          // console.log(remaining, "####")
+          if (isNaN(remaining)) {
+            return
+          }
+          console.log(remaining, "####")
+          // FIXME !0: semble s'illuminer un peu n'importe comment
           // A priori sur le cas complex maxi, 2 => selon le bouton appuyé. 1 => reset_action. 0 => aurait du etre declenché, mais je n'ai rien vu, pas normal !
           // TODO !1: look $scope.states.macro.c_{{component.id}} to know the step just done and highlight proper switch (set activation to 'on' or 'off')
         }
