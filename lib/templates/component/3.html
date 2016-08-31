@@ -154,8 +154,8 @@
               $scope.activationState = false
               return
           }
-          $scope.activationState = state.supposedState
-          $scope.supposedState = state.supposedState
+          $scope.activationState = (state.supposedState === "1") ? 'on' : ((state.supposedState === "0") ? 'off' : false)
+          $scope.supposedState = (state.supposedState === "1") ? 'on' : ((state.supposedState === "0") ? 'off' : false)
         } else {
           $scope.activationState = activation ? 'on' : 'off'
           if ($rootScope.states.macro.c_{{component.id}}.state === 'finished') {

@@ -6,7 +6,10 @@
     <md-button class="md-raised md-primary component-button"
                style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{'md-hue-1': 'TODO !1'}"
+               ng-class="{
+                   'md-warn': processingState === 'error',
+                   'md-hue-1': activationState === 'on' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+               }"
                flex id="component-button-{{component.id}}-on" ng-click="play('on')">
         <md-icon aria-label="state" style="color: {{ng-open}}activationState === 'on' ? '#00C853' : '#2E7D32'{{ng-close}}"
                  class="material-icons button-icon-48">{{ng-open}}activationState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
@@ -15,7 +18,10 @@
     <md-button class="md-raised md-primary component-button"
                style="border-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{'md-hue-1': activationState == 'eco'}"
+               ng-class="{
+                   'md-warn': processingState === 'error',
+                   'md-hue-1': activationState === 'eco' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+               }"
                flex id="component-button-{{component.id}}-eco" ng-click="play('eco')">
         <md-icon aria-label="state" style="color: {{ng-open}}activationState === 'eco' ? '#FFAB00' : '#FF6F00'{{ng-close}}"
                  class="material-icons button-icon-48">{{ng-open}}activationState === 'eco' ? 'star' : 'star_border'{{ng-close}}</md-icon>
@@ -24,7 +30,10 @@
     <md-button class="md-raised md-primary component-button"
                style="border-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{'md-hue-1': activationState == 'frost'}"
+               ng-class="{
+                   'md-warn': processingState === 'error',
+                   'md-hue-1': activationState === 'frost' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+               }"
                flex id="component-button-{{component.id}}-frost" ng-click="play('frost')">
         <md-icon aria-label="state" style="color: {{ng-open}}activationState === 'frost' ? '#D50000' : '#B71C1C'{{ng-close}}"
                  class="material-icons button-icon-48">{{ng-open}}activationState === 'frost' ? 'star' : 'star_border'{{ng-close}}</md-icon>
@@ -33,7 +42,10 @@
     <md-button class="md-raised md-primary component-button"
                style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
                ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{'md-hue-1': activationState == 'off'}"
+               ng-class="{
+                   'md-warn': processingState === 'error',
+                   'md-hue-1': activationState === 'off' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+               }"
                flex id="component-button-{{component.id}}-off" ng-click="play('off')">
         <md-icon aria-label="state" class="material-icons button-icon-48"
                  style="color: #212121;">{{ng-open}}activationState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
@@ -47,7 +59,7 @@
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
       <form name="componentForm" layout="column" flex layout-fill>
-         TODO !5
+         TODO !1
       </form>
   </md-dialog-content>
   <md-dialog-actions layout="row">
@@ -69,6 +81,9 @@
     }
 
     // to control state
-    // TODO !5
+    $scope.processingState = 'waiting' // or 'processing', 'error'
+    $scope.activationState = false // or 'on', 'eco', 'frost' or 'off', is the last command sent by component: the last button pressed.
+
+    // TODO !2
   {{/extend}}
 </script>
