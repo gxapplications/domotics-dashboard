@@ -11,8 +11,8 @@
                    'md-hue-1': activationState === 'on' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
                }"
                flex id="component-button-{{component.id}}-on" ng-click="play('on')">
-        <md-icon aria-label="state" style="color: {{ng-open}}activationState === 'on' ? '#00C853' : '#2E7D32'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}activationState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        <md-icon aria-label="state" style="color: {{ng-open}}realState === 'on' ? '#00C853' : '#2E7D32'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}realState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="mode" class="material-icons button-icon-48">brightness_high</md-icon>
     </md-button>
     <md-button class="md-raised md-primary component-button"
@@ -23,8 +23,8 @@
                    'md-hue-1': activationState === 'eco' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
                }"
                flex id="component-button-{{component.id}}-eco" ng-click="play('eco')">
-        <md-icon aria-label="state" style="color: {{ng-open}}activationState === 'eco' ? '#FFAB00' : '#FF6F00'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}activationState === 'eco' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        <md-icon aria-label="state" style="color: {{ng-open}}realState === 'eco' ? '#FFAB00' : '#FF6F00'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}realState === 'eco' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="mode" class="material-icons button-icon-48">brightness_medium</md-icon>
     </md-button>
     <md-button class="md-raised md-primary component-button"
@@ -35,8 +35,8 @@
                    'md-hue-1': activationState === 'frost' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
                }"
                flex id="component-button-{{component.id}}-frost" ng-click="play('frost')">
-        <md-icon aria-label="state" style="color: {{ng-open}}activationState === 'frost' ? '#D50000' : '#B71C1C'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}activationState === 'frost' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        <md-icon aria-label="state" style="color: {{ng-open}}realState === 'frost' ? '#D50000' : '#B71C1C'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}realState === 'frost' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="mode" class="material-icons button-icon-48">ac_unit</md-icon>
     </md-button>
     <md-button class="md-raised md-primary component-button"
@@ -48,7 +48,7 @@
                }"
                flex id="component-button-{{component.id}}-off" ng-click="play('off')">
         <md-icon aria-label="state" class="material-icons button-icon-48"
-                 style="color: #212121;">{{ng-open}}activationState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+                 style="color: #212121;">{{ng-open}}realState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="mode" class="material-icons button-icon-48">power_settings_new</md-icon>
     </md-button>
 </div>
@@ -59,7 +59,7 @@
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
       <form name="componentForm" layout="column" flex layout-fill>
-         TODO !1
+         TODO !1: settings form, save and init load. Title, icon, description, heating ID, delay, reset_delay reset_action.
       </form>
   </md-dialog-content>
   <md-dialog-actions layout="row">
@@ -83,7 +83,7 @@
     // to control state
     $scope.processingState = 'waiting' // or 'processing', 'error'
     $scope.activationState = false // or 'on', 'eco', 'frost' or 'off', is the last command sent by component: the last button pressed.
-
+    $scope.realState = false // or 'on', 'eco', 'frost' or 'off', is the real state came from API.
     // TODO !2
   {{/extend}}
 </script>
