@@ -167,6 +167,7 @@
         }, 60000)
       }
       this.addCleaner($scope.$watch('states.domotic.value[' + $scope.component.configuration.domotic + ']', $scope.updateSwitch.bind(null, undefined)))
+      //this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateSwitch.bind(null, undefined))) // TODO !1: necessaire ?
     }
   {{/extend}}
 </script>
