@@ -93,70 +93,69 @@
         </md-slider-container>
     </md-content>
     <md-content layout="column" layout-align="right center" class="page-editor right-bar" ng-class="{'editing': (edition.active)}">
-        TODO !4: All myfox in a submenu. Then another submenu for non myfox.
         <md-list layout="column" layout-align="stretch top" flex="noshrink">
             <md-list-item>
-                <div>
-                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(1, 1, 1)">
-                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
-                        <md-icon class="material-icons" aria-label="Play scenario">play_circle_outline</md-icon>
-                        <div class="md-grid-text"> Scenario play </div>
+                <md-menu md-position-mode="target-right target">
+                    <md-button aria-label="Myfox components" class="md-grid-item-content text75pct" ng-click="$mdOpenMenu($event)">
+                        <img style="width: 24px; height: 24px;" src="/assets/images/myfox.png" />
+                        <br/>Myfox HC2
                     </md-button>
-                </div>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button class="md-grid-item-content" ng-click="edition.addComponent(1, 1, 1)">
+                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                                <md-icon class="material-icons" aria-label="Play scenario">play_circle_outline</md-icon>
+                                <div class="md-grid-text"> Scenario play </div>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button class="md-grid-item-content" ng-click="edition.addComponent(2, 1, 1)">
+                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                                <md-icon class="material-icons" aria-label="Scenario Activation">tune</md-icon>
+                                <div class="md-grid-text"> Scenario activation </div>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button class="md-grid-item-content" ng-click="edition.addComponent(3, 1, 1)">
+                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                                <md-icon class="material-icons" aria-label="Domotic On Off">settings_power</md-icon>
+                                <div class="md-grid-text"> Domotic Oo/Off </div>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button class="md-grid-item-content" ng-click="edition.addComponent(4, 1, 1)">
+                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                                <md-icon class="material-icons" aria-label="Heat mode">brightness_4</md-icon>
+                                <div class="md-grid-text"> Heat mode </div>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button class="md-grid-item-content" ng-click="edition.addComponent(5, 2, 1)">
+                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                                <md-icon class="material-icons" aria-label="Alarm level">notifications_active</md-icon>
+                                <div class="md-grid-text"> Alarm level </div>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button class="md-grid-item-content" ng-click="edition.addComponent(6, 2, 2)">
+                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                                <md-icon class="material-icons" aria-label="Heating dashboard (On/Off)">settings_brightness</md-icon>
+                                <div class="md-grid-text"> Heating dashboard (On/Off) </div>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button class="md-grid-item-content" ng-click="edition.addComponent(7, 2, 2)">
+                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
+                                <md-icon class="material-icons" aria-label="Heating dashboard (4 orders pilot)">settings_brightness</md-icon>
+                                <div class="md-grid-text"> Heating dashboard (4 orders pilot) </div>
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
             </md-list-item>
-            <md-list-item>
-                <div>
-                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(2, 1, 1)">
-                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
-                        <md-icon class="material-icons" aria-label="Scenario Activation">tune</md-icon>
-                        <div class="md-grid-text"> Scenario activation </div>
-                    </md-button>
-                </div>
-            </md-list-item>
-            <md-list-item>
-                <div>
-                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(3, 1, 1)">
-                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
-                        <md-icon class="material-icons" aria-label="Domotic On Off">settings_power</md-icon>
-                        <div class="md-grid-text"> Domotic Oo/Off </div>
-                    </md-button>
-                </div>
-            </md-list-item>
-            <md-list-item>
-                <div>
-                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(4, 1, 1)">
-                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
-                        <md-icon class="material-icons" aria-label="Heat mode">brightness_4</md-icon>
-                        <div class="md-grid-text"> Heat mode </div>
-                    </md-button>
-                </div>
-            </md-list-item>
-            <md-list-item>
-                <div>
-                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(5, 2, 1)">
-                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
-                        <md-icon class="material-icons" aria-label="Alarm level">notifications_active</md-icon>
-                        <div class="md-grid-text"> Alarm level </div>
-                    </md-button>
-                </div>
-            </md-list-item>
-            <md-list-item>
-                <div>
-                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(6, 2, 2)">
-                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
-                        <md-icon class="material-icons" aria-label="Heating dashboard (On/Off)">settings_brightness</md-icon>
-                        <div class="md-grid-text"> Heating dashboard (On/Off) </div>
-                    </md-button>
-                </div>
-            </md-list-item>
-            <md-list-item>
-                <div>
-                    <md-button class="md-grid-item-content" ng-click="edition.addComponent(7, 2, 2)">
-                        <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
-                        <md-icon class="material-icons" aria-label="Heating dashboard (4 orders pilot)">settings_brightness</md-icon>
-                        <div class="md-grid-text"> Heating dashboard (4 orders pilot) </div>
-                    </md-button>
-                </div>
+
+            <md-list-item class="text75pct">
+                TODO !9: Autres cmpnts
             </md-list-item>
         </md-list>
     </md-content>

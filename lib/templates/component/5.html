@@ -3,8 +3,48 @@
     {{parsejson component.configuration 'title' 'Settings needed'}}
 </h2>
 <div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
-    TODO !5: 3 buttons, isDisabled state, activationState, ...
+    <md-button class="md-raised md-primary component-button"
+               style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
+               ng-disabled="isDisabled(states.macro.c_{{component.id}}.state, processingState)"
+               ng-class="{
+                   'md-warn': processingState === 'error',
+                   'md-hue-1': activationState === 'off' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+               }"
+               flex id="component-button-{{component.id}}-on" ng-click="play('off')">
+        <md-icon aria-label="state" style="color: {{ng-open}}realState === 'off' ? '#00C853' : '#2E7D32'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}realState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        <md-icon aria-label="mode" class="material-icons button-icon-48">notifications_off</md-icon>
+    </md-button>
+    <md-button class="md-raised md-primary component-button"
+               style="border-radius: 0;"
+               ng-disabled="isDisabled(states.macro.c_{{component.id}}.state, processingState)"
+               ng-class="{
+                   'md-warn': processingState === 'error',
+                   'md-hue-1': activationState === 'half' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+               }"
+               flex id="component-button-{{component.id}}-eco" ng-click="play('half')">
+        <md-icon aria-label="state" style="color: {{ng-open}}realState === 'half' ? '#FFAB00' : '#FF6F00'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}realState === 'half' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        <md-icon aria-label="mode" class="material-icons button-icon-48">notifications_none</md-icon>
+    </md-button>
+    <md-button class="md-raised md-primary component-button"
+               style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+               ng-disabled="isDisabled(states.macro.c_{{component.id}}.state, processingState)"
+               ng-class="{
+                   'md-warn': processingState === 'error',
+                   'md-hue-1': activationState === 'on' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+               }"
+               flex id="component-button-{{component.id}}-off" ng-click="play('on')">
+        <md-icon aria-label="state" style="color: {{ng-open}}realState === 'on' ? '#D50000' : '#B71C1C'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}realState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        <md-icon aria-label="mode" class="material-icons button-icon-48">notifications_active</md-icon>
+    </md-button>
 </div>
+<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0.4rem;">
+    {{parsejson component.configuration 'description'}}
+</div>
+<div class="step"></div>
+
 
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
@@ -23,6 +63,12 @@
                           </md-option>
                       </md-select>
                   </md-list-item>
+                  <md-list-item>
+                      <md-input-container flex>
+                          <label>Description</label>
+                          <textarea ng-model="component.configuration.description" columns="1" md-maxlength="256"></textarea>
+                      </md-input-container>
+                  </md-list-item>
               </md-list>
           </section>
           <md-divider></md-divider>
@@ -37,6 +83,23 @@
 
 <script>
   {{#extend "controllerScript"}}
-    // TODO !5
+    // Default values assignment
+    $scope.component = $scope.edition.tools.assignDeep({
+      configuration:
+        {title: 'Alarm level', icon: '', description: ''}
+    }, $scope.component);
+    if (!$rootScope.states.macro.c_{{component.id}}) {
+      $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}
+    }
+
+    // to control state
+    $scope.processingState = 'waiting' // or 'processing', 'error'
+    $scope.activationState = false // or 'on', 'half' or 'off', is the last command sent by component: the last button pressed.
+    $scope.realState = false // or 'on', 'half' or 'off', is the real state came from API.
+    $scope.isDisabled = function (remoteState, processingState) {
+      return (remoteState === 1 || processingState === 'processing')
+    }
+
+    /* TODO !5. */
   {{/extend}}
 </script>

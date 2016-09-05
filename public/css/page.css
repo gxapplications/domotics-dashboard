@@ -7,6 +7,9 @@ button > img {
     position: relative;
     top: 0.6rem;
 }
+.text75pct {
+    font-size: 0.75rem;
+}
 
 /* Main layout with shrinkable header */
 @keyframes page-content-div-closing {
@@ -113,6 +116,7 @@ button > img {
 }
 .page-editor.right-bar {
     margin-right: 1em;
+    overflow-x: hidden;
 }
 .page-editor.left-bar.editing {
     animation-name: page-editor-left-div-closing;
