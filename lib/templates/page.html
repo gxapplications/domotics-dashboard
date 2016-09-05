@@ -103,52 +103,89 @@
                     <md-menu-content width="4">
                         <md-menu-item>
                             <md-button class="md-grid-item-content" ng-click="edition.addComponent(1, 1, 1)">
-                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
                                 <md-icon class="material-icons" aria-label="Play scenario">play_circle_outline</md-icon>
                                 <div class="md-grid-text"> Scenario play </div>
                             </md-button>
                         </md-menu-item>
                         <md-menu-item>
                             <md-button class="md-grid-item-content" ng-click="edition.addComponent(2, 1, 1)">
-                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
                                 <md-icon class="material-icons" aria-label="Scenario Activation">tune</md-icon>
                                 <div class="md-grid-text"> Scenario activation </div>
                             </md-button>
                         </md-menu-item>
                         <md-menu-item>
                             <md-button class="md-grid-item-content" ng-click="edition.addComponent(3, 1, 1)">
-                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
                                 <md-icon class="material-icons" aria-label="Domotic On Off">settings_power</md-icon>
                                 <div class="md-grid-text"> Domotic Oo/Off </div>
                             </md-button>
                         </md-menu-item>
                         <md-menu-item>
                             <md-button class="md-grid-item-content" ng-click="edition.addComponent(4, 1, 1)">
-                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
                                 <md-icon class="material-icons" aria-label="Heat mode">brightness_4</md-icon>
                                 <div class="md-grid-text"> Heat mode </div>
                             </md-button>
                         </md-menu-item>
                         <md-menu-item>
                             <md-button class="md-grid-item-content" ng-click="edition.addComponent(5, 2, 1)">
-                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
                                 <md-icon class="material-icons" aria-label="Alarm level">notifications_active</md-icon>
                                 <div class="md-grid-text"> Alarm level </div>
                             </md-button>
                         </md-menu-item>
                         <md-menu-item>
                             <md-button class="md-grid-item-content" ng-click="edition.addComponent(6, 2, 2)">
-                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
                                 <md-icon class="material-icons" aria-label="Heating dashboard (On/Off)">settings_brightness</md-icon>
                                 <div class="md-grid-text"> Heating dashboard (On/Off) </div>
                             </md-button>
                         </md-menu-item>
                         <md-menu-item>
                             <md-button class="md-grid-item-content" ng-click="edition.addComponent(7, 2, 2)">
-                                <md-icon class="material-icons" aria-label="Add a component">add</md-icon>
                                 <md-icon class="material-icons" aria-label="Heating dashboard (4 orders pilot)">settings_brightness</md-icon>
                                 <div class="md-grid-text"> Heating dashboard (4 orders pilot) </div>
                             </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-list-item>
+
+            <md-list-item>
+                <md-menu md-position-mode="target-right target">
+                    <md-button aria-label="parsers components" class="md-grid-item-content text75pct" ng-click="$mdOpenMenu($event)">
+                        <md-icon class="material-icons" aria-label="Web parsers menu">http</md-icon>
+                        <br/>Web parsers
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button class="md-grid-item-content" ng-click="edition.addComponent(501, 1, 2)">
+                                <md-icon class="material-icons" aria-label="RATP RER">train</md-icon>
+                                <div class="md-grid-text"> RATP RER timetable parser </div>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button class="md-grid-item-content" ng-click="edition.addComponent(511, 2, 2)">
+                                <md-icon class="material-icons" aria-label="Meteo">cloud_circle</md-icon>
+                                <div class="md-grid-text"> Meteo Blue parser </div>
+                            </md-button>
+                        </md-menu-item>
+
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-list-item>
+
+            <md-list-item>
+                <md-menu md-position-mode="target-right target">
+                    <md-button aria-label="other components" class="md-grid-item-content text75pct" ng-click="$mdOpenMenu($event)">
+                        <md-icon class="material-icons" aria-label="">play_circle_outline</md-icon>
+                        <br/>Others
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button class="md-grid-item-content" ng-click="edition.addComponent(1, 1, 1)">
+                                <md-icon class="material-icons" aria-label="Play scenario">play_circle_outline</md-icon>
+                                <div class="md-grid-text"> Scenario play </div>
+                            </md-button>
+                        </md-menu-item>
+
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>

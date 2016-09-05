@@ -1,0 +1,62 @@
+Mettre la timetable ratp rer.
+Dans un 1er temps, en statique, mettre ici un "loader". Puis unez req ajax va remplacer par le contenu. Le script sera donc inclu via actions.js
+
+{{#extend "settingsForm"}}
+  <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
+      <form name="componentForm" layout="column" flex layout-fill>
+          <section>
+              <md-subheader class="md-accent">RATP RER timetable parser</md-subheader>
+              <md-list layout="column" layout-padding>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-input-container flex="80">
+                          <label>Title</label>
+                          <input ng-model="component.configuration.title" required name="component_title" md-maxlength="64" />
+                      </md-input-container>
+                      <md-select placeholder="Icon" ng-model="component.configuration.icon" style="margin-left: 1rem;" flex="20">
+                          <md-option ng-value="icon" ng-repeat="icon in edition.tools.icons">
+                            <md-icon class="material-icons" aria-label="{{ng-open}}icon{{ng-close}}" style="color: #64DD17;">{{ng-open}}icon{{ng-close}}</md-icon>
+                          </md-option>
+                      </md-select>
+                  </md-list-item>
+                  <md-list-item>
+                      <md-input-container flex>
+                          <label>URL</label>
+                          <input ng-model="component.configuration.url" md-maxlength="256" />
+                      </md-input-container>
+                  </md-list-item>
+              </md-list>
+          </section>
+          <md-divider></md-divider>
+      </form>
+  </md-dialog-content>
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="cancelConfig()"><md-icon aria-label="block" class="material-icons md-14">block</md-icon> Cancel</md-button>
+    <md-button class="md-primary md-raised" ng-click="saveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
+  </md-dialog-actions>
+{{/extend}}
+
+<script>
+  {{#extend "controllerScript"}}
+    // Default values assignment
+    $scope.component = $scope.edition.tools.assignDeep({
+      configuration:
+        {title: 'RATP ~ RER', icon: 'train', url: 'http://www.ratp.fr/horaires/fr/ratp/rer/prochains_passages/RA/Bussy+St-Georges/A'}
+    }, $scope.component);
+
+    /*
+
+     lines = "div#prochains_passages > fieldset > table > tbody > tr"
+     foreach lines,
+     - td.name .html() -> Nom train
+     - td.passing_time .html() -> heure ou 'Train à l'approche'
+
+     Gestion des messages d'incident :
+     "div#prochains_passages > fieldset > div.message" .html()
+
+     Heure de refresh :
+     "div#prochains_passages > fieldset > div.date_time > span.time"
+
+     */
+  {{/extend}}
+</script>
