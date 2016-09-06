@@ -94,10 +94,9 @@ const actions = function (api, reply, page, component, action = null, payload = 
       break
 
     case 5:
-      // TODO !5
+      // TODO !2
       break
 
-    // TODO !9: other actions
     default:
       // Action not (yet) supported
       reply({}).code(418)

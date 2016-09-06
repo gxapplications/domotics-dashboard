@@ -14,7 +14,8 @@ import Nes from 'nes'
 
 import myfoxWrapperApi from 'myfox-wrapper-api'
 import db from './db'
-import actions from './actions'
+import myfoxActions from './myfox-actions'
+import parserActions from './parser-actions'
 import context from '../lib/middlewares/context'
 
 // Stateful instance
@@ -290,7 +291,12 @@ server.route({
       }
 
       // Call actions switch
-      return actions(api, reply, page, component, request.params.action, request.payload)
+      if (component.type < 100) {
+        return myfoxActions(api, reply, page, component, request.params.action, request.payload)
+      }
+      if (component.type >= 500) {
+        return parserActions(api, reply, page, component, request.params.action, request.payload)
+      }
     })
   }
 })
