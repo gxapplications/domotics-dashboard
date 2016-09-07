@@ -94,7 +94,18 @@ const actions = function (api, reply, page, component, action = null, payload = 
       break
 
     case 5:
-      // TODO !2
+      // 5: Alarm level
+      firstAction = {
+        action: action
+      }
+
+      api.callAlarmLevelAction(firstAction, (err, data) => {
+        if (err) {
+          console.log(err)
+          reply(err).code(500)
+        }
+        reply(data)
+      })
       break
 
     default:
