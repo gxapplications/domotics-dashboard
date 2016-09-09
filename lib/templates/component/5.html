@@ -45,6 +45,7 @@
 </div>
 <div class="step"></div>
 
+{{#extend "cardCss"}}{'card-alarm-{{ng-open}}states.alarm.value{{ng-close}}': true}{{/extend}}
 
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
@@ -100,6 +101,27 @@
       return (remoteState === 1 || processingState === 'processing')
     }
 
-    /* TODO !2 */
+    $scope.play = function(action) {
+      $scope.processingState = 'processing'
+      $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {})
+        .done(function(data) {
+          $scope.processingState = 'waiting'
+          $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
+          $scope.updateSwitch(action)
+        })
+        .fail(function() {
+          $scope.processingState = 'error'
+          $('div#component-{{component.id}}').parent('md-card').addClass('error')
+          $rootScope.events.errorEvent('Error during Heat mode action!')
+        })
+    }
+
+    $scope.updateSwitch = function (action) {
+      if (action !== undefined) {
+          $scope.activationState = action
+      }
+      $scope.realState = $scope.states.alarm.value
+    }
+    this.addCleaner($scope.$watch('states.alarm.value', $scope.updateSwitch.bind(null, undefined)))
   {{/extend}}
 </script>

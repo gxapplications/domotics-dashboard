@@ -197,3 +197,18 @@ button.component-button div.switch {
 md-card.error {
     background-color: #B71C1C;
 }
+.card-alarm-on {
+    background-color: #B71C1C;
+    background-image: url(/assets/images/warning-red.jpg);
+    border-radius: 2px;
+}
+.card-alarm-half {
+    background-color: #FF6F00;
+    background-image: url(/assets/images/warning-yellow.jpg);
+    border-radius: 2px;
+}
+.card-alarm-off {
+    background-color: #2E7D32;
+    background-image: url(/assets/images/warning-green.jpg);
+    border-radius: 2px;
+}
