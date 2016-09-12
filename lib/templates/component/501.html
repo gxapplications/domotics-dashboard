@@ -63,28 +63,12 @@
 
     $scope.loadContent = function() {
       $scope.processingState = 'processing'
-      // TODO !0
+      // TODO !0: coder l'envoi de l'action avec l'ID du component... tres simple.
 
-        /*
-         Mettre la timetable ratp rer.
-         Dans un 1er temps, en statique, mettre ici un "loader". Puis unez req ajax va remplacer par le contenu. Le script sera donc inclu via myfox-actions.js
-
-         lines = "div#prochains_passages > fieldset > table > tbody > tr"
-         foreach lines,
-         - td.name .html() -> Nom train
-         - td.passing_time .html() -> heure ou 'Train à l'approche'
-
-         Gestion des messages d'incident :
-         "div#prochains_passages > fieldset > div.message" .html()
-
-         Heure de refresh :
-         "div#prochains_passages > fieldset > div.date_time > span.time"
-
-         */
     }
 
     $document.ready(() => {
-      $scope.loadContent()
+      $scope.loadContent() // FIXME !1: ca se lance 2 fois au refresh du component (fermeture settings)
     })
   {{/extend}}
 </script>
