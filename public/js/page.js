@@ -217,7 +217,6 @@
 	          $scope.events.errorEvent('Positions NOT saved!');
 	        });
 	      }).fail(function () {/* Do nothing, most of the cases will get 404, because removeBroken is used when GET gives 404 */});
-	      // TODO !0: on remove la position... et on envoie un delete DB aussi (et tant pis si ca foire)
 	    },
 	    resizeComponentDialog: function resizeComponentDialog(id, event) {
 	      // eslint-disable-next-line eqeqeq

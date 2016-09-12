@@ -199,16 +199,16 @@ md-card.error {
 }
 .card-alarm-on {
     background-color: #B71C1C;
-    background-image: url(/assets/images/warning-red.jpg);
-    border-radius: 2px;
+    background-image: url(/assets/images/warning-red.png);
+    border-radius: 3px;
 }
 .card-alarm-half {
     background-color: #FF6F00;
-    background-image: url(/assets/images/warning-yellow.jpg);
-    border-radius: 2px;
+    background-image: url(/assets/images/warning-yellow.png);
+    border-radius: 3px;
 }
 .card-alarm-off {
     background-color: #2E7D32;
-    background-image: url(/assets/images/warning-green.jpg);
-    border-radius: 2px;
+    background-image: url(/assets/images/warning-green.png);
+    border-radius: 3px;
 }

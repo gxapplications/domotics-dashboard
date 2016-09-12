@@ -46,7 +46,7 @@
     ---></div>
 
     <script>
-      app.controllerProvider.register('CardCtrl-{{component.id}}', function ($rootScope, $scope, $mdDialog, $mdToast) {
+      app.controllerProvider.register('CardCtrl-{{component.id}}', function ($rootScope, $scope, $mdDialog, $mdToast, $document) {
         $scope.edition = $rootScope.edition
         this.speedDialOpened = false
         $scope.component = {{tojson component}}

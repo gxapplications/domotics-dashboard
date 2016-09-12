@@ -1,5 +1,19 @@
-Mettre la timetable ratp rer.
-Dans un 1er temps, en statique, mettre ici un "loader". Puis unez req ajax va remplacer par le contenu. Le script sera donc inclu via myfox-actions.js
+<div class="sub-loader" ng-show="processingState === 'processing'">
+    <div flex layout="row" layout-align="center center">
+        <md-progress-circular md-diameter="64" md-mode="indeterminate" class="md-hue-3"></md-progress-circular>
+    </div>
+    <div style="position: relative; bottom: 2.7rem; height: 0px; overflow: visible;">
+        <md-icon class="material-icons" aria-label="RATP RER">train</md-icon>
+    </div>
+</div>
+<div class="sub-content" ng-show="processingState === 'waiting'">
+    <div flex layout="row" layout-align="center center"></div>
+</div>
+<div class="sub-content" ng-show="processingState === 'error'">
+    <div flex layout="row" layout-align="center center">
+        TODO !1
+    </div>
+</div>
 
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
@@ -42,21 +56,35 @@ Dans un 1er temps, en statique, mettre ici un "loader". Puis unez req ajax va re
     $scope.component = $scope.edition.tools.assignDeep({
       configuration:
         {title: 'RATP ~ RER', icon: 'train', url: 'http://www.ratp.fr/horaires/fr/ratp/rer/prochains_passages/RA/Bussy+St-Georges/A'}
-    }, $scope.component);
+    }, $scope.component)
 
-    /*
+    // to control state
+    $scope.processingState = 'processing' // or 'waiting', 'error'
 
-     lines = "div#prochains_passages > fieldset > table > tbody > tr"
-     foreach lines,
-     - td.name .html() -> Nom train
-     - td.passing_time .html() -> heure ou 'Train à l'approche'
+    $scope.loadContent = function() {
+      $scope.processingState = 'processing'
+      // TODO !0
 
-     Gestion des messages d'incident :
-     "div#prochains_passages > fieldset > div.message" .html()
+        /*
+         Mettre la timetable ratp rer.
+         Dans un 1er temps, en statique, mettre ici un "loader". Puis unez req ajax va remplacer par le contenu. Le script sera donc inclu via myfox-actions.js
 
-     Heure de refresh :
-     "div#prochains_passages > fieldset > div.date_time > span.time"
+         lines = "div#prochains_passages > fieldset > table > tbody > tr"
+         foreach lines,
+         - td.name .html() -> Nom train
+         - td.passing_time .html() -> heure ou 'Train à l'approche'
 
-     */
+         Gestion des messages d'incident :
+         "div#prochains_passages > fieldset > div.message" .html()
+
+         Heure de refresh :
+         "div#prochains_passages > fieldset > div.date_time > span.time"
+
+         */
+    }
+
+    $document.ready(() => {
+      $scope.loadContent()
+    })
   {{/extend}}
 </script>
