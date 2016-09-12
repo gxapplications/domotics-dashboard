@@ -11,7 +11,7 @@
 </div>
 <div class="sub-content" ng-show="processingState === 'error'">
     <div flex layout="row" layout-align="center center">
-        TODO !1
+        TODO !4
     </div>
 </div>
 
@@ -63,12 +63,19 @@
 
     $scope.loadContent = function() {
       $scope.processingState = 'processing'
-      // TODO !0: coder l'envoi de l'action avec l'ID du component... tres simple.
-
+      $.post('/{{page.slug}}/component/{{component.id}}/action', {})
+        .done(function(data) {
+          $scope.processingState = 'waiting'
+          // TODO !2 : afficher data correctement !
+        })
+        .fail(function() {
+          $scope.processingState = 'error'
+          // TODO !3 ?
+        })
     }
 
     $document.ready(() => {
-      $scope.loadContent() // FIXME !1: ca se lance 2 fois au refresh du component (fermeture settings)
+      $scope.loadContent() // FIXME !4: ca se lance 2 fois au refresh du component (fermeture settings)
     })
   {{/extend}}
 </script>
