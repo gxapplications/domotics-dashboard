@@ -184,7 +184,7 @@ db.updateComponent = function (slug, id, payload, callback) {
       let component = {type: 1, configuration: {}, extra_component: {}}
       Object.assign(component, componentRow, payload)
       db.run('UPDATE components SET type=?, configuration=?, extra_component=? WHERE id=?',
-        component.type, db.stringify(component.configuration, ['[*].delay', 'delay', 'reset_delay']), db.stringify(component.extra_component), id, (err) => {
+        component.type, db.stringify(component.configuration, ['[*].delay', 'delay', 'reset_delay', 'refresh']), db.stringify(component.extra_component), id, (err) => {
           return callback(err, pageRow, component)
         })
     })

@@ -6,33 +6,41 @@
         <md-icon class="material-icons" aria-label="RATP RER">train</md-icon>
     </div>
 </div>
-<div class="sub-content" ng-show="processingState === 'waiting'">
-    <md-list class="md-dense" flex style="overflow: auto; padding: 0.8rem 0.6rem;">
-        <md-list-item>
-            TODO !1 : icon
+
+<div ng-show="processingState === 'waiting'">
+    <md-list class="md-dense" flex>
+        <md-list-item layout="row" style="min-height: 2rem;">
+            <md-button class="md-icon-button" aria-label="Refresh" ng-click="loadContent()">
+                <md-icon aria-label="Refresh" class="material-icons button-icon-48">{{parsejson component.configuration 'icon' 'train'}}</md-icon>
+            </md-button>
             {{parsejson component.configuration 'title' 'Settings needed'}}
-            <md-icon class="material-icons" aria-label="Refresh time">sync</md-icon>
-            ~ {{ng-open}}trains.refresh{{ng-close}}
+            <small style="color: rgba(255,255,255,0.5);">
+                &nbsp; ( {{ng-open}}trains.refresh{{ng-close}} )
+            </small>
         </md-list-item>
-        <md-list-item ng-repeat="train in trains" layout="row" style="min-height: 2rem;">
-            <div flex="20">{{ng-open}}train.name{{ng-close}}</div>
-            <div flex="20">{{ng-open}}train.time{{ng-close}}</div>
-            <div flex>{{ng-open}}train.terminus{{ng-close}} TODO !1: tester</div>
+        <md-divider></md-divider>
+    </md-list>
+</div>
+<div flex class="sub-content" ng-show="processingState === 'waiting'" style="overflow: auto; margin: 0 0.6rem 0.7rem ;">
+    <md-list class="md-dense" flex>
+        <md-list-item ng-repeat="message in trains.messages" style="min-height: 2rem; padding: 0;">
+            <small flex style="color: rgba(255,100,100,0.8); padding: 0.2rem;">{{ng-open}}message{{ng-close}}</small>
         </md-list-item>
-        <md-list-item ng-repeat="message in trains.messages" layout="row" style="min-height: 2rem;">
-            <div flex>{{ng-open}}message{{ng-close}} TODO !2: style en rouge ?</div>
+        <md-list-item ng-repeat="train in trains" layout="row" style="min-height: 2rem; padding: 0;" layout-padding>
+            <small style="color: rgba(255,255,255,0.5);" flex="20">{{ng-open}}train.name{{ng-close}}</small>
+            <div flex="24">{{ng-open}}train.time{{ng-close}}</div>
+            <small style="color: rgba(255,255,255,0.5);" flex>{{ng-open}}train.terminus{{ng-close}}</small>
         </md-list-item>
     </md-list>
-    TODO !1: refresh manual button.
-    TODO !2: fix edition button position!
 </div>
+
 <div class="sub-content" ng-show="processingState === 'error'">
     <div flex layout="row" layout-align="center center">
         <md-progress-circular md-diameter="64" md-mode="indeterminate" class="md-warn"></md-progress-circular>
     </div>
     <div style="position: relative; bottom: 3.6rem; height: 0px; overflow: visible;">
         <md-button class="md-warn md-fab md-mini"
-                   aria-label="Delete broken component" ng-click="loadContent()">
+                   aria-label="Reload" ng-click="loadContent()">
             <md-icon class="material-icons" aria-label="Reload">sync</md-icon>
         </md-button>
     </div>
@@ -116,7 +124,7 @@
         })
     }
 
-    $scope.reschedule = function() {
+    $scope.reschedule = function(success) {
         // TODO !0: parametré dans la config, en minutes. Si 0, pas de refresh auto, seulement manuel
     }
 
