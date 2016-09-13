@@ -4,8 +4,7 @@ import http from 'http'
 import https from 'https'
 import urlParser from 'url'
 import zlib from 'zlib'
-import trumpet from 'trumpet'
-import { trumpetInnerText } from 'myfox-wrapper-api/dist/html-parsers'
+import ratpRer from '../lib/parsers/ratp-rer'
 
 const httpParse = function (url, parser, callback) {
   const requestData = urlParser.parse(url)
@@ -45,32 +44,12 @@ const actions = function (api, reply, page, component, action = null, payload = 
   switch (component.type) {
     case 501:
       // 501: RATP RER timetable parser
-      const rerParser = trumpet()
-      rerParser.rerLines = []
-      rerParser.rerMessages = []
-      rerParser.rerRefresh = '' // FIXME !0: default to now() -> format '12h34' !
-      rerParser.selectAll('div#prochains_passages > fieldset > table > tbody > tr > td.name > a', trumpetInnerText((name) => {
-        rerParser.rerLines.push({name: name})
-      })) // To retrieve train name
-      rerParser.selectAll('div#prochains_passages > fieldset > table > tbody > tr > td.terminus', trumpetInnerText((terminus) => {
-        rerParser.rerLines[rerParser.rerLines.length -1].terminus = terminus
-      })) // To retrieve train terminus
-      rerParser.selectAll('div#prochains_passages > fieldset > table > tbody > tr > td.passing_time', trumpetInnerText((time) => {
-        rerParser.rerLines[rerParser.rerLines.length -1].time = time
-      })) // To retrieve train time
-      rerParser.selectAll('div#prochains_passages > fieldset > div.message', trumpetInnerText((message) => {
-        rerParser.rerMessages.push(message)
-      })) // To retrieve error messages
-      rerParser.select('div#prochains_passages > fieldset > div.date_time > span.time', trumpetInnerText((time) => {
-        rerParser.rerRefresh = time
-      })) // To retrieve error messages
-      rerParser.selectAll('span.copyright', () => {
-        rerParser.data = {lines: rerParser.rerLines, messages: rerParser.rerMessages, refresh: rerParser.rerRefresh}
-        rerParser.end()
-      })
+      if (!configuration.url) {
+        reply(new Error('URL not configured for component ' + component.id + '.')).code(400)
+        return
+      }
 
-      // FIXME !0: si pas configuré, pas .url ! retour propre a faire !
-      httpParse(configuration.url, rerParser, (err, parser) => {
+      httpParse(configuration.url, ratpRer(), (err, parser) => {
         if (err) {
           console.log(err)
           reply(err).code(500)

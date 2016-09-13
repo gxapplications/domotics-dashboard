@@ -7,11 +7,34 @@
     </div>
 </div>
 <div class="sub-content" ng-show="processingState === 'waiting'">
-    <div flex layout="row" layout-align="center center"></div>
+    <md-list class="md-dense" flex style="overflow: auto; padding: 0.8rem 0.6rem;">
+        <md-list-item>
+            TODO !1 : icon
+            {{parsejson component.configuration 'title' 'Settings needed'}}
+            <md-icon class="material-icons" aria-label="Refresh time">sync</md-icon>
+            ~ {{ng-open}}trains.refresh{{ng-close}}
+        </md-list-item>
+        <md-list-item ng-repeat="train in trains" layout="row" style="min-height: 2rem;">
+            <div flex="20">{{ng-open}}train.name{{ng-close}}</div>
+            <div flex="20">{{ng-open}}train.time{{ng-close}}</div>
+            <div flex>{{ng-open}}train.terminus{{ng-close}} TODO !1: tester</div>
+        </md-list-item>
+        <md-list-item ng-repeat="message in trains.messages" layout="row" style="min-height: 2rem;">
+            <div flex>{{ng-open}}message{{ng-close}} TODO !2: style en rouge ?</div>
+        </md-list-item>
+    </md-list>
+    TODO !1: refresh manual button.
+    TODO !2: fix edition button position!
 </div>
 <div class="sub-content" ng-show="processingState === 'error'">
     <div flex layout="row" layout-align="center center">
-        TODO !4
+        <md-progress-circular md-diameter="64" md-mode="indeterminate" class="md-warn"></md-progress-circular>
+    </div>
+    <div style="position: relative; bottom: 3.6rem; height: 0px; overflow: visible;">
+        <md-button class="md-warn md-fab md-mini"
+                   aria-label="Delete broken component" ng-click="loadContent()">
+            <md-icon class="material-icons" aria-label="Reload">sync</md-icon>
+        </md-button>
     </div>
 </div>
 
@@ -33,9 +56,18 @@
                       </md-select>
                   </md-list-item>
                   <md-list-item>
-                      <md-input-container flex>
+                      <md-input-container flex="60">
                           <label>URL</label>
                           <input ng-model="component.configuration.url" md-maxlength="256" />
+                      </md-input-container>
+                      <md-input-container flex="40" style="margin-left: 1rem;">
+                          <label>Refresh frequency (in minutes)</label>
+                          <input required type="number" step="any" name="component_refresh" ng-model="component.configuration.refresh" min="0" max="1440" required>
+                          <div ng-messages="componentForm.component_refresh.$error">
+                              <div ng-message="required">If you want manual refreshment only, please indicate 0.</div>
+                              <div ng-message="min">Negative frequencies are not supported (yet...)!</div>
+                              <div ng-message="max">1440 minutes max. Equivalent to 24hrs.</div>
+                          </div>
                       </md-input-container>
                   </md-list-item>
               </md-list>
@@ -55,27 +87,41 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration:
-        {title: 'RATP ~ RER', icon: 'train', url: 'http://www.ratp.fr/horaires/fr/ratp/rer/prochains_passages/RA/Bussy+St-Georges/A'}
+        {
+            title: 'RATP ~ RER',
+            icon: 'train',
+            url: 'http://www.ratp.fr/horaires/fr/ratp/rer/prochains_passages/RA/Bussy+St-Georges/A',
+            refresh: 10
+        }
     }, $scope.component)
 
     // to control state
     $scope.processingState = 'processing' // or 'waiting', 'error'
+    $scope.trains = []
 
     $scope.loadContent = function() {
       $scope.processingState = 'processing'
       $.post('/{{page.slug}}/component/{{component.id}}/action', {})
         .done(function(data) {
+          $scope.reschedule(true)
           $scope.processingState = 'waiting'
-          // TODO !2 : afficher data correctement !
+          $scope.trains = data.lines
+          $scope.trains.refresh = data.refresh
+          $scope.trains.messages = data.messages
         })
         .fail(function() {
+          $scope.reschedule(false)
           $scope.processingState = 'error'
-          // TODO !3 ?
+          $rootScope.events.errorEvent('Error during parsing of a URL!')
         })
     }
 
+    $scope.reschedule = function() {
+        // TODO !0: parametré dans la config, en minutes. Si 0, pas de refresh auto, seulement manuel
+    }
+
     $document.ready(() => {
-      $scope.loadContent() // FIXME !4: ca se lance 2 fois au refresh du component (fermeture settings)
+      $scope.loadContent() // FIXME !3: ca se lance 2 fois au refresh du component (fermeture settings)
     })
   {{/extend}}
 </script>
