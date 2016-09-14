@@ -111,25 +111,42 @@
       $scope.processingState = 'processing'
       $.post('/{{page.slug}}/component/{{component.id}}/action', {})
         .done(function(data) {
-          $scope.reschedule(true)
+          $scope.reschedule()
           $scope.processingState = 'waiting'
           $scope.trains = data.lines
           $scope.trains.refresh = data.refresh
           $scope.trains.messages = data.messages
         })
         .fail(function() {
-          $scope.reschedule(false)
+          $scope.reschedule()
           $scope.processingState = 'error'
           $rootScope.events.errorEvent('Error during parsing of a URL!')
         })
     }
 
-    $scope.reschedule = function(success) {
-        // TODO !0: parametré dans la config, en minutes. Si 0, pas de refresh auto, seulement manuel
+    $scope.reschedule = function() {
+      if ($scope.component.configuration.refresh > 0) {
+        if ($scope.reschedule.timer) {
+          window.clearTimeout($scope.reschedule.timer)
+        }
+        $scope.reschedule.timer = window.setTimeout(
+          (scope) => {
+            scope.loadContent()
+            scope.reschedule.timer = null
+          },
+          $scope.component.configuration.refresh * 60000,
+          $scope
+        )
+      }
     }
+    this.addCleaner(() => {
+      if ($scope.reschedule.timer) {
+        window.clearTimeout($scope.reschedule.timer)
+      }
+    })
 
     $document.ready(() => {
-      $scope.loadContent() // FIXME !3: ca se lance 2 fois au refresh du component (fermeture settings)
+      $scope.loadContent()
     })
   {{/extend}}
 </script>

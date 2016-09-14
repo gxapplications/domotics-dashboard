@@ -58,6 +58,7 @@
         this.addCleaner = function(cleaner) {
           $rootScope.cleaners['CardCtrl-{{component.id}}'].push(cleaner)
         }
+        $scope.addCleaner = this.addCleaner
 
         // Configuration popup
         this.configure = function($event) {
@@ -70,9 +71,6 @@
             closeTo: '#component-{{component.id}}',
             scope: $scope, // use parent scope in template
             preserveScope: true, // do not forget this if use parent scope
-            onRemoving: function() {
-              $scope.edition.refreshComponent({{component.id}})
-            },
             template: content,
             controller: function($scope, $mdDialog) {
               $scope.cancelConfig = function() {
