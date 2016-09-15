@@ -1,0 +1,962 @@
+@font-face {
+    font-family: "meteoblue";
+    src: url("/assets/fonts/meteoblue_pictofont_rev6.woff#iefix") format("woff"), url("/assets/fonts/meteoblue_pictofont_rev6.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal
+}
+
+.glyph {
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+.glyph:after, .glyph:before {
+    font-family: meteoblue;
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    position: relative;
+    vertical-align: text-bottom;
+    text-decoration: none
+}
+
+.glyph:after:hover, .glyph:before:hover {
+    text-decoration: none
+}
+
+.glyph.time:before {
+    content: "\00e0e0"
+}
+
+.glyph.temperature:before {
+    content: "\00e010"
+}
+
+.glyph.windchill:before {
+    content: "\00e011"
+}
+
+.glyph.winddir:before {
+    content: "\00e012"
+}
+
+.glyph.winddir.N:before {
+    content: "\00e008"
+}
+
+.glyph.winddir.NNE:before {
+    content: "\00e009"
+}
+
+.glyph.winddir.NE:before {
+    content: "\00e00a"
+}
+
+.glyph.winddir.ENE:before {
+    content: "\00e00b"
+}
+
+.glyph.winddir.E:before {
+    content: "\00e00c"
+}
+
+.glyph.winddir.ESE:before {
+    content: "\00e00d"
+}
+
+.glyph.winddir.SE:before {
+    content: "\00e00e"
+}
+
+.glyph.winddir.SSE:before {
+    content: "\00e00f"
+}
+
+.glyph.winddir.S:before {
+    content: "\00e000"
+}
+
+.glyph.winddir.SSW:before {
+    content: "\00e001"
+}
+
+.glyph.winddir.SW:before {
+    content: "\00e002"
+}
+
+.glyph.winddir.WSW:before {
+    content: "\00e003"
+}
+
+.glyph.winddir.W:before {
+    content: "\00e004"
+}
+
+.glyph.winddir.WNW:before {
+    content: "\00e005"
+}
+
+.glyph.winddir.NW:before {
+    content: "\00e006"
+}
+
+.glyph.winddir.NNW:before {
+    content: "\00e007"
+}
+
+.glyph.windspeed:before {
+    content: "\00e013"
+}
+
+.glyph.windgust:before {
+    content: "\00e014"
+}
+
+.glyph.humidity:before {
+    content: "\00e015"
+}
+
+.glyph.rain:before {
+    content: "\00e016"
+}
+
+.glyph.rain1h:before {
+    content: "\00e017"
+}
+
+.glyph.rain3h:before {
+    content: "\00e018"
+}
+
+.glyph.precipprob:before {
+    content: "\00e019"
+}
+
+.glyph.watertemp:before {
+    content: "\00e01a"
+}
+
+.glyph.waveheight:before {
+    content: "\00e01b"
+}
+
+.glyph.wavedirection:before {
+    content: "\00e01c"
+}
+
+.glyph.windwavedirection:before {
+    content: "\00e01d"
+}
+
+.glyph.pressure:before {
+    content: "\00e01e"
+}
+
+.glyph.sunshine:before {
+    content: "\00e01f"
+}
+
+.glyph.predictability:before {
+    content: "\00e020"
+}
+
+.glyph.sunrise:before {
+    content: "\00e021"
+}
+
+.glyph.sunset:before {
+    content: "\00e022"
+}
+
+.glyph.snow:before {
+    content: "\00e025"
+}
+
+.glyph.dust:before {
+    content: "\00e026"
+}
+
+.glyph.swellwaveheight:before {
+    content: "\00e028"
+}
+
+.glyph.swellwaveperiod:before {
+    content: "\00e029"
+}
+
+.glyph.windwaveheight:before {
+    content: "\00e02a"
+}
+
+.glyph.windwaveperiod:before {
+    content: "\00e02b"
+}
+
+.glyph.thunderstormprob:before {
+    content: "\00e02c"
+}
+
+.glyph.featcl_V:before {
+    content: "\00e032"
+}
+
+.glyph.featcl_T:before {
+    content: "\00e036"
+}
+
+.glyph.featcl_H:before {
+    content: "\00e037"
+}
+
+.glyph.featcl_S:before {
+    content: "\00e038"
+}
+
+.glyph.settings:before {
+    content: "\00e04b"
+}
+
+.glyph.language:before {
+    content: "\00e04c"
+}
+
+.glyph.search:before {
+    content: "\00e071"
+}
+
+.glyph.menu:before {
+    content: "\00e040"
+}
+
+.glyph.options:before {
+    content: "\00e04b"
+}
+
+.glyph.delete:before {
+    content: "\00e06c"
+}
+
+.glyph.close:before {
+    content: "\00e06d"
+}
+
+.glyph.edit:before {
+    content: "\00e070"
+}
+
+.glyph.hourglass:before {
+    content: "\00e072"
+}
+
+.glyph.help:before {
+    content: "\00e080"
+}
+
+.glyph.download:before {
+    content: "\00e082"
+}
+
+.glyph.bookmark:before {
+    content: "\00e085"
+}
+
+.glyph.document:before {
+    content: "\00e086"
+}
+
+.glyph.more:before {
+    content: "\00e087"
+}
+
+.glyph.share:before {
+    content: "\00e088"
+}
+
+.glyph.params:before {
+    content: "\00e089"
+}
+
+.glyph.print:before {
+    content: "\00e08a"
+}
+
+.glyph.warning:before {
+    content: "\00e08d"
+}
+
+.glyph.info:before {
+    content: "\00e08e"
+}
+
+.glyph.facebook-positive:before {
+    content: "\00e0b1";
+    color: #39579a
+}
+
+.glyph.facebook:before {
+    content: "\00e0b2";
+    color: #39579a
+}
+
+.glyph.twitter-positive:before {
+    content: "\00e0b3";
+    color: #00abf0
+}
+
+.glyph.twitter:before {
+    content: "\00e0b4";
+    color: #00abf0
+}
+
+.glyph.whatsapp:before {
+    content: "";
+    color: #25d366
+}
+
+.glyph.googleplus:before {
+    content: "\00e0b6";
+    color: #df4a32
+}
+
+.glyph.whatsapp:before {
+    content: "\00e0b8";
+    color: #25d366
+}
+
+.glyph.user:before {
+    content: "\00e0b9"
+}
+
+.glyph.comment:before {
+    content: "\00e0ba"
+}
+
+.glyph.user_logged_in:before {
+    content: "\00e0bd"
+}
+
+.glyph.like:before {
+    content: "\00e0bb"
+}
+
+.glyph.dislike:before {
+    content: "\00e0bc"
+}
+
+.glyph.credits:before {
+    content: "\00e090"
+}
+
+.glyph.meteoblue:before {
+    content: "\00e0d0"
+}
+
+.glyph.logo:before {
+    content: "\00e0d1"
+}
+
+.glyph.sun:before {
+    content: "\00e0d4"
+}
+
+.glyph.external:before {
+    content: "\00e08f"
+}
+
+.glyph.checkmark:before {
+    content: "\00e0d8"
+}
+
+.glyph.cross:before {
+    content: "\00e0d9"
+}
+
+.glyph.location:before {
+    content: "\00e0df"
+}
+
+.glyph.clock:before {
+    content: "\00e0e0"
+}
+
+.glyph.arrowhead_hollow_down:before {
+    content: "\00e048"
+}
+
+.glyph.arrowhead_hollow_up:before {
+    content: "\00e047"
+}
+
+.glyph.arrowhead_hollow_left:before {
+    content: "\00e049"
+}
+
+.glyph.arrowhead_hollow_right:before {
+    content: "\00e04a"
+}
+
+.glyph.forward:before {
+    content: "\00e063"
+}
+
+.glyph.backward:before {
+    content: "\00e064";
+    margin-right: -0.8em
+}
+
+.glyph.fast_forward:before {
+    content: "\00e065"
+}
+
+.glyph.fast_backward:before {
+    content: "\00e066"
+}
+
+.glyph.play:before {
+    content: "\00e060"
+}
+
+.glyph.pause:before {
+    content: "\00e061"
+}
+
+.glyph.fullscreen:before {
+    content: "\00e074"
+}
+
+.glyph.fullscreen_close:before {
+    content: "\00e075"
+}
+
+.glyph.gps:before {
+    content: "\00e0e3"
+}
+
+.p01_iday {
+    background-image: url("/assets/images/meteoblue/01_iday_monochrome_hollow.svg")
+}
+
+.p02_iday {
+    background-image: url("/assets/images/meteoblue/02_iday_monochrome_hollow.svg")
+}
+
+.p03_iday {
+    background-image: url("/assets/images/meteoblue/03_iday_monochrome_hollow.svg")
+}
+
+.p04_iday {
+    background-image: url("/assets/images/meteoblue/04_iday_monochrome_hollow.svg")
+}
+
+.p05_iday {
+    background-image: url("/assets/images/meteoblue/05_iday_monochrome_hollow.svg")
+}
+
+.p06_iday {
+    background-image: url("/assets/images/meteoblue/06_iday_monochrome_hollow.svg")
+}
+
+.p07_iday {
+    background-image: url("/assets/images/meteoblue/07_iday_monochrome_hollow.svg")
+}
+
+.p08_iday {
+    background-image: url("/assets/images/meteoblue/08_iday_monochrome_hollow.svg")
+}
+
+.p09_iday {
+    background-image: url("/assets/images/meteoblue/09_iday_monochrome_hollow.svg")
+}
+
+.p10_iday {
+    background-image: url("/assets/images/meteoblue/10_iday_monochrome_hollow.svg")
+}
+
+.p11_iday {
+    background-image: url("/assets/images/meteoblue/11_iday_monochrome_hollow.svg")
+}
+
+.p12_iday {
+    background-image: url("/assets/images/meteoblue/12_iday_monochrome_hollow.svg")
+}
+
+.p13_iday {
+    background-image: url("/assets/images/meteoblue/13_iday_monochrome_hollow.svg")
+}
+
+.p14_iday {
+    background-image: url("/assets/images/meteoblue/14_iday_monochrome_hollow.svg")
+}
+
+.p15_iday {
+    background-image: url("/assets/images/meteoblue/15_iday_monochrome_hollow.svg")
+}
+
+.p16_iday {
+    background-image: url("/assets/images/meteoblue/16_iday_monochrome_hollow.svg")
+}
+
+.p17_iday {
+    background-image: url("/assets/images/meteoblue/17_iday_monochrome_hollow.svg")
+}
+
+.p18_iday {
+    background-image: url("/assets/images/meteoblue/18_iday_monochrome_hollow.svg")
+}
+
+.p19_iday {
+    background-image: url("/assets/images/meteoblue/19_iday_monochrome_hollow.svg")
+}
+
+.p01_inight {
+    background-image: url("/assets/images/meteoblue/01_inight_monochrome_hollow.svg")
+}
+
+.p02_inight {
+    background-image: url("/assets/images/meteoblue/02_inight_monochrome_hollow.svg")
+}
+
+.p03_inight {
+    background-image: url("/assets/images/meteoblue/03_inight_monochrome_hollow.svg")
+}
+
+.p04_inight {
+    background-image: url("/assets/images/meteoblue/04_inight_monochrome_hollow.svg")
+}
+
+.p05_inight {
+    background-image: url("/assets/images/meteoblue/05_inight_monochrome_hollow.svg")
+}
+
+.p06_inight {
+    background-image: url("/assets/images/meteoblue/06_inight_monochrome_hollow.svg")
+}
+
+.p07_inight {
+    background-image: url("/assets/images/meteoblue/07_inight_monochrome_hollow.svg")
+}
+
+.p08_inight {
+    background-image: url("/assets/images/meteoblue/08_inight_monochrome_hollow.svg")
+}
+
+.p09_inight {
+    background-image: url("/assets/images/meteoblue/09_inight_monochrome_hollow.svg")
+}
+
+.p10_inight {
+    background-image: url("/assets/images/meteoblue/10_inight_monochrome_hollow.svg")
+}
+
+.p11_inight {
+    background-image: url("/assets/images/meteoblue/11_inight_monochrome_hollow.svg")
+}
+
+.p12_inight {
+    background-image: url("/assets/images/meteoblue/12_inight_monochrome_hollow.svg")
+}
+
+.p13_inight {
+    background-image: url("/assets/images/meteoblue/13_inight_monochrome_hollow.svg")
+}
+
+.p14_inight {
+    background-image: url("/assets/images/meteoblue/14_inight_monochrome_hollow.svg")
+}
+
+
+.p15_inight {
+    background-image: url("/assets/images/meteoblue/15_inight_monochrome_hollow.svg")
+}
+
+
+.p16_inight {
+    background-image: url("/assets/images/meteoblue/16_inight_monochrome_hollow.svg")
+}
+
+
+.p17_inight {
+    background-image: url("/assets/images/meteoblue/17_inight_monochrome_hollow.svg")
+}
+
+
+.p18_inight {
+    background-image: url("/assets/images/meteoblue/18_inight_monochrome_hollow.svg")
+}
+
+
+.p19_inight {
+    background-image: url("/assets/images/meteoblue/19_inight_monochrome_hollow.svg")
+}
+
+
+.p01_day {
+    background-image: url("/assets/images/meteoblue/01_day_monochrome_hollow.svg")
+}
+
+
+.p02_day {
+    background-image: url("/assets/images/meteoblue/02_day_monochrome_hollow.svg")
+}
+
+
+.p03_day {
+    background-image: url("/assets/images/meteoblue/03_day_monochrome_hollow.svg")
+}
+
+
+.p04_day {
+    background-image: url("/assets/images/meteoblue/04_day_monochrome_hollow.svg")
+}
+
+
+.p05_day {
+    background-image: url("/assets/images/meteoblue/05_day_monochrome_hollow.svg")
+}
+
+
+.p06_day {
+    background-image: url("/assets/images/meteoblue/06_day_monochrome_hollow.svg")
+}
+
+
+.p07_day {
+    background-image: url("/assets/images/meteoblue/07_day_monochrome_hollow.svg")
+}
+
+
+.p08_day {
+    background-image: url("/assets/images/meteoblue/08_day_monochrome_hollow.svg")
+}
+
+
+.p09_day {
+    background-image: url("/assets/images/meteoblue/09_day_monochrome_hollow.svg")
+}
+
+
+.p10_day {
+    background-image: url("/assets/images/meteoblue/10_day_monochrome_hollow.svg")
+}
+
+
+.p11_day {
+    background-image: url("/assets/images/meteoblue/11_day_monochrome_hollow.svg")
+}
+
+
+.p12_day {
+    background-image: url("/assets/images/meteoblue/12_day_monochrome_hollow.svg")
+}
+
+
+.p13_day {
+    background-image: url("/assets/images/meteoblue/13_day_monochrome_hollow.svg")
+}
+
+
+.p14_day {
+    background-image: url("/assets/images/meteoblue/14_day_monochrome_hollow.svg")
+}
+
+
+.p15_day {
+    background-image: url("/assets/images/meteoblue/15_day_monochrome_hollow.svg")
+}
+
+
+.p16_day {
+    background-image: url("/assets/images/meteoblue/16_day_monochrome_hollow.svg")
+}
+
+
+.p17_day {
+    background-image: url("/assets/images/meteoblue/17_day_monochrome_hollow.svg")
+}
+
+
+.p18_day {
+    background-image: url("/assets/images/meteoblue/18_day_monochrome_hollow.svg")
+}
+
+
+.p19_day {
+    background-image: url("/assets/images/meteoblue/19_day_monochrome_hollow.svg")
+}
+
+
+.p20_day {
+    background-image: url("/assets/images/meteoblue/20_day_monochrome_hollow.svg")
+}
+
+
+.p21_day {
+    background-image: url("/assets/images/meteoblue/21_day_monochrome_hollow.svg")
+}
+
+
+.p22_day {
+    background-image: url("/assets/images/meteoblue/22_day_monochrome_hollow.svg")
+}
+
+
+.p23_day {
+    background-image: url("/assets/images/meteoblue/23_day_monochrome_hollow.svg")
+}
+
+
+.p24_day {
+    background-image: url("/assets/images/meteoblue/24_day_monochrome_hollow.svg")
+}
+
+
+.p25_day {
+    background-image: url("/assets/images/meteoblue/25_day_monochrome_hollow.svg")
+}
+
+
+.p26_day {
+    background-image: url("/assets/images/meteoblue/26_day_monochrome_hollow.svg")
+}
+
+
+.p27_day {
+    background-image: url("/assets/images/meteoblue/27_day_monochrome_hollow.svg")
+}
+
+
+.p28_day {
+    background-image: url("/assets/images/meteoblue/28_day_monochrome_hollow.svg")
+}
+
+
+.p29_day {
+    background-image: url("/assets/images/meteoblue/29_day_monochrome_hollow.svg")
+}
+
+
+.p30_day {
+    background-image: url("/assets/images/meteoblue/30_day_monochrome_hollow.svg")
+}
+
+
+.p31_day {
+    background-image: url("/assets/images/meteoblue/31_day_monochrome_hollow.svg")
+}
+
+
+.p32_day {
+    background-image: url("/assets/images/meteoblue/32_day_monochrome_hollow.svg")
+}
+
+
+.p33_day {
+    background-image: url("/assets/images/meteoblue/33_day_monochrome_hollow.svg")
+}
+
+
+.p34_day {
+    background-image: url("/assets/images/meteoblue/34_day_monochrome_hollow.svg")
+}
+
+
+.p35_day {
+    background-image: url("/assets/images/meteoblue/35_day_monochrome_hollow.svg")
+}
+
+
+.p36_day {
+    background-image: url("/assets/images/meteoblue/36_day_monochrome_hollow.svg")
+}
+
+
+.p37_day {
+    background-image: url("/assets/images/meteoblue/37_day_monochrome_hollow.svg")
+}
+
+
+.p01_night {
+    background-image: url("/assets/images/meteoblue/01_night_monochrome_hollow.svg")
+}
+
+
+.p02_night {
+    background-image: url("/assets/images/meteoblue/02_night_monochrome_hollow.svg")
+}
+
+
+.p03_night {
+    background-image: url("/assets/images/meteoblue/03_night_monochrome_hollow.svg")
+}
+
+
+.p04_night {
+    background-image: url("/assets/images/meteoblue/04_night_monochrome_hollow.svg")
+}
+
+
+.p05_night {
+    background-image: url("/assets/images/meteoblue/05_night_monochrome_hollow.svg")
+}
+
+
+.p06_night {
+    background-image: url("/assets/images/meteoblue/06_night_monochrome_hollow.svg")
+}
+
+
+.p07_night {
+    background-image: url("/assets/images/meteoblue/07_night_monochrome_hollow.svg")
+}
+
+
+.p08_night {
+    background-image: url("/assets/images/meteoblue/08_night_monochrome_hollow.svg")
+}
+
+
+.p09_night {
+    background-image: url("/assets/images/meteoblue/09_night_monochrome_hollow.svg")
+}
+
+
+.p10_night {
+    background-image: url("/assets/images/meteoblue/10_night_monochrome_hollow.svg")
+}
+
+
+.p11_night {
+    background-image: url("/assets/images/meteoblue/11_night_monochrome_hollow.svg")
+}
+
+
+.p12_night {
+    background-image: url("/assets/images/meteoblue/12_night_monochrome_hollow.svg")
+}
+
+
+.p13_night {
+    background-image: url("/assets/images/meteoblue/13_night_monochrome_hollow.svg")
+}
+
+
+.p14_night {
+    background-image: url("/assets/images/meteoblue/14_night_monochrome_hollow.svg")
+}
+
+
+.p15_night {
+    background-image: url("/assets/images/meteoblue/15_night_monochrome_hollow.svg")
+}
+
+
+.p16_night {
+    background-image: url("/assets/images/meteoblue/16_night_monochrome_hollow.svg")
+}
+
+
+.p17_night {
+    background-image: url("/assets/images/meteoblue/17_night_monochrome_hollow.svg")
+}
+
+
+.p18_night {
+    background-image: url("/assets/images/meteoblue/18_night_monochrome_hollow.svg")
+}
+
+
+.p19_night {
+    background-image: url("/assets/images/meteoblue/19_night_monochrome_hollow.svg")
+}
+
+
+.p20_night {
+    background-image: url("/assets/images/meteoblue/20_night_monochrome_hollow.svg")
+}
+
+
+.p21_night {
+    background-image: url("/assets/images/meteoblue/21_night_monochrome_hollow.svg")
+}
+
+
+.p22_night {
+    background-image: url("/assets/images/meteoblue/22_night_monochrome_hollow.svg")
+}
+
+
+.p23_night {
+    background-image: url("/assets/images/meteoblue/23_night_monochrome_hollow.svg")
+}
+
+
+.p24_night {
+    background-image: url("/assets/images/meteoblue/24_night_monochrome_hollow.svg")
+}
+
+
+.p25_night {
+    background-image: url("/assets/images/meteoblue/25_night_monochrome_hollow.svg")
+}
+
+
+.p26_night {
+    background-image: url("/assets/images/meteoblue/26_night_monochrome_hollow.svg")
+}
+
+
+.p27_night {
+    background-image: url("/assets/images/meteoblue/27_night_monochrome_hollow.svg")
+}
+
+
+.p28_night {
+    background-image: url("/assets/images/meteoblue/28_night_monochrome_hollow.svg")
+}
+
+
+.p29_night {
+    background-image: url("/assets/images/meteoblue/29_night_monochrome_hollow.svg")
+}
+
+
+.p30_night {
+    background-image: url("/assets/images/meteoblue/30_night_monochrome_hollow.svg")
+}
+
+
+.p31_night {
+    background-image: url("/assets/images/meteoblue/31_night_monochrome_hollow.svg")
+}
+
+
+.p32_night {
+    background-image: url("/assets/images/meteoblue/32_night_monochrome_hollow.svg")
+}
+
+
+.p33_night {
+    background-image: url("/assets/images/meteoblue/33_night_monochrome_hollow.svg")
+}
+
+
+.p34_night {
+    background-image: url("/assets/images/meteoblue/34_night_monochrome_hollow.svg")
+}
+
+
+.p35_night {
+    background-image: url("/assets/images/meteoblue/35_night_monochrome_hollow.svg")
+}
+
+
+.p36_night {
+    background-image: url("/assets/images/meteoblue/36_night_monochrome_hollow.svg")
+}
+
+
+.p37_night {
+    background-image: url("/assets/images/meteoblue/37_night_monochrome_hollow.svg")
+}
