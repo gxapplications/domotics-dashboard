@@ -14,15 +14,17 @@
                 <md-icon aria-label="Refresh" class="material-icons button-icon-48">{{parsejson component.configuration 'icon' 'cloud_circle'}}</md-icon>
             </md-button>
             {{parsejson component.configuration 'title' 'Settings needed'}}
-            <small style="color: rgba(255,255,255,0.5);">
-                &nbsp; ( {{ng-open}}weather.refresh{{ng-close}} )
-            </small>
         </md-list-item>
         <md-divider></md-divider>
     </md-list>
 </div>
 <div flex class="sub-content" ng-show="processingState === 'waiting'" style="overflow: auto; margin: 0 0.6rem 0.7rem ;">
-    TODO
+    TODO !0
+    <div ng-repeat="hourly in weather.hourlySafe" ng-bind-html="hourly"></div>
+    <div ng-repeat="daily in weather.daily">
+        {{ng-open}}daily.day{{ng-close}} - {{ng-open}}daily.classes[1]{{ng-close}}
+        - {{ng-open}}daily.max{{ng-close}} - {{ng-open}}daily.min{{ng-close}}
+    </div>
 </div>
 
 <div class="sub-content" ng-show="processingState === 'error'">
@@ -96,23 +98,47 @@
 
     // to control state
     $scope.processingState = 'processing' // or 'waiting', 'error'
-    $scope.weather = ''
+    $scope.weather = { daily: [], hourly: [] }
 
     $scope.loadContent = function() {
       $scope.processingState = 'processing'
+      $.post('/{{page.slug}}/component/{{component.id}}/action', {})
+        .done(function(data) {
+          $scope.reschedule()
+          $scope.processingState = 'waiting'
+          $scope.weather = data
+          $scope.weather.hourlySafe = $scope.weather.hourly.map($sce.trustAsHtml)
+        })
+        .fail(function() {
+          $scope.reschedule()
+          $scope.processingState = 'error'
+          $rootScope.events.errorEvent('Error during parsing of a URL!')
+        })
     }
 
-    // TODO !0
+    $scope.reschedule = function() {
+      if ($scope.component.configuration.refresh > 0) {
+        if ($scope.reschedule.timer) {
+          window.clearTimeout($scope.reschedule.timer)
+        }
+        $scope.reschedule.timer = window.setTimeout(
+          (scope) => {
+            scope.loadContent()
+            scope.reschedule.timer = null
+          },
+          $scope.component.configuration.refresh * 60000,
+          $scope
+        )
+      }
+    }
+    this.addCleaner(() => {
+      if ($scope.reschedule.timer) {
+        window.clearTimeout($scope.reschedule.timer)
+      }
+    })
 
-    /*
-
-     Travailler sur :
-     li#day1 li#day[X] ... li#day7
-     pour le contenu general par jour n+[X]-1
-
-     puis sur "ul#hourly > li:nth-child([X]) > table > tbody > ...." pour travailler le tableau du détail par heure.
-     Utilisable pour les 2 premiers jours, le reste semble trop incertain comme prévision météo !
-
-     */
+    $document.ready(() => {
+      $scope.loadContent()
+    })
   {{/extend}}
 </script>

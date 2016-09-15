@@ -5,6 +5,7 @@ import https from 'https'
 import urlParser from 'url'
 import zlib from 'zlib'
 import ratpRer from '../lib/parsers/ratp-rer'
+import meteoBlue from '../lib/parsers/meteo-blue'
 
 const httpParse = function (url, parser, callback) {
   const requestData = urlParser.parse(url)
@@ -45,7 +46,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
     case 501:
       // 501: RATP RER timetable parser
       if (!configuration.url) {
-        reply(new Error('URL not configured for component ' + component.id + '.')).code(400)
+        reply('URL not configured for component ' + component.id + '.').code(400)
         return
       }
 
@@ -60,7 +61,18 @@ const actions = function (api, reply, page, component, action = null, payload = 
 
     case 511:
       // 511: Meteo Blue parser
-      // TODO !5
+      if (!configuration.url) {
+        reply('URL not configured for component ' + component.id + '.').code(400)
+        return
+      }
+
+      httpParse(configuration.url, meteoBlue(), (err, parser) => {
+        if (err) {
+          console.log(err)
+          reply(err).code(500)
+        }
+        reply(parser.data)
+      })
       break
 
     default:
