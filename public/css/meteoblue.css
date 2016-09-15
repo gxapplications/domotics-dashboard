@@ -5,13 +5,13 @@
     font-style: normal
 }
 
-.glyph {
+.meteoblue-root .glyph {
     direction: ltr;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale
 }
 
-.glyph:after, .glyph:before {
+.meteoblue-root .glyph:after, .meteoblue-root .glyph:before {
     font-family: meteoblue;
     display: inline-block;
     font-style: normal;
@@ -22,941 +22,948 @@
     text-decoration: none
 }
 
-.glyph:after:hover, .glyph:before:hover {
+.meteoblue-root .glyph:after:hover, .meteoblue-root .glyph:before:hover {
     text-decoration: none
 }
 
-.glyph.time:before {
+.meteoblue-root .glyph.time:before {
     content: "\00e0e0"
 }
 
-.glyph.temperature:before {
+.meteoblue-root .glyph.temperature:before {
     content: "\00e010"
 }
 
-.glyph.windchill:before {
+.meteoblue-root .glyph.windchill:before {
     content: "\00e011"
 }
 
-.glyph.winddir:before {
+.meteoblue-root .glyph.winddir:before {
     content: "\00e012"
 }
 
-.glyph.winddir.N:before {
+.meteoblue-root .glyph.winddir.N:before {
     content: "\00e008"
 }
 
-.glyph.winddir.NNE:before {
+.meteoblue-root .glyph.winddir.NNE:before {
     content: "\00e009"
 }
 
-.glyph.winddir.NE:before {
+.meteoblue-root .glyph.winddir.NE:before {
     content: "\00e00a"
 }
 
-.glyph.winddir.ENE:before {
+.meteoblue-root .glyph.winddir.ENE:before {
     content: "\00e00b"
 }
 
-.glyph.winddir.E:before {
+.meteoblue-root .glyph.winddir.E:before {
     content: "\00e00c"
 }
 
-.glyph.winddir.ESE:before {
+.meteoblue-root .glyph.winddir.ESE:before {
     content: "\00e00d"
 }
 
-.glyph.winddir.SE:before {
+.meteoblue-root .glyph.winddir.SE:before {
     content: "\00e00e"
 }
 
-.glyph.winddir.SSE:before {
+.meteoblue-root .glyph.winddir.SSE:before {
     content: "\00e00f"
 }
 
-.glyph.winddir.S:before {
+.meteoblue-root .glyph.winddir.S:before {
     content: "\00e000"
 }
 
-.glyph.winddir.SSW:before {
+.meteoblue-root .glyph.winddir.SSW:before {
     content: "\00e001"
 }
 
-.glyph.winddir.SW:before {
+.meteoblue-root .glyph.winddir.SW:before {
     content: "\00e002"
 }
 
-.glyph.winddir.WSW:before {
+.meteoblue-root .glyph.winddir.WSW:before {
     content: "\00e003"
 }
 
-.glyph.winddir.W:before {
+.meteoblue-root .glyph.winddir.W:before {
     content: "\00e004"
 }
 
-.glyph.winddir.WNW:before {
+.meteoblue-root .glyph.winddir.WNW:before {
     content: "\00e005"
 }
 
-.glyph.winddir.NW:before {
+.meteoblue-root .glyph.winddir.NW:before {
     content: "\00e006"
 }
 
-.glyph.winddir.NNW:before {
+.meteoblue-root .glyph.winddir.NNW:before {
     content: "\00e007"
 }
 
-.glyph.windspeed:before {
+.meteoblue-root .glyph.windspeed:before {
     content: "\00e013"
 }
 
-.glyph.windgust:before {
+.meteoblue-root .glyph.windgust:before {
     content: "\00e014"
 }
 
-.glyph.humidity:before {
+.meteoblue-root .glyph.humidity:before {
     content: "\00e015"
 }
 
-.glyph.rain:before {
+.meteoblue-root .glyph.rain:before {
     content: "\00e016"
 }
 
-.glyph.rain1h:before {
+.meteoblue-root .glyph.rain1h:before {
     content: "\00e017"
 }
 
-.glyph.rain3h:before {
+.meteoblue-root .glyph.rain3h:before {
     content: "\00e018"
 }
 
-.glyph.precipprob:before {
+.meteoblue-root .glyph.precipprob:before {
     content: "\00e019"
 }
 
-.glyph.watertemp:before {
+.meteoblue-root .glyph.watertemp:before {
     content: "\00e01a"
 }
 
-.glyph.waveheight:before {
+.meteoblue-root .glyph.waveheight:before {
     content: "\00e01b"
 }
 
-.glyph.wavedirection:before {
+.meteoblue-root .glyph.wavedirection:before {
     content: "\00e01c"
 }
 
-.glyph.windwavedirection:before {
+.meteoblue-root .glyph.windwavedirection:before {
     content: "\00e01d"
 }
 
-.glyph.pressure:before {
+.meteoblue-root .glyph.pressure:before {
     content: "\00e01e"
 }
 
-.glyph.sunshine:before {
+.meteoblue-root .glyph.sunshine:before {
     content: "\00e01f"
 }
 
-.glyph.predictability:before {
+.meteoblue-root .glyph.predictability:before {
     content: "\00e020"
 }
 
-.glyph.sunrise:before {
+.meteoblue-root .glyph.sunrise:before {
     content: "\00e021"
 }
 
-.glyph.sunset:before {
+.meteoblue-root .glyph.sunset:before {
     content: "\00e022"
 }
 
-.glyph.snow:before {
+.meteoblue-root .glyph.snow:before {
     content: "\00e025"
 }
 
-.glyph.dust:before {
+.meteoblue-root .glyph.dust:before {
     content: "\00e026"
 }
 
-.glyph.swellwaveheight:before {
+.meteoblue-root .glyph.swellwaveheight:before {
     content: "\00e028"
 }
 
-.glyph.swellwaveperiod:before {
+.meteoblue-root .glyph.swellwaveperiod:before {
     content: "\00e029"
 }
 
-.glyph.windwaveheight:before {
+.meteoblue-root .glyph.windwaveheight:before {
     content: "\00e02a"
 }
 
-.glyph.windwaveperiod:before {
+.meteoblue-root .glyph.windwaveperiod:before {
     content: "\00e02b"
 }
 
-.glyph.thunderstormprob:before {
+.meteoblue-root .glyph.thunderstormprob:before {
     content: "\00e02c"
 }
 
-.glyph.featcl_V:before {
+.meteoblue-root .glyph.featcl_V:before {
     content: "\00e032"
 }
 
-.glyph.featcl_T:before {
+.meteoblue-root .glyph.featcl_T:before {
     content: "\00e036"
 }
 
-.glyph.featcl_H:before {
+.meteoblue-root .glyph.featcl_H:before {
     content: "\00e037"
 }
 
-.glyph.featcl_S:before {
+.meteoblue-root .glyph.featcl_S:before {
     content: "\00e038"
 }
 
-.glyph.settings:before {
+.meteoblue-root .glyph.settings:before {
     content: "\00e04b"
 }
 
-.glyph.language:before {
+.meteoblue-root .glyph.language:before {
     content: "\00e04c"
 }
 
-.glyph.search:before {
+.meteoblue-root .glyph.search:before {
     content: "\00e071"
 }
 
-.glyph.menu:before {
+.meteoblue-root .glyph.menu:before {
     content: "\00e040"
 }
 
-.glyph.options:before {
+.meteoblue-root .glyph.options:before {
     content: "\00e04b"
 }
 
-.glyph.delete:before {
+.meteoblue-root .glyph.delete:before {
     content: "\00e06c"
 }
 
-.glyph.close:before {
+.meteoblue-root .glyph.close:before {
     content: "\00e06d"
 }
 
-.glyph.edit:before {
+.meteoblue-root .glyph.edit:before {
     content: "\00e070"
 }
 
-.glyph.hourglass:before {
+.meteoblue-root .glyph.hourglass:before {
     content: "\00e072"
 }
 
-.glyph.help:before {
+.meteoblue-root .glyph.help:before {
     content: "\00e080"
 }
 
-.glyph.download:before {
+.meteoblue-root .glyph.download:before {
     content: "\00e082"
 }
 
-.glyph.bookmark:before {
+.meteoblue-root .glyph.bookmark:before {
     content: "\00e085"
 }
 
-.glyph.document:before {
+.meteoblue-root .glyph.document:before {
     content: "\00e086"
 }
 
-.glyph.more:before {
+.meteoblue-root .glyph.more:before {
     content: "\00e087"
 }
 
-.glyph.share:before {
+.meteoblue-root .glyph.share:before {
     content: "\00e088"
 }
 
-.glyph.params:before {
+.meteoblue-root .glyph.params:before {
     content: "\00e089"
 }
 
-.glyph.print:before {
+.meteoblue-root .glyph.print:before {
     content: "\00e08a"
 }
 
-.glyph.warning:before {
+.meteoblue-root .glyph.warning:before {
     content: "\00e08d"
 }
 
-.glyph.info:before {
+.meteoblue-root .glyph.info:before {
     content: "\00e08e"
 }
 
-.glyph.facebook-positive:before {
+.meteoblue-root .glyph.facebook-positive:before {
     content: "\00e0b1";
     color: #39579a
 }
 
-.glyph.facebook:before {
+.meteoblue-root .glyph.facebook:before {
     content: "\00e0b2";
     color: #39579a
 }
 
-.glyph.twitter-positive:before {
+.meteoblue-root .glyph.twitter-positive:before {
     content: "\00e0b3";
     color: #00abf0
 }
 
-.glyph.twitter:before {
+.meteoblue-root .glyph.twitter:before {
     content: "\00e0b4";
     color: #00abf0
 }
 
-.glyph.whatsapp:before {
+.meteoblue-root .glyph.whatsapp:before {
     content: "";
     color: #25d366
 }
 
-.glyph.googleplus:before {
+.meteoblue-root .glyph.googleplus:before {
     content: "\00e0b6";
     color: #df4a32
 }
 
-.glyph.whatsapp:before {
+.meteoblue-root .glyph.whatsapp:before {
     content: "\00e0b8";
     color: #25d366
 }
 
-.glyph.user:before {
+.meteoblue-root .glyph.user:before {
     content: "\00e0b9"
 }
 
-.glyph.comment:before {
+.meteoblue-root .glyph.comment:before {
     content: "\00e0ba"
 }
 
-.glyph.user_logged_in:before {
+.meteoblue-root .glyph.user_logged_in:before {
     content: "\00e0bd"
 }
 
-.glyph.like:before {
+.meteoblue-root .glyph.like:before {
     content: "\00e0bb"
 }
 
-.glyph.dislike:before {
+.meteoblue-root .glyph.dislike:before {
     content: "\00e0bc"
 }
 
-.glyph.credits:before {
+.meteoblue-root .glyph.credits:before {
     content: "\00e090"
 }
 
-.glyph.meteoblue:before {
+.meteoblue-root .glyph.meteoblue:before {
     content: "\00e0d0"
 }
 
-.glyph.logo:before {
+.meteoblue-root .glyph.logo:before {
     content: "\00e0d1"
 }
 
-.glyph.sun:before {
+.meteoblue-root .glyph.sun:before {
     content: "\00e0d4"
 }
 
-.glyph.external:before {
+.meteoblue-root .glyph.external:before {
     content: "\00e08f"
 }
 
-.glyph.checkmark:before {
+.meteoblue-root .glyph.checkmark:before {
     content: "\00e0d8"
 }
 
-.glyph.cross:before {
+.meteoblue-root .glyph.cross:before {
     content: "\00e0d9"
 }
 
-.glyph.location:before {
+.meteoblue-root .glyph.location:before {
     content: "\00e0df"
 }
 
-.glyph.clock:before {
+.meteoblue-root .glyph.clock:before {
     content: "\00e0e0"
 }
 
-.glyph.arrowhead_hollow_down:before {
+.meteoblue-root .glyph.arrowhead_hollow_down:before {
     content: "\00e048"
 }
 
-.glyph.arrowhead_hollow_up:before {
+.meteoblue-root .glyph.arrowhead_hollow_up:before {
     content: "\00e047"
 }
 
-.glyph.arrowhead_hollow_left:before {
+.meteoblue-root .glyph.arrowhead_hollow_left:before {
     content: "\00e049"
 }
 
-.glyph.arrowhead_hollow_right:before {
+.meteoblue-root .glyph.arrowhead_hollow_right:before {
     content: "\00e04a"
 }
 
-.glyph.forward:before {
+.meteoblue-root .glyph.forward:before {
     content: "\00e063"
 }
 
-.glyph.backward:before {
+.meteoblue-root .glyph.backward:before {
     content: "\00e064";
     margin-right: -0.8em
 }
 
-.glyph.fast_forward:before {
+.meteoblue-root .glyph.fast_forward:before {
     content: "\00e065"
 }
 
-.glyph.fast_backward:before {
+.meteoblue-root .glyph.fast_backward:before {
     content: "\00e066"
 }
 
-.glyph.play:before {
+.meteoblue-root .glyph.play:before {
     content: "\00e060"
 }
 
-.glyph.pause:before {
+.meteoblue-root .glyph.pause:before {
     content: "\00e061"
 }
 
-.glyph.fullscreen:before {
+.meteoblue-root .glyph.fullscreen:before {
     content: "\00e074"
 }
 
-.glyph.fullscreen_close:before {
+.meteoblue-root .glyph.fullscreen_close:before {
     content: "\00e075"
 }
 
-.glyph.gps:before {
+.meteoblue-root .glyph.gps:before {
     content: "\00e0e3"
 }
 
-.p01_iday {
+.meteoblue-root .p01_iday {
     background-image: url("/assets/images/meteoblue/01_iday_monochrome_hollow.svg")
 }
 
-.p02_iday {
+.meteoblue-root .p02_iday {
     background-image: url("/assets/images/meteoblue/02_iday_monochrome_hollow.svg")
 }
 
-.p03_iday {
+.meteoblue-root .p03_iday {
     background-image: url("/assets/images/meteoblue/03_iday_monochrome_hollow.svg")
 }
 
-.p04_iday {
+.meteoblue-root .p04_iday {
     background-image: url("/assets/images/meteoblue/04_iday_monochrome_hollow.svg")
 }
 
-.p05_iday {
+.meteoblue-root .p05_iday {
     background-image: url("/assets/images/meteoblue/05_iday_monochrome_hollow.svg")
 }
 
-.p06_iday {
+.meteoblue-root .p06_iday {
     background-image: url("/assets/images/meteoblue/06_iday_monochrome_hollow.svg")
 }
 
-.p07_iday {
+.meteoblue-root .p07_iday {
     background-image: url("/assets/images/meteoblue/07_iday_monochrome_hollow.svg")
 }
 
-.p08_iday {
+.meteoblue-root .p08_iday {
     background-image: url("/assets/images/meteoblue/08_iday_monochrome_hollow.svg")
 }
 
-.p09_iday {
+.meteoblue-root .p09_iday {
     background-image: url("/assets/images/meteoblue/09_iday_monochrome_hollow.svg")
 }
 
-.p10_iday {
+.meteoblue-root .p10_iday {
     background-image: url("/assets/images/meteoblue/10_iday_monochrome_hollow.svg")
 }
 
-.p11_iday {
+.meteoblue-root .p11_iday {
     background-image: url("/assets/images/meteoblue/11_iday_monochrome_hollow.svg")
 }
 
-.p12_iday {
+.meteoblue-root .p12_iday {
     background-image: url("/assets/images/meteoblue/12_iday_monochrome_hollow.svg")
 }
 
-.p13_iday {
+.meteoblue-root .p13_iday {
     background-image: url("/assets/images/meteoblue/13_iday_monochrome_hollow.svg")
 }
 
-.p14_iday {
+.meteoblue-root .p14_iday {
     background-image: url("/assets/images/meteoblue/14_iday_monochrome_hollow.svg")
 }
 
-.p15_iday {
+.meteoblue-root .p15_iday {
     background-image: url("/assets/images/meteoblue/15_iday_monochrome_hollow.svg")
 }
 
-.p16_iday {
+.meteoblue-root .p16_iday {
     background-image: url("/assets/images/meteoblue/16_iday_monochrome_hollow.svg")
 }
 
-.p17_iday {
+.meteoblue-root .p17_iday {
     background-image: url("/assets/images/meteoblue/17_iday_monochrome_hollow.svg")
 }
 
-.p18_iday {
+.meteoblue-root .p18_iday {
     background-image: url("/assets/images/meteoblue/18_iday_monochrome_hollow.svg")
 }
 
-.p19_iday {
+.meteoblue-root .p19_iday {
     background-image: url("/assets/images/meteoblue/19_iday_monochrome_hollow.svg")
 }
 
-.p01_inight {
+.meteoblue-root .p01_inight {
     background-image: url("/assets/images/meteoblue/01_inight_monochrome_hollow.svg")
 }
 
-.p02_inight {
+.meteoblue-root .p02_inight {
     background-image: url("/assets/images/meteoblue/02_inight_monochrome_hollow.svg")
 }
 
-.p03_inight {
+.meteoblue-root .p03_inight {
     background-image: url("/assets/images/meteoblue/03_inight_monochrome_hollow.svg")
 }
 
-.p04_inight {
+.meteoblue-root .p04_inight {
     background-image: url("/assets/images/meteoblue/04_inight_monochrome_hollow.svg")
 }
 
-.p05_inight {
+.meteoblue-root .p05_inight {
     background-image: url("/assets/images/meteoblue/05_inight_monochrome_hollow.svg")
 }
 
-.p06_inight {
+.meteoblue-root .p06_inight {
     background-image: url("/assets/images/meteoblue/06_inight_monochrome_hollow.svg")
 }
 
-.p07_inight {
+.meteoblue-root .p07_inight {
     background-image: url("/assets/images/meteoblue/07_inight_monochrome_hollow.svg")
 }
 
-.p08_inight {
+.meteoblue-root .p08_inight {
     background-image: url("/assets/images/meteoblue/08_inight_monochrome_hollow.svg")
 }
 
-.p09_inight {
+.meteoblue-root .p09_inight {
     background-image: url("/assets/images/meteoblue/09_inight_monochrome_hollow.svg")
 }
 
-.p10_inight {
+.meteoblue-root .p10_inight {
     background-image: url("/assets/images/meteoblue/10_inight_monochrome_hollow.svg")
 }
 
-.p11_inight {
+.meteoblue-root .p11_inight {
     background-image: url("/assets/images/meteoblue/11_inight_monochrome_hollow.svg")
 }
 
-.p12_inight {
+.meteoblue-root .p12_inight {
     background-image: url("/assets/images/meteoblue/12_inight_monochrome_hollow.svg")
 }
 
-.p13_inight {
+.meteoblue-root .p13_inight {
     background-image: url("/assets/images/meteoblue/13_inight_monochrome_hollow.svg")
 }
 
-.p14_inight {
+.meteoblue-root .p14_inight {
     background-image: url("/assets/images/meteoblue/14_inight_monochrome_hollow.svg")
 }
 
 
-.p15_inight {
+.meteoblue-root .p15_inight {
     background-image: url("/assets/images/meteoblue/15_inight_monochrome_hollow.svg")
 }
 
 
-.p16_inight {
+.meteoblue-root .p16_inight {
     background-image: url("/assets/images/meteoblue/16_inight_monochrome_hollow.svg")
 }
 
 
-.p17_inight {
+.meteoblue-root .p17_inight {
     background-image: url("/assets/images/meteoblue/17_inight_monochrome_hollow.svg")
 }
 
 
-.p18_inight {
+.meteoblue-root .p18_inight {
     background-image: url("/assets/images/meteoblue/18_inight_monochrome_hollow.svg")
 }
 
 
-.p19_inight {
+.meteoblue-root .p19_inight {
     background-image: url("/assets/images/meteoblue/19_inight_monochrome_hollow.svg")
 }
 
 
-.p01_day {
+.meteoblue-root .p01_day {
     background-image: url("/assets/images/meteoblue/01_day_monochrome_hollow.svg")
 }
 
 
-.p02_day {
+.meteoblue-root .p02_day {
     background-image: url("/assets/images/meteoblue/02_day_monochrome_hollow.svg")
 }
 
 
-.p03_day {
+.meteoblue-root .p03_day {
     background-image: url("/assets/images/meteoblue/03_day_monochrome_hollow.svg")
 }
 
 
-.p04_day {
+.meteoblue-root .p04_day {
     background-image: url("/assets/images/meteoblue/04_day_monochrome_hollow.svg")
 }
 
 
-.p05_day {
+.meteoblue-root .p05_day {
     background-image: url("/assets/images/meteoblue/05_day_monochrome_hollow.svg")
 }
 
 
-.p06_day {
+.meteoblue-root .p06_day {
     background-image: url("/assets/images/meteoblue/06_day_monochrome_hollow.svg")
 }
 
 
-.p07_day {
+.meteoblue-root .p07_day {
     background-image: url("/assets/images/meteoblue/07_day_monochrome_hollow.svg")
 }
 
 
-.p08_day {
+.meteoblue-root .p08_day {
     background-image: url("/assets/images/meteoblue/08_day_monochrome_hollow.svg")
 }
 
 
-.p09_day {
+.meteoblue-root .p09_day {
     background-image: url("/assets/images/meteoblue/09_day_monochrome_hollow.svg")
 }
 
 
-.p10_day {
+.meteoblue-root .p10_day {
     background-image: url("/assets/images/meteoblue/10_day_monochrome_hollow.svg")
 }
 
 
-.p11_day {
+.meteoblue-root .p11_day {
     background-image: url("/assets/images/meteoblue/11_day_monochrome_hollow.svg")
 }
 
 
-.p12_day {
+.meteoblue-root .p12_day {
     background-image: url("/assets/images/meteoblue/12_day_monochrome_hollow.svg")
 }
 
 
-.p13_day {
+.meteoblue-root .p13_day {
     background-image: url("/assets/images/meteoblue/13_day_monochrome_hollow.svg")
 }
 
 
-.p14_day {
+.meteoblue-root .p14_day {
     background-image: url("/assets/images/meteoblue/14_day_monochrome_hollow.svg")
 }
 
 
-.p15_day {
+.meteoblue-root .p15_day {
     background-image: url("/assets/images/meteoblue/15_day_monochrome_hollow.svg")
 }
 
 
-.p16_day {
+.meteoblue-root .p16_day {
     background-image: url("/assets/images/meteoblue/16_day_monochrome_hollow.svg")
 }
 
 
-.p17_day {
+.meteoblue-root .p17_day {
     background-image: url("/assets/images/meteoblue/17_day_monochrome_hollow.svg")
 }
 
 
-.p18_day {
+.meteoblue-root .p18_day {
     background-image: url("/assets/images/meteoblue/18_day_monochrome_hollow.svg")
 }
 
 
-.p19_day {
+.meteoblue-root .p19_day {
     background-image: url("/assets/images/meteoblue/19_day_monochrome_hollow.svg")
 }
 
 
-.p20_day {
+.meteoblue-root .p20_day {
     background-image: url("/assets/images/meteoblue/20_day_monochrome_hollow.svg")
 }
 
 
-.p21_day {
+.meteoblue-root .p21_day {
     background-image: url("/assets/images/meteoblue/21_day_monochrome_hollow.svg")
 }
 
 
-.p22_day {
+.meteoblue-root .p22_day {
     background-image: url("/assets/images/meteoblue/22_day_monochrome_hollow.svg")
 }
 
 
-.p23_day {
+.meteoblue-root .p23_day {
     background-image: url("/assets/images/meteoblue/23_day_monochrome_hollow.svg")
 }
 
 
-.p24_day {
+.meteoblue-root .p24_day {
     background-image: url("/assets/images/meteoblue/24_day_monochrome_hollow.svg")
 }
 
 
-.p25_day {
+.meteoblue-root .p25_day {
     background-image: url("/assets/images/meteoblue/25_day_monochrome_hollow.svg")
 }
 
 
-.p26_day {
+.meteoblue-root .p26_day {
     background-image: url("/assets/images/meteoblue/26_day_monochrome_hollow.svg")
 }
 
 
-.p27_day {
+.meteoblue-root .p27_day {
     background-image: url("/assets/images/meteoblue/27_day_monochrome_hollow.svg")
 }
 
 
-.p28_day {
+.meteoblue-root .p28_day {
     background-image: url("/assets/images/meteoblue/28_day_monochrome_hollow.svg")
 }
 
 
-.p29_day {
+.meteoblue-root .p29_day {
     background-image: url("/assets/images/meteoblue/29_day_monochrome_hollow.svg")
 }
 
 
-.p30_day {
+.meteoblue-root .p30_day {
     background-image: url("/assets/images/meteoblue/30_day_monochrome_hollow.svg")
 }
 
 
-.p31_day {
+.meteoblue-root .p31_day {
     background-image: url("/assets/images/meteoblue/31_day_monochrome_hollow.svg")
 }
 
 
-.p32_day {
+.meteoblue-root .p32_day {
     background-image: url("/assets/images/meteoblue/32_day_monochrome_hollow.svg")
 }
 
 
-.p33_day {
+.meteoblue-root .p33_day {
     background-image: url("/assets/images/meteoblue/33_day_monochrome_hollow.svg")
 }
 
 
-.p34_day {
+.meteoblue-root .p34_day {
     background-image: url("/assets/images/meteoblue/34_day_monochrome_hollow.svg")
 }
 
 
-.p35_day {
+.meteoblue-root .p35_day {
     background-image: url("/assets/images/meteoblue/35_day_monochrome_hollow.svg")
 }
 
 
-.p36_day {
+.meteoblue-root .p36_day {
     background-image: url("/assets/images/meteoblue/36_day_monochrome_hollow.svg")
 }
 
 
-.p37_day {
+.meteoblue-root .p37_day {
     background-image: url("/assets/images/meteoblue/37_day_monochrome_hollow.svg")
 }
 
 
-.p01_night {
+.meteoblue-root .p01_night {
     background-image: url("/assets/images/meteoblue/01_night_monochrome_hollow.svg")
 }
 
 
-.p02_night {
+.meteoblue-root .p02_night {
     background-image: url("/assets/images/meteoblue/02_night_monochrome_hollow.svg")
 }
 
 
-.p03_night {
+.meteoblue-root .p03_night {
     background-image: url("/assets/images/meteoblue/03_night_monochrome_hollow.svg")
 }
 
 
-.p04_night {
+.meteoblue-root .p04_night {
     background-image: url("/assets/images/meteoblue/04_night_monochrome_hollow.svg")
 }
 
 
-.p05_night {
+.meteoblue-root .p05_night {
     background-image: url("/assets/images/meteoblue/05_night_monochrome_hollow.svg")
 }
 
 
-.p06_night {
+.meteoblue-root .p06_night {
     background-image: url("/assets/images/meteoblue/06_night_monochrome_hollow.svg")
 }
 
 
-.p07_night {
+.meteoblue-root .p07_night {
     background-image: url("/assets/images/meteoblue/07_night_monochrome_hollow.svg")
 }
 
 
-.p08_night {
+.meteoblue-root .p08_night {
     background-image: url("/assets/images/meteoblue/08_night_monochrome_hollow.svg")
 }
 
 
-.p09_night {
+.meteoblue-root .p09_night {
     background-image: url("/assets/images/meteoblue/09_night_monochrome_hollow.svg")
 }
 
 
-.p10_night {
+.meteoblue-root .p10_night {
     background-image: url("/assets/images/meteoblue/10_night_monochrome_hollow.svg")
 }
 
 
-.p11_night {
+.meteoblue-root .p11_night {
     background-image: url("/assets/images/meteoblue/11_night_monochrome_hollow.svg")
 }
 
 
-.p12_night {
+.meteoblue-root .p12_night {
     background-image: url("/assets/images/meteoblue/12_night_monochrome_hollow.svg")
 }
 
 
-.p13_night {
+.meteoblue-root .p13_night {
     background-image: url("/assets/images/meteoblue/13_night_monochrome_hollow.svg")
 }
 
 
-.p14_night {
+.meteoblue-root .p14_night {
     background-image: url("/assets/images/meteoblue/14_night_monochrome_hollow.svg")
 }
 
 
-.p15_night {
+.meteoblue-root .p15_night {
     background-image: url("/assets/images/meteoblue/15_night_monochrome_hollow.svg")
 }
 
 
-.p16_night {
+.meteoblue-root .p16_night {
     background-image: url("/assets/images/meteoblue/16_night_monochrome_hollow.svg")
 }
 
 
-.p17_night {
+.meteoblue-root .p17_night {
     background-image: url("/assets/images/meteoblue/17_night_monochrome_hollow.svg")
 }
 
 
-.p18_night {
+.meteoblue-root .p18_night {
     background-image: url("/assets/images/meteoblue/18_night_monochrome_hollow.svg")
 }
 
 
-.p19_night {
+.meteoblue-root .p19_night {
     background-image: url("/assets/images/meteoblue/19_night_monochrome_hollow.svg")
 }
 
 
-.p20_night {
+.meteoblue-root .p20_night {
     background-image: url("/assets/images/meteoblue/20_night_monochrome_hollow.svg")
 }
 
 
-.p21_night {
+.meteoblue-root .p21_night {
     background-image: url("/assets/images/meteoblue/21_night_monochrome_hollow.svg")
 }
 
 
-.p22_night {
+.meteoblue-root .p22_night {
     background-image: url("/assets/images/meteoblue/22_night_monochrome_hollow.svg")
 }
 
 
-.p23_night {
+.meteoblue-root .p23_night {
     background-image: url("/assets/images/meteoblue/23_night_monochrome_hollow.svg")
 }
 
 
-.p24_night {
+.meteoblue-root .p24_night {
     background-image: url("/assets/images/meteoblue/24_night_monochrome_hollow.svg")
 }
 
 
-.p25_night {
+.meteoblue-root .p25_night {
     background-image: url("/assets/images/meteoblue/25_night_monochrome_hollow.svg")
 }
 
 
-.p26_night {
+.meteoblue-root .p26_night {
     background-image: url("/assets/images/meteoblue/26_night_monochrome_hollow.svg")
 }
 
 
-.p27_night {
+.meteoblue-root .p27_night {
     background-image: url("/assets/images/meteoblue/27_night_monochrome_hollow.svg")
 }
 
 
-.p28_night {
+.meteoblue-root .p28_night {
     background-image: url("/assets/images/meteoblue/28_night_monochrome_hollow.svg")
 }
 
 
-.p29_night {
+.meteoblue-root .p29_night {
     background-image: url("/assets/images/meteoblue/29_night_monochrome_hollow.svg")
 }
 
 
-.p30_night {
+.meteoblue-root .p30_night {
     background-image: url("/assets/images/meteoblue/30_night_monochrome_hollow.svg")
 }
 
 
-.p31_night {
+.meteoblue-root .p31_night {
     background-image: url("/assets/images/meteoblue/31_night_monochrome_hollow.svg")
 }
 
 
-.p32_night {
+.meteoblue-root .p32_night {
     background-image: url("/assets/images/meteoblue/32_night_monochrome_hollow.svg")
 }
 
 
-.p33_night {
+.meteoblue-root .p33_night {
     background-image: url("/assets/images/meteoblue/33_night_monochrome_hollow.svg")
 }
 
 
-.p34_night {
+.meteoblue-root .p34_night {
     background-image: url("/assets/images/meteoblue/34_night_monochrome_hollow.svg")
 }
 
 
-.p35_night {
+.meteoblue-root .p35_night {
     background-image: url("/assets/images/meteoblue/35_night_monochrome_hollow.svg")
 }
 
 
-.p36_night {
+.meteoblue-root .p36_night {
     background-image: url("/assets/images/meteoblue/36_night_monochrome_hollow.svg")
 }
 
 
-.p37_night {
+.meteoblue-root .p37_night {
     background-image: url("/assets/images/meteoblue/37_night_monochrome_hollow.svg")
+}
+
+.meteoblue-root .hourly {
+    background-color: red;
+}
+.meteoblue-root .daily {
+    background-color: green;
 }

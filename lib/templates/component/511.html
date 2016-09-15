@@ -18,11 +18,11 @@
         <md-divider></md-divider>
     </md-list>
 </div>
-<div flex class="sub-content" ng-show="processingState === 'waiting'" style="overflow: auto; margin: 0 0.6rem 0.7rem ;">
-    TODO !1 : corriger le CSS pour attaquer mes images. Corriger les styles des table hourly
-    <div ng-repeat="hourly in weather.hourlySafe" ng-bind-html="hourly"></div>
+<div flex class="sub-content meteoblue-root" ng-show="processingState === 'waiting'" style="overflow: auto; margin: 0 0.6rem 0.7rem ;">
+    TODO !1 : Corriger les styles des table hourly
+    <div class="hourly" ng-repeat="hourly in weather.hourlySafe" ng-bind-html="hourly"></div>
     TODO !2 : Corriger les styles et la mise en page HTML des daily
-    <div ng-repeat="daily in weather.daily">
+    <div class="daily" ng-repeat="daily in weather.daily">
         {{ng-open}}daily.day{{ng-close}} - {{ng-open}}daily.classes[1]{{ng-close}}
         - {{ng-open}}daily.max{{ng-close}} - {{ng-open}}daily.min{{ng-close}}
     </div>
