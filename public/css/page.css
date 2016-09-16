@@ -115,7 +115,7 @@ button > img {
     width: 7%;
 }
 .page-editor.right-bar {
-    margin-right: 1em;
+    margin-right: 8px;
     overflow-x: hidden;
 }
 .page-editor.left-bar.editing {

@@ -965,9 +965,17 @@
 .meteoblue-root .hourly table time .up {
     vertical-align: super;
     font-size: x-small;
+    color: rgba(255, 255, 255, 0.3);
 }
 .meteoblue-root .hourly table tr th span.description, .meteoblue-root .hourly table tr:nth-child(2) th, .meteoblue-root .hourly table tr:nth-child(1) th {
     font-size: 0;
+}
+.meteoblue-root .hourly table tr:nth-child(4) td, .meteoblue-root .hourly table tr:nth-child(5) td {
+    font-size: smaller;
+    color: rgba(255, 255, 255, 0.4);
+}
+.meteoblue-root .hourly table tr:nth-child(4) th, .meteoblue-root .hourly table tr:nth-child(5) th {
+    color: rgba(255, 255, 255, 0.4);
 }
 .meteoblue-root .hourly table tr th {
     max-width: 4rem;
@@ -993,20 +1001,29 @@
     width: 100%;
 }
 .meteoblue-root .hourly .vertical-day {
-    transform: rotate(-90deg);
-    transform-origin: bottom right;
-    height: 1rem;
-    width: 0;
-    top: -0.8rem;
-    position: relative;
+    width: 0.4rem;
+    font-size: larger;
 }
 .meteoblue-root .hourly > div {
     padding-top: 0.4rem;
     padding-bottom: 0.4rem;
 }
 
-
-
-.meteoblue-root .daily {
-    background-color: green;
+/* Daily table fixes */
+.meteoblue-root .daily table tr td div.picon {
+    height: 100%;
+    background-position: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.meteoblue-root .daily table tr:nth-child(2) td {
+    height: 2.4rem;
+    min-width: 3.4rem;
+}
+.meteoblue-root .daily table tr td {
+    padding: 0.2rem;
+    min-width: 14%;
+}
+.meteoblue-root .daily table {
+    width: 100%;
 }

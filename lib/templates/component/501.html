@@ -8,7 +8,7 @@
 </div>
 
 <div ng-show="processingState === 'waiting'">
-    <md-list class="md-dense" flex>
+    <md-list class="md-dense" flex style="padding-bottom: 0;">
         <md-list-item layout="row" style="min-height: 2rem;">
             <md-button class="md-icon-button" aria-label="Refresh" ng-click="loadContent()">
                 <md-icon aria-label="Refresh" class="material-icons button-icon-48">{{parsejson component.configuration 'icon' 'train'}}</md-icon>
@@ -21,7 +21,7 @@
         <md-divider></md-divider>
     </md-list>
 </div>
-<div flex class="sub-content" ng-show="processingState === 'waiting'" style="overflow: auto; margin: 0 0.6rem 0.7rem ;">
+<div flex class="sub-content" ng-show="processingState === 'waiting'" style="overflow: auto; margin: 0 0.4rem 0.4rem ;">
     <md-list class="md-dense" flex>
         <md-list-item ng-repeat="message in trains.messages" style="min-height: 2rem; padding: 0;">
             <small flex style="color: rgba(255,100,100,0.8); padding: 0.2rem;">{{ng-open}}message{{ng-close}}</small>

@@ -8,7 +8,7 @@
 </div>
 
 <div ng-show="processingState === 'waiting'">
-    <md-list class="md-dense" flex>
+    <md-list class="md-dense" flex style="padding-bottom: 0;">
         <md-list-item layout="row" style="min-height: 2rem;">
             <md-button class="md-icon-button" aria-label="Refresh" ng-click="loadContent()">
                 <md-icon aria-label="Refresh" class="material-icons button-icon-48">{{parsejson component.configuration 'icon' 'cloud_circle'}}</md-icon>
@@ -18,20 +18,9 @@
         <md-divider></md-divider>
     </md-list>
 </div>
-<div flex class="sub-content meteoblue-root" ng-show="processingState === 'waiting'" style="overflow: auto; margin: 0 0.6rem 0.7rem ;">
-    <md-list flex>
-        <md-list-item class="hourly" ng-repeat="hourly in weather.hourlySafe">
-            <div layout="row" layout-align="space-between end" flex>
-                <div class="vertical-day">{{ng-open}}hourly.day{{ng-close}}</div>
-                <table ng-bind-html="hourly" flex></table>
-            </div>
-            <md-divider></md-divider>
-        </md-list-item>
-    </md-list>
-
+<div flex class="sub-content meteoblue-root" ng-show="processingState === 'waiting'" style="overflow: auto; margin: 0 0.4rem 0.4rem ;">
     <md-list flex>
         <md-list-item class="daily">
-            TODO !1: styles
             <table>
                 <tr>
                     <th ng-repeat="daily in weather.daily">{{ng-open}}daily.day{{ng-close}}</th>
@@ -42,11 +31,21 @@
                     </td>
                 </tr>
                 <tr>
-                    <td ng-repeat="daily in weather.daily">
-                        {{ng-open}}daily.min{{ng-close}} <br/> {{ng-open}}daily.max{{ng-close}}
+                    <td ng-repeat="daily in weather.dailySafe">
+                        {{ng-open}}daily.minmax{{ng-close}}
                     </td>
                 </tr>
             </table>
+        </md-list-item>
+    </md-list>
+    <md-divider></md-divider>
+    <md-list flex>
+        <md-list-item class="hourly" ng-repeat="hourly in weather.hourlySafe">
+            <div layout="row" layout-align="space-between start" flex>
+                <div class="vertical-day">{{ng-open}}hourly.day{{ng-close}}</div>
+                <table ng-bind-html="hourly" flex></table>
+            </div>
+            <md-divider></md-divider>
         </md-list-item>
     </md-list>
 </div>
@@ -133,10 +132,15 @@
           $scope.weather = data
           $scope.weather.hourlySafe = $scope.weather.hourly.map((element, idx) => {
             const res = $sce.trustAsHtml(element)
-            res.day = idx ? 'Tomorrow' : 'Today'
+            res.day = $scope.weather.daily[idx].day
             return res
           })
-console.log($scope.weather.daily, "#####");
+          $scope.weather.daily.pop()
+          $scope.weather.dailySafe = $scope.weather.daily.map((element) => {
+            const res = element
+            res.minmax = element.min.replace(/ ?°?C|F/i, '') + ' - ' + element.max
+            return res
+          })
         })
         .fail(function() {
           $scope.reschedule()
