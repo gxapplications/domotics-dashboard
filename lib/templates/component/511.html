@@ -19,8 +19,10 @@
     </md-list>
 </div>
 <div flex class="sub-content meteoblue-root" ng-show="processingState === 'waiting'" style="overflow: auto; margin: 0 0.6rem 0.7rem ;">
-    TODO !1 : Corriger les styles des table hourly
-    <div class="hourly" ng-repeat="hourly in weather.hourlySafe" ng-bind-html="hourly"></div>
+    TODO !1 : mettre sub header qui scotche
+    <div class="hourly" ng-repeat="hourly in weather.hourlySafe">
+        <table ng-bind-html="hourly"></table>
+    </div>
     TODO !2 : Corriger les styles et la mise en page HTML des daily
     <div class="daily" ng-repeat="daily in weather.daily">
         {{ng-open}}daily.day{{ng-close}} - {{ng-open}}daily.classes[1]{{ng-close}}

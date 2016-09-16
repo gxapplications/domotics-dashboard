@@ -961,9 +961,41 @@
     background-image: url("/assets/images/meteoblue/37_night_monochrome_hollow.svg")
 }
 
-.meteoblue-root .hourly {
-    background-color: red;
+/* Hourly tables fixes */
+.meteoblue-root .hourly table time .up {
+    vertical-align: super;
+    font-size: x-small;
 }
+.meteoblue-root .hourly table tr th span.description, .meteoblue-root .hourly table tr:nth-child(2) th {
+    font-size: 0;
+}
+.meteoblue-root .hourly table tr th {
+    max-width: 4rem;
+}
+.meteoblue-root .hourly table tr td {
+    padding: 0.2rem;
+    min-width: 12%;
+}
+.meteoblue-root .hourly table tr td div.cell, .meteoblue-root .hourly table tr td div.pictoicon {
+    height: 100%;
+}
+.meteoblue-root .hourly table tr td div.picon {
+    height: 100%;
+    background-position: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.meteoblue-root .hourly table tr:nth-child(2) td {
+    height: 2.4rem;
+    min-width: 3.4rem;
+}
+.meteoblue-root .hourly table {
+    width: 100%;
+    border: 1px solid red;
+}
+
+
+
 .meteoblue-root .daily {
     background-color: green;
 }
