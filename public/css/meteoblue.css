@@ -966,7 +966,7 @@
     vertical-align: super;
     font-size: x-small;
 }
-.meteoblue-root .hourly table tr th span.description, .meteoblue-root .hourly table tr:nth-child(2) th {
+.meteoblue-root .hourly table tr th span.description, .meteoblue-root .hourly table tr:nth-child(2) th, .meteoblue-root .hourly table tr:nth-child(1) th {
     font-size: 0;
 }
 .meteoblue-root .hourly table tr th {
@@ -991,7 +991,18 @@
 }
 .meteoblue-root .hourly table {
     width: 100%;
-    border: 1px solid red;
+}
+.meteoblue-root .hourly .vertical-day {
+    transform: rotate(-90deg);
+    transform-origin: bottom right;
+    height: 1rem;
+    width: 0;
+    top: -0.8rem;
+    position: relative;
+}
+.meteoblue-root .hourly > div {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
 }
 
 
