@@ -281,6 +281,7 @@
     },
 
     _snapItemPositionToGrid: function(item) {
+      // TODO !0 : d'ici, plus précisément ! Appliquer un anti-coeff pour compenser le zoom. Essayer this.getSizingCoefficient() si present !
       var position = item.$element.position();
 
       position[0] -= this.$element.position().left;
