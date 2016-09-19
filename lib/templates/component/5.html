@@ -90,7 +90,7 @@ TODO !3: pattern to lower alamr level
     $scope.component = $scope.edition.tools.assignDeep({
       configuration:
         {title: 'Alarm level', icon: '', description: ''}
-    }, $scope.component);
+    }, $scope.component)
     if (!$rootScope.states.macro.c_{{component.id}}) {
       $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}
     }

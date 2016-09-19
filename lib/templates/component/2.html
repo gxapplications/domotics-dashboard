@@ -93,7 +93,7 @@
     $scope.component = $scope.edition.tools.assignDeep({
       configuration:
         {title: 'Scenario', icon: '', description: 'ON/OFF', scenario: '', delay: 0, reset_delay: 0, reset_action: 'off'}
-    }, $scope.component);
+    }, $scope.component)
     if (!$rootScope.states.macro.c_{{component.id}}) {
       $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}
     }

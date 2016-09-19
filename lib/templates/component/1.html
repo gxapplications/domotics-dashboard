@@ -85,13 +85,13 @@
       configuration: [
         {title: 'Scenario', icon: '', description: 'Play', scenario: '', delay: 0}
       ]
-    }, $scope.component);
+    }, $scope.component)
     if (!$rootScope.states.macro.c_{{component.id}}) {
       $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}
     }
 
     // to control state
-    $scope.processingState = 'waiting'; // or 'processing', 'error'
+    $scope.processingState = 'waiting' // or 'processing', 'error'
     $scope.isDisabled = function (scenario, remoteState, processingState) {
       return (!scenario || remoteState === 1|| processingState === 'processing')
     }
@@ -129,7 +129,7 @@
   {{#extend "settingsScript"}}
     // lines count to display is dynamic
     $scope.scCountUpdater = function () {
-      $scope.scCount = 0;
+      $scope.scCount = 0
       for (let i of [0, 1, 2, 3, 4, 5]) {
           if ($scope.component && $scope.component.configuration[i] && $scope.component.configuration[i].scenario &&
                   ($scope.component.configuration[i].scenario > 0 || $scope.component.configuration[i].scenario.length > 0)) {
@@ -139,17 +139,17 @@
       return $scope.scCount
     };
     $scope.getScCountToDisplay = function (n) {
-      n = (n >= 4) ? 4 : n; // Max 5 elements
+      n = (n >= 4) ? 4 : n // Max 5 elements
       return new Array(n+1)
     };
-    $scope.scCount = $scope.scCountUpdater();
+    $scope.scCount = $scope.scCountUpdater()
 
     // remove lines without scenario, except first line...
     $scope.preSaveConfig = function () {
       var config = $scope.component.configuration.filter(function (item, idx) {
           return idx === 0 || (item.scenario && (item.scenario > 0 || item.scenario.length > 0))
       });
-      $scope.component.configuration = config;
+      $scope.component.configuration = config
       $scope.saveConfig()
     };
   {{/extend}}

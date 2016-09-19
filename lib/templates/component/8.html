@@ -1,4 +1,23 @@
-TODO !2
+<h2 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.7rem; margin-bottom: 0.3rem;">
+    <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration 'icon'}}</md-icon>
+    {{parsejson component.configuration 'title' 'Settings needed'}}
+</h2>
+<div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
+
+
+    TODO !0: ng-classes, radius, disabled?, activated star, action play('...')
+    <md-button class="md-raised md-primary component-button"
+            ng-repeat="scenario in component.configuration.scenarii track by $index"
+            >
+        {{ng-open}}scenario.icon{{ng-close}} - {{ng-open}}scenario.title{{ng-close}}
+    </md-button>
+
+
+</div>
+<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0.4rem;">
+    {{parsejson component.configuration 'description'}}
+</div>
+<div class="step"></div>
 
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
@@ -7,10 +26,15 @@ TODO !2
               <md-subheader class="md-accent">Multiple scenarii switch</md-subheader>
               <md-list layout="column" layout-padding>
                   <md-list-item layout="row" layout-align="space-between stretch">
-                      <md-input-container flex>
+                      <md-input-container flex="80">
                           <label>Title</label>
                           <input ng-model="component.configuration.title" required name="component_title" md-maxlength="64" />
                       </md-input-container>
+                      <md-select placeholder="Icon" ng-model="component.configuration.icon" style="margin-left: 1rem;" flex="20">
+                          <md-option ng-value="icon" ng-repeat="icon in edition.tools.icons">
+                            <md-icon class="material-icons" aria-label="{{ng-open}}icon{{ng-close}}" style="color: #64DD17;">{{ng-open}}icon{{ng-close}}</md-icon>
+                          </md-option>
+                      </md-select>
                   </md-list-item>
                   <md-list-item>
                       <md-input-container flex>
@@ -19,8 +43,25 @@ TODO !2
                       </md-input-container>
                   </md-list-item>
 
-                  TODO !2: loop like in component 1, but only with activable scenarii.
                   TODO !3: option to allow [v] or not [ ] the "none selected" state.
+
+                  <md-list-item layout="row" layout-align="space-between stretch"
+                                ng-repeat="i in getScCountToDisplay(scCount) track by $index">
+                      <md-select placeholder="Scenario linked" ng-model="component.configuration.scenarii[$index].id"
+                                 ng-change="scCountUpdater()" flex="40">
+                          <md-option ng-value="">None / remove line</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                      <md-input-container flex="40">
+                          <label>Title</label>
+                          <input ng-model="component.configuration.scenarii[$index].title" required name="component_title[$index]" md-maxlength="64" />
+                      </md-input-container>
+                      <md-select placeholder="Icon" ng-model="component.configuration.scenarii[$index].icon" style="margin-left: 1rem;" flex="20">
+                          <md-option ng-value="icon" ng-repeat="icon in edition.tools.icons">
+                              <md-icon class="material-icons" aria-label="{{ng-open}}icon{{ng-close}}" style="color: #64DD17;">{{ng-open}}icon{{ng-close}}</md-icon>
+                          </md-option>
+                      </md-select>
+                  </md-list-item>
               </md-list>
           </section>
           <md-divider></md-divider>
@@ -29,12 +70,63 @@ TODO !2
   <md-dialog-actions layout="row">
     <span flex></span>
     <md-button ng-click="cancelConfig()"><md-icon aria-label="block" class="material-icons md-14">block</md-icon> Cancel</md-button>
-    <md-button class="md-primary md-raised" ng-click="saveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
+    <md-button class="md-primary md-raised" ng-click="preSaveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
   </md-dialog-actions>
 {{/extend}}
 
 <script>
   {{#extend "controllerScript"}}
-    // TODO !2
+    // Default values assignment
+    $scope.component = $scope.edition.tools.assignDeep({
+      configuration: {
+          title: 'Scenarii switch',
+          icon: '',
+          description: 'multiple switch',
+          scenarii: [{id: '', title: '', icon: ''}]
+      }
+    }, $scope.component)
+    if (!$rootScope.states.macro.c_{{component.id}}) {
+      $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}
+    }
+
+    // to control state
+    $scope.processingState = 'waiting' // or 'processing', 'error'
+    $scope.activationState = false // or 0-indexed position of the last button pressed.
+    $scope.realStates = [] // indexes of each real state came from API. eg: [false, false, true, false]
+    $scope.isDisabled = function (scenarii, remoteState, processingState) {
+      return (!scenarii || !scenarii[0] || !scenarii[0].id || remoteState === 1 || processingState === 'processing')
+    }
+
+
+    // TODO !1
+  {{/extend}}
+
+  {{#extend "settingsScript"}}
+    // lines count to display is dynamic
+    $scope.scCountUpdater = function () {
+      $scope.scCount = 0
+      for (let i of [0, 1, 2, 3, 4]) {
+          if ($scope.component && $scope.component.configuration && $scope.component.configuration.scenarii &&
+                  $scope.component.configuration.scenarii[i] && $scope.component.configuration.scenarii[i].id &&
+                  ($scope.component.configuration.scenarii[i].id > 0 || $scope.component.configuration.scenarii[i].id.length > 0)) {
+              $scope.scCount = i+1
+          }
+      }
+      return $scope.scCount
+    };
+    $scope.getScCountToDisplay = function (n) {
+      n = (n >= 4) ? 4 : n // Max 5 elements
+      return new Array(n+1)
+    };
+    $scope.scCount = $scope.scCountUpdater()
+
+    // remove lines without scenario, except first line...
+    $scope.preSaveConfig = function () {
+      var config = $scope.component.configuration.scenarii.filter(function (item, idx) {
+          return idx === 0 || (item.id && (item.id > 0 || item.id.length > 0))
+      });
+      $scope.component.configuration.scenarii = config
+      $scope.saveConfig()
+    };
   {{/extend}}
 </script>

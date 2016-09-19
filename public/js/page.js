@@ -302,7 +302,6 @@
 	        },
 	        getSizingCoefficient: function getSizingCoefficient() {
 	          return $scope.edition.active ? 1 / 0.84 : 1;
-	          // TODO !0: when dragging, should compense coeff !
 	        }
 	      });
 	    }
