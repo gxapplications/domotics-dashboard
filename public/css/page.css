@@ -209,3 +209,13 @@ md-card.error {
     background-image: url(/assets/images/warning-green.png);
     border-radius: 3px;
 }
+
+.component-button.grouped.first {
+    border-top-right-radius: 0; border-bottom-right-radius: 0;
+}
+.component-button.grouped.middle {
+    border-radius: 0;
+}
+.component-button.grouped.last {
+    border-top-left-radius: 0; border-bottom-left-radius: 0;
+}

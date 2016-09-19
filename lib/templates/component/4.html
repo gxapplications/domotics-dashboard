@@ -3,8 +3,7 @@
     {{parsejson component.configuration 'title' 'Settings needed'}}
 </h2>
 <div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
-    <md-button class="md-raised md-primary component-button"
-               style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
+    <md-button class="md-raised md-primary component-button grouped first"
                ng-disabled="isDisabled(component.configuration.heat, states.macro.c_{{component.id}}.state, processingState)"
                ng-class="{
                    'md-warn': processingState === 'error',
@@ -15,8 +14,7 @@
                  class="material-icons button-icon-48">{{ng-open}}realState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="mode" class="material-icons button-icon-48">brightness_high</md-icon>
     </md-button>
-    <md-button class="md-raised md-primary component-button"
-               style="border-radius: 0;"
+    <md-button class="md-raised md-primary component-button grouped middle"
                ng-disabled="isDisabled(component.configuration.heat, states.macro.c_{{component.id}}.state, processingState)"
                ng-class="{
                    'md-warn': processingState === 'error',
@@ -27,8 +25,7 @@
                  class="material-icons button-icon-48">{{ng-open}}realState === 'eco' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="mode" class="material-icons button-icon-48">brightness_medium</md-icon>
     </md-button>
-    <md-button class="md-raised md-primary component-button"
-               style="border-radius: 0;"
+    <md-button class="md-raised md-primary component-button grouped middle"
                ng-disabled="isDisabled(component.configuration.heat, states.macro.c_{{component.id}}.state, processingState)"
                ng-class="{
                    'md-warn': processingState === 'error',
@@ -39,8 +36,7 @@
                  class="material-icons button-icon-48">{{ng-open}}realState === 'frost' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="mode" class="material-icons button-icon-48">ac_unit</md-icon>
     </md-button>
-    <md-button class="md-raised md-primary component-button"
-               style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+    <md-button class="md-raised md-primary component-button grouped last"
                ng-disabled="isDisabled(component.configuration.heat, states.macro.c_{{component.id}}.state, processingState)"
                ng-class="{
                    'md-warn': processingState === 'error',

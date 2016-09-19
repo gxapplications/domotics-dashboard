@@ -5,10 +5,17 @@
 <div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
 
 
-    TODO !0: ng-classes, radius, disabled?, activated star, action play('...')
-    <md-button class="md-raised md-primary component-button"
+    TODO !0: activated star, icon, ng-click
+    <md-button class="md-raised md-primary component-button grouped"
             ng-repeat="scenario in component.configuration.scenarii track by $index"
-            >
+            ng-disabled="isDisabled(component.configuration.scenarii, states.macro.c_{{component.id}}.state, processingState)"
+            ng-classes="{
+                'first': $first,
+                'middle': $middle,
+                'last': $last,
+                'md-warn': processingState === 'error',
+                'md-hue-1': activationState === $index && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+            }">
         {{ng-open}}scenario.icon{{ng-close}} - {{ng-open}}scenario.title{{ng-close}}
     </md-button>
 
