@@ -13,7 +13,6 @@
     this.options = $.extend({}, this.defaults, options);
     this.draggableOptions = $.extend(
       {}, this.draggableDefaults, draggableOptions);
-
     this.$element = $(element);
     this._init();
     this._bindEvents();
@@ -33,7 +32,12 @@
     draggableDefaults: {
       zIndex: 2,
       scroll: false,
-      containment: "parent"
+      containment: "parent",
+
+      distance: 50,
+      snap: true,
+      addClasses: false,
+      opacity: 0.0001 // FIXME !9: for now, hide element while dragging because zoom does not move the element properly
     },
 
     destroy: function() {
@@ -145,6 +149,8 @@
       // of cols (+1 extra) before the drag starts
 
       this._maxGridCols = this.gridList.grid.length;
+
+      this._drag_coefficient = this.options.getSizingCoefficient();
     },
 
     _onDrag: function(event, ui) {
@@ -245,7 +251,7 @@
         });
       }
       if (this.options.heightToFontSizeRatio) {
-        this.$items.css('font-size', this._fontSize);
+        this.$items.css('font-size', this._fontSize); // TODO !0: doit-on le laisser ? present ailleurs aussi ?
       }
     },
 
@@ -281,13 +287,13 @@
     },
 
     _snapItemPositionToGrid: function(item) {
-      // TODO !0 : d'ici, plus précisément ! Appliquer un anti-coeff pour compenser le zoom. Essayer this.getSizingCoefficient() si present !
       var position = item.$element.position();
 
       position[0] -= this.$element.position().left;
+      position.left = position.left * this._drag_coefficient;
 
-      var col = Math.round(position.left / this._cellWidth),
-          row = Math.round(position.top / this._cellHeight);
+      var col = Math.round(position.left / (this._cellWidth / this._drag_coefficient)),
+          row = Math.round(position.top / (this._cellHeight / this._drag_coefficient));
 
       // Keep item position within the grid and don't let the item create more
       // than one extra column
