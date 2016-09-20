@@ -16,6 +16,7 @@
             ng-click="play($index)">
         <md-icon aria-label="state" style="color: {{ng-open}}realStates.includes($index) ? '#00C853' : '#2E7D32'{{ng-close}}"
                  class="material-icons button-icon-48">{{ng-open}}realStates.includes($index) ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        TODO !1: si pas d'icon, alors ne pas laisser un trou ! PAreil sur les autres components
         <md-icon aria-label="scenario icon" class="material-icons button-icon-48">{{ng-open}}scenario.icon{{ng-close}}</md-icon>
         {{ng-open}}scenario.title{{ng-close}}
     </md-button>
@@ -68,6 +69,7 @@
                       </md-input-container>
                       <md-select placeholder="Icon" ng-model="component.configuration.scenarii[$index].icon" style="margin-left: 1rem;" flex="20">
                           <md-option ng-value="icon" ng-repeat="icon in edition.tools.icons">
+                              TODO !1: possibilité de ne rien avoir! Et propager dans les autres components
                               <md-icon class="material-icons" aria-label="{{ng-open}}icon{{ng-close}}" style="color: #64DD17;">{{ng-open}}icon{{ng-close}}</md-icon>
                           </md-option>
                       </md-select>
@@ -113,8 +115,8 @@
       $.post('/{{page.slug}}/component/{{component.id}}/action/' + actionIdx + '-' +
           ($scope.realStates.includes(actionIdx) ? 'off' : 'on'), {})
         .done(function(data) {
-          // TODO !1: ne pas tenir compte de l'etat scenarii de retour (pas d'affectation de realStates ici ! c'est un listener qui s'en charge)
-          // TODO !1: MAIS tenir compte de la reussite : affecter processingState (et activationState ?)
+          // TODO !0: ne pas tenir compte de l'etat scenarii de retour (pas d'affectation de realStates ici ! c'est un listener qui s'en charge)
+          // TODO !0: MAIS tenir compte de la reussite : affecter processingState (et activationState ?)
         })
         .fail(function() {
           $scope.processingState = 'error'

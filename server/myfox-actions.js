@@ -136,7 +136,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
           reply(err).code(500)
         }
         reply(data)
-      }, macroId, ...actions) // FIXME !0: to test
+      }, macroId, ...steps)
       break
 
     default:
