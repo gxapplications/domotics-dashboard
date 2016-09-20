@@ -3,9 +3,6 @@
     {{parsejson component.configuration 'title' 'Settings needed'}}
 </h2>
 <div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
-
-
-    TODO !0: activated star, icon, ng-click
     <md-button class="md-raised md-primary component-button grouped"
             ng-repeat="scenario in component.configuration.scenarii track by $index"
             ng-disabled="isDisabled(component.configuration.scenarii, states.macro.c_{{component.id}}.state, processingState)"
@@ -15,11 +12,13 @@
                 'last': $last,
                 'md-warn': processingState === 'error',
                 'md-hue-1': activationState === $index && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
-            }">
-        {{ng-open}}scenario.icon{{ng-close}} - {{ng-open}}scenario.title{{ng-close}}
+            }" flex
+            ng-click="play($index)">
+        <md-icon aria-label="state" style="color: {{ng-open}}realStates.includes($index) ? '#00C853' : '#2E7D32'{{ng-close}}"
+                 class="material-icons button-icon-48">{{ng-open}}realStates.includes($index) ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        <md-icon aria-label="scenario icon" class="material-icons button-icon-48">{{ng-open}}scenario.icon{{ng-close}}</md-icon>
+        {{ng-open}}scenario.title{{ng-close}}
     </md-button>
-
-
 </div>
 <div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0.4rem;">
     {{parsejson component.configuration 'description'}}
@@ -50,7 +49,11 @@
                       </md-input-container>
                   </md-list-item>
 
-                  TODO !3: option to allow [v] or not [ ] the "none selected" state.
+                  <md-list-item>
+                      <md-checkbox ng-model="component.configuration.allow_none" aria-label="Allow no selection" flex>
+                          Allows none of the scenarii selected.
+                      </md-checkbox>
+                  </md-list-item>
 
                   <md-list-item layout="row" layout-align="space-between stretch"
                                 ng-repeat="i in getScCountToDisplay(scCount) track by $index">
@@ -86,10 +89,11 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration: {
-          title: 'Scenarii switch',
-          icon: '',
-          description: 'multiple switch',
-          scenarii: [{id: '', title: '', icon: ''}]
+        title: 'Scenarii switch',
+        icon: '',
+        description: 'multiple switch',
+        scenarii: [{id: '', title: '', icon: ''}],
+        allow_none: false
       }
     }, $scope.component)
     if (!$rootScope.states.macro.c_{{component.id}}) {
@@ -104,8 +108,40 @@
       return (!scenarii || !scenarii[0] || !scenarii[0].id || remoteState === 1 || processingState === 'processing')
     }
 
+    $scope.play = function(actionIdx) {
+      $scope.processingState = 'processing'
+      $.post('/{{page.slug}}/component/{{component.id}}/action/' + actionIdx + '-' +
+          ($scope.realStates.includes(actionIdx) ? 'off' : 'on'), {})
+        .done(function(data) {
+          // TODO !1: ne pas tenir compte de l'etat scenarii de retour (pas d'affectation de realStates ici ! c'est un listener qui s'en charge)
+          // TODO !1: MAIS tenir compte de la reussite : affecter processingState (et activationState ?)
+        })
+        .fail(function() {
+          $scope.processingState = 'error'
+          $rootScope.events.errorEvent('Error during Multiple scenarii switch action!')
+        })
+    }
 
-    // TODO !1
+    if ($scope.component.configuration && $scope.component.configuration.scenarii &&
+        $scope.component.configuration.scenarii[0] && $scope.component.configuration.scenarii[0].id > 0) {
+      $scope.updateSwitch = function (action) {
+        if (action !== undefined) {
+          $scope.activationState = action
+        }
+        const states = [] // uses a temp array to avoid scope listeners to trigger each time we push an element on it.
+        $scope.component.configuration.scenarii.forEach((scenario, idx) => {
+          if (scenario.id > 0 && $rootScope.states.scenarii.value[scenario.id].active === '1') {
+            states.push(idx)
+          }
+        })
+        $scope.realStates = states
+      }
+      $scope.component.configuration.scenarii.forEach((scenario) => {
+        if (scenario.id > 0) {
+          this.addCleaner($scope.$watch('states.scenarii.value[' + scenario.id + ']', $scope.updateSwitch.bind(null, undefined)))
+        }
+      })
+    }
   {{/extend}}
 
   {{#extend "settingsScript"}}
@@ -113,11 +149,11 @@
     $scope.scCountUpdater = function () {
       $scope.scCount = 0
       for (let i of [0, 1, 2, 3, 4]) {
-          if ($scope.component && $scope.component.configuration && $scope.component.configuration.scenarii &&
-                  $scope.component.configuration.scenarii[i] && $scope.component.configuration.scenarii[i].id &&
-                  ($scope.component.configuration.scenarii[i].id > 0 || $scope.component.configuration.scenarii[i].id.length > 0)) {
-              $scope.scCount = i+1
-          }
+        if ($scope.component && $scope.component.configuration && $scope.component.configuration.scenarii &&
+            $scope.component.configuration.scenarii[i] && $scope.component.configuration.scenarii[i].id &&
+            ($scope.component.configuration.scenarii[i].id > 0 || $scope.component.configuration.scenarii[i].id.length > 0)) {
+          $scope.scCount = i+1
+        }
       }
       return $scope.scCount
     };
@@ -130,7 +166,7 @@
     // remove lines without scenario, except first line...
     $scope.preSaveConfig = function () {
       var config = $scope.component.configuration.scenarii.filter(function (item, idx) {
-          return idx === 0 || (item.id && (item.id > 0 || item.id.length > 0))
+        return idx === 0 || (item.id && (item.id > 0 || item.id.length > 0))
       });
       $scope.component.configuration.scenarii = config
       $scope.saveConfig()

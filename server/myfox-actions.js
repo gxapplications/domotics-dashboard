@@ -108,6 +108,32 @@ const actions = function (api, reply, page, component, action = null, payload = 
       })
       break
 
+    case 8:
+      // 8: Multiple scenarii switch
+      const [actionIdx, actionVerb] = action.split('-')
+
+      // Map them to steps to play against API
+      let steps = configuration.scenarii.map((scenario, idx) => {
+        // eslint-disable-next-line eqeqeq
+        if (idx == actionIdx) {
+          return {
+            id: scenario.id,
+            action: (configuration.allow_none && actionVerb === 'off') ? 'off' : 'on'
+          }
+        }
+        return {id: scenario.id, action: 'off'}
+      })
+
+      // Sort OFFs first, ON after.
+      steps = steps.sort((a, b) => {
+        return ((a === 'off') ? 1 : 2) - ((b === 'off') ? 1 : 2)
+      })
+
+      console.log(steps, '######')
+      // TODO !0
+
+      break
+
     default:
       // Action not (yet) supported
       reply({}).code(418)

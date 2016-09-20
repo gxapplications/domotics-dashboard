@@ -43,9 +43,12 @@ db.typeFixer = function (data, attributePath, transformer) {
   }
   return data
 }
-db.stringify = function (data, attributesToNumber = []) {
+db.stringify = function (data, attributesToNumber = [], attributesToBoolean = []) {
   attributesToNumber.forEach((attributePath) => {
     data = db.typeFixer(data, attributePath, (n) => { return Number(n) })
+  })
+  attributesToBoolean.forEach((attributePath) => {
+    data = db.typeFixer(data, attributePath, (n) => { return (n === 'true') })
   })
   return JSON.stringify(data)
 }
@@ -183,10 +186,16 @@ db.updateComponent = function (slug, id, payload, callback) {
 
       let component = {type: 1, configuration: {}, extra_component: {}}
       Object.assign(component, componentRow, payload)
-      db.run('UPDATE components SET type=?, configuration=?, extra_component=? WHERE id=?',
-        component.type, db.stringify(component.configuration, ['[*].delay', 'delay', 'reset_delay', 'refresh']), db.stringify(component.extra_component), id, (err) => {
+      db.run(
+        'UPDATE components SET type=?, configuration=?, extra_component=? WHERE id=?',
+        component.type,
+        db.stringify(component.configuration, ['[*].delay', 'delay', 'reset_delay', 'refresh'], ['allow_none']),
+        db.stringify(component.extra_component),
+        id,
+        (err) => {
           return callback(err, pageRow, component)
-        })
+        }
+      )
     })
   })
 }
