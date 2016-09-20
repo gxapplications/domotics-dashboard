@@ -129,9 +129,14 @@ const actions = function (api, reply, page, component, action = null, payload = 
         return ((a === 'off') ? 1 : 2) - ((b === 'off') ? 1 : 2)
       })
 
-      console.log(steps, '######')
-      // TODO !0
-
+      firstAction = steps.shift()
+      api.callScenarioAction(firstAction, (err, data) => {
+        if (err) {
+          console.log(err)
+          reply(err).code(500)
+        }
+        reply(data)
+      }, macroId, ...actions) // FIXME !0: to test
       break
 
     default:
