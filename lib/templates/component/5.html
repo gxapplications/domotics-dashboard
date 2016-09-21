@@ -114,23 +114,29 @@
     }
 
     $scope.play = function(action, $event) {
-
-      $scope.pattern($event)
-      return
-      // TODO !2: if lowering level, then pattern dialog should run before the action
-
       $scope.processingState = 'processing'
-      $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {})
-        .done(function(data) {
-          $scope.processingState = 'waiting'
-          $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
-          $scope.updateSwitch(action)
-        })
-        .fail(function() {
-          $scope.processingState = 'error'
-          $('div#component-{{component.id}}').parent('md-card').addClass('error')
-          $rootScope.events.errorEvent('Error during Heat mode action!')
-        })
+
+      const call = function () {
+        $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {})
+          .done(function (data) {
+            $scope.processingState = 'waiting'
+            $rootScope.states.macro[data.id] = {
+              remaining: data.remaining,
+              state: data.state,
+              timestamp: Date.now()
+            }
+            $scope.updateSwitch(action)
+          })
+          .fail(function () {
+            $scope.processingState = 'error'
+            $('div#component-{{component.id}}').parent('md-card').addClass('error')
+            $rootScope.events.errorEvent('Error during Heat mode action!')
+          })
+      }
+
+      $scope.pattern($event, call)
+      // call()
+      // TODO !2: if lowering level then pattern($event, call), else call()
     }
 
     $scope.updateSwitch = function (action) {
@@ -142,7 +148,7 @@
     this.addCleaner($scope.$watch('states.alarm.value', $scope.updateSwitch.bind(null, undefined)))
 
     // Pattern dialog
-    $scope.pattern = function($event) {
+    $scope.pattern = function($event, callback) {
       var content = $("div#component-{{component.id}} div.component_pattern_dialog").html().substring(4) // removes <!--
       content = content.substr(0, content.length - 4) // removes --->
 
@@ -158,11 +164,11 @@
           // TODO !0: il faut faire de la place en CSS pour que le pattern ne change pas les dimensions.
           var lock = new PatternLock('#patternHolder-{{component.id}}',{matrix:[3,3], onDraw: function(pattern) {
             alert('coucou' + pattern)
-            // TODO !1
+            // TODO !1: if pattern is right, then callback()
           }})
         },
         controller: function ($scope, $mdDialog) {
-            // TODO !1
+            // TODO !1 ?
         }
       })
     }
