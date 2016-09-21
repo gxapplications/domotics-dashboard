@@ -3,6 +3,7 @@
 {{/extend}}
 
 {{#extend "css"}}
+  <link rel="stylesheet" href="/assets/css/patternLock.css">
   <link rel="stylesheet" href="/assets/css/gx-grid-stack.css">
   <link rel="stylesheet" href="/assets/css/fab-speed-dial-circle.css">
   <link rel="stylesheet" href="/assets/css/page.css">
@@ -24,6 +25,7 @@
   <script src="/assets/js/gridList.js"></script>
   <script src="/assets/js/jquery.gridList.js"></script>
   <script src="/assets/js/gx-grid-stack.js"></script>
+  <script src="/assets/js/patternLock.min.js"></script>
   <script src="/assets/js/page.js"></script>
 {{/extend}}
 
@@ -93,7 +95,7 @@
             Trucs pas hauts ici...
         </div>
         <md-slider-container flex="40">
-            <md-slider md-discrete ng-model="page.layout" min="3" max="6" step="1"
+            <md-slider md-discrete ng-model="page.layout" min="2" max="8" step="1"
                        aria-label="Column count" md-vertical></md-slider>
             <h5>Column count</h5>
         </md-slider-container>

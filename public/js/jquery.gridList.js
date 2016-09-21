@@ -251,7 +251,7 @@
         });
       }
       if (this.options.heightToFontSizeRatio) {
-        this.$items.css('font-size', this._fontSize); // TODO !0: doit-on le laisser ? present ailleurs aussi ?
+        this.$items.css('font-size', this._fontSize);
       }
     },
 

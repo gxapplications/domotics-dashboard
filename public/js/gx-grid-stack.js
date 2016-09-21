@@ -142,7 +142,7 @@
             direction: 'vertical',
             lanes: params.lanes,
             widthHeightRatio: params.widthHeightRatio,
-            heightToFontSizeRatio: 0.1,
+            heightToFontSizeRatio: false,
             onChange: function(changedItems) {
                 grid = gridStack.data('_gridList').gridList.grid;
                 var j, k;
