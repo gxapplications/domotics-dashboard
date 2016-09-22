@@ -219,3 +219,12 @@ md-card.error {
 .component-button.grouped.last {
     border-top-left-radius: 0; border-bottom-left-radius: 0;
 }
+
+.pattern_holder_dialog {
+    width: 310px;
+    height: 310px;
+    background-color: transparent;
+}
+.pattern_holder_dialog ul.patt-wrap {
+    margin: 0;
+}

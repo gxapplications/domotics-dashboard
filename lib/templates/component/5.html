@@ -51,8 +51,7 @@
                 <h2 flex>Draw your pattern</h2>
             </div>
         </md-toolbar>
-        TODO !0
-        <div id="patternHolder-{{component.id}}" layout="row" layout-align="center"> </div>
+        <div id="patternHolder-{{component.id}}" class="pattern_holder_dialog" layout="row" layout-align="center"> </div>
     </md-dialog>
 ---></div>
 
@@ -113,7 +112,7 @@
       return (remoteState === 1 || processingState === 'processing')
     }
 
-    $scope.play = function(action, $event) {
+    $scope.play = function (action, $event) {
       $scope.processingState = 'processing'
 
       const call = function () {
@@ -161,15 +160,21 @@
         preserveScope: true, // do not forget this if use parent scope
         template: content,
         onComplete: function ($scope, element) {
-          // TODO !0: il faut faire de la place en CSS pour que le pattern ne change pas les dimensions.
-          var lock = new PatternLock('#patternHolder-{{component.id}}',{matrix:[3,3], onDraw: function(pattern) {
+          var lock = new PatternLock('#patternHolder-{{component.id}}', {matrix:[3, 3], onDraw: function (pattern) {
             alert('coucou' + pattern)
-            // TODO !1: if pattern is right, then callback()
+            // TODO !1: if pattern is right, then $scope.validPattern(), else, show error toast and $scope.cancelPattern()
           }})
         },
         controller: function ($scope, $mdDialog) {
-            // TODO !1 ?
+          $scope.validPattern = $mdDialog.hide
+          $scope.cancelPattern = $mdDialog.cancel
         }
+      }).then(function () {
+        // pattern validated
+        callback()
+      }, function () {
+        // canceled
+        $scope.processingState = 'waiting'
       })
     }
   {{/extend}}
