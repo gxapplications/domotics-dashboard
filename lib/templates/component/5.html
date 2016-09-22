@@ -130,13 +130,16 @@
           .fail(function () {
             $scope.processingState = 'error'
             $('div#component-{{component.id}}').parent('md-card').addClass('error')
-            $rootScope.events.errorEvent('Error during Heat mode action!')
+            $rootScope.events.errorEvent('Error during Alarm level action!')
           })
       }
 
-      $scope.pattern($event, call)
-      // call()
-      // TODO !1: if lowering level then pattern($event, call), else call()
+      if (($scope.states.alarm.value === 'on' && action !== 'on') ||
+          ($scope.states.alarm.value === 'half' && action === 'off')) {
+        $scope.pattern($event, call)
+      } else {
+        call()
+      }
     }
 
     $scope.updateSwitch = function (action) {
