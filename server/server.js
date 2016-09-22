@@ -153,7 +153,7 @@ server.route({
           let passwordBytes = CryptoJS.AES.decrypt(cryptedPassword, 'azerty' + pattern)
           password = passwordBytes.toString(CryptoJS.enc.Utf8)
           if (!password) {
-            return reply(err.toString()).code(401)
+            return reply({}).code(401)
           }
           api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
           api.callHome(afterHomeCalled(401))
@@ -292,10 +292,10 @@ server.route({
 
       // Call actions switch
       if (component.type < 100) {
-        return myfoxActions(api, reply, page, component, request.params.action, request.payload)
+        return myfoxActions(api, reply, page, component, request.params.action, request.payload || {})
       }
       if (component.type >= 500) {
-        return parserActions(api, reply, page, component, request.params.action, request.payload)
+        return parserActions(api, reply, page, component, request.params.action, request.payload || {})
       }
     })
   }

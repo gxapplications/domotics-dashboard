@@ -115,9 +115,10 @@
     $scope.play = function (action, $event) {
       $scope.processingState = 'processing'
 
-      const call = function () {
-        $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {})
-          .done(function (data) {
+      const call = function (pattern) {
+        $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {
+          pattern: pattern || undefined
+        }).done(function (data) {
             $scope.processingState = 'waiting'
             $rootScope.states.macro[data.id] = {
               remaining: data.remaining,
@@ -135,7 +136,7 @@
 
       $scope.pattern($event, call)
       // call()
-      // TODO !2: if lowering level then pattern($event, call), else call()
+      // TODO !1: if lowering level then pattern($event, call), else call()
     }
 
     $scope.updateSwitch = function (action) {
@@ -159,19 +160,18 @@
         scope: $scope, // use parent scope in template
         preserveScope: true, // do not forget this if use parent scope
         template: content,
-        onComplete: function ($scope, element) {
-          var lock = new PatternLock('#patternHolder-{{component.id}}', {matrix:[3, 3], onDraw: function (pattern) {
-            alert('coucou' + pattern)
-            // TODO !1: if pattern is right, then $scope.validPattern(), else, show error toast and $scope.cancelPattern()
+        onComplete: function ($scope) {
+          new PatternLock('#patternHolder-{{component.id}}', {matrix:[3, 3], onDraw: function (pattern) {
+            $scope.validPattern(pattern)
           }})
         },
         controller: function ($scope, $mdDialog) {
           $scope.validPattern = $mdDialog.hide
           $scope.cancelPattern = $mdDialog.cancel
         }
-      }).then(function () {
-        // pattern validated
-        callback()
+      }).then(function (pattern) {
+        // pattern drawn and sent as is
+        callback(pattern)
       }, function () {
         // canceled
         $scope.processingState = 'waiting'
