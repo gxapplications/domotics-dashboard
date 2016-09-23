@@ -141,11 +141,12 @@ server.route({
       api.callHome(afterHomeCalled(403, encryptPassword))
     } else if (pattern) {
       // Decrypt password from pattern, and use it to login.
-      try {
-        db.getPassword((err, row) => {
-          if (err) {
-            throw err
-          }
+      db.getPassword((err, row) => {
+        if (err) {
+          return reply(err.toString()).code(401)
+        }
+
+        try {
           let cryptedPassword = row.password
           if (!cryptedPassword) {
             return reply({}).code(404)
@@ -155,12 +156,13 @@ server.route({
           if (!password) {
             return reply({}).code(401)
           }
-          api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
-          api.callHome(afterHomeCalled(401))
-        })
-      } catch (err) {
-        return reply(err.toString()).code(401)
-      }
+        } catch (err) {
+          return reply(err.toString()).code(401)
+        }
+
+        api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
+        api.callHome(afterHomeCalled(401))
+      })
     } else {
       return reply({}).code(412) // Malformed request: stops here
     }
