@@ -1,3 +1,10 @@
+body {
+    font-size: 0.85em;
+}
+.md-button {
+    font-size: 0.9em;
+}
+
 .hidden {
     display: none;
 }
@@ -175,12 +182,22 @@ div[ng-controller] div.step, div[ng-controller] md-progress-circular.step {
     right: 0.4rem;
     font-size: 0.6rem;
 }
+div[ng-controller] md-progress-circular.step {
+    bottom: 0.75rem;
+    height: 0 !important;
+    right: 0.15rem;
+}
 button.component-button div.step, button.component-button md-progress-circular.step {
     position: absolute;
-    bottom: 1.8rem;
+    bottom: 2.05rem;
     height: 0;
-    right: 0.4rem;
+    right: 0.45rem;
     font-size: 0.6rem;
+}
+button.component-button md-progress-circular.step {
+    bottom: 1.7rem;
+    height: 0 !important;
+    right: 0.2rem;
 }
 
 
@@ -196,6 +213,9 @@ button.component-button div.switch {
 
 md-card.error {
     background-color: #B71C1C;
+}
+md-card div.no-card {
+    background-color: rgb(33,33,33);
 }
 .card-alarm-on {
     background-image: url(/assets/images/warning-red.png);
@@ -227,4 +247,12 @@ md-card.error {
 }
 .pattern_holder_dialog ul.patt-wrap {
     margin: 0;
+}
+
+md-progress-circular.step path {
+    stroke: rgba(255,255,255,0.87);
+}
+md-progress-circular.step svg {
+    background-color: rgba(255,255,255,0.25);
+    border-radius: 50%;
 }

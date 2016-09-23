@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="step"></div>
-  <md-progress-circular md-mode="indeterminate" class="md-hue-1 step" value="{{vm.determinateValue}}" md-diameter="20"></md-progress-circular>
+  <md-progress-circular md-mode="determinate" class="md-hue-1 step" ng-if="delayTimer.progress" value="{{ng-open}}delayTimer.progress{{ng-close}}" md-diameter="24"></md-progress-circular>
 </md-button>
 
 {{#extend "cardCss"}}{'md-whiteframe-6dp': !edition.active, 'gridlist-card': edition.active}{{/extend}}
@@ -97,6 +97,7 @@
     $scope.isDisabled = function (scenario, remoteState, processingState) {
       return (!scenario || remoteState === 1|| processingState === 'processing')
     }
+    $scope.delayTimer = {progress: 0}
     $scope.play = function() {
       $scope.processingState = 'processing'
       $.post('/{{page.slug}}/component/{{component.id}}/action', {})
@@ -118,11 +119,10 @@
         if (remaining > 0 && state.state !== 'finished') {
           const stepsLabel = ($scope.component.configuration.length - remaining + 1) + '/' + $scope.component.configuration.length
           $('#component-button-{{component.id}} div.step').html(stepsLabel)
+          $scope.timer($scope.delayTimer, $scope.component.configuration[remaining-1].delay*60)
         } else {
           $('#component-button-{{component.id}} div.step').html('')
         }
-        // TODO !1: recuperer le temps restant via calcul de $scope.component.configuration...
-        // TODO !1: ...pour un mini chrono sous forme de progress circular qui entoure le step counter
       }
     }
     this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter))

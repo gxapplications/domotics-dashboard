@@ -15,6 +15,7 @@
         </div>
     </div>
     <div class="step"></div>
+    <md-progress-circular md-mode="determinate" class="md-hue-1 step" ng-if="delayTimer.progress" value="{{ng-open}}delayTimer.progress{{ng-close}}" md-diameter="24"></md-progress-circular>
     <div class="switch">
         <md-icon aria-label="state" style="color: {{ng-open}}activationState  ? '#00C853' : '#2E7D32'{{ng-close}}"
             class="material-icons button-icon-48">{{ng-open}}activationState ? 'star' : 'star_border'{{ng-close}}</md-icon>
@@ -105,6 +106,7 @@
       return (!scenario || remoteState === 1 || processingState === 'processing')
     }
     $scope.activationState = false
+    $scope.delayTimer = {progress: 0}
     $scope.play = function() {
       $scope.processingState = 'processing'
       const toActivate = !$scope.activationState
@@ -132,11 +134,21 @@
             stepsLabel = (3 - remaining) + '/2'
           }
           $('#component-button-{{component.id}} div.step').html(stepsLabel)
+
+          // timer show complex cases.
+          if ($scope.component.configuration.reset_delay === 0 && remaining === 1) {
+            $scope.timer($scope.delayTimer, $scope.component.configuration.delay * 60)
+          }
+          if ($scope.component.configuration.reset_delay > 0 && remaining === 2) {
+            $scope.timer($scope.delayTimer, $scope.component.configuration.delay * 60)
+          }
+          if (remaining === 1 && $scope.component.configuration.reset_delay > 0) {
+            $scope.timer($scope.delayTimer, $scope.component.configuration.reset_delay * 60)
+          }
+
         } else {
           $('#component-button-{{component.id}} div.step').html('')
         }
-        // TODO !2: recuperer le temps restant via calcul de $scope.component.configuration...
-        // TODO !2: ...pour un mini chrono sous forme de progress circular qui entoure le step counter
       }
     }
     this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter))

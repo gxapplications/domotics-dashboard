@@ -60,6 +60,22 @@
         }
         $scope.addCleaner = this.addCleaner
 
+        $scope.timer = function(value, delay) {
+          if (value.heart) {
+            clearInterval(value.heart)
+          }
+          value.progress = 100
+          value.heart = null
+          value.variator = () => {
+            if (value.progress > 0) {
+              value.progress --
+            } else {
+              clearInterval(value.heart)
+            }
+          }
+          value.heart = setInterval(value.variator, delay * 10)
+        }
+
         // Configuration popup
         this.configure = function($event) {
           var content = $("div#component-{{component.id}} div.component_edit_dialog").html().substring(4) // removes <!--
