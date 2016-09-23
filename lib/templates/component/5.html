@@ -134,8 +134,7 @@
           })
       }
 
-      if (($scope.states.alarm.value === 'on' && action !== 'on') ||
-          ($scope.states.alarm.value === 'half' && action === 'off')) {
+      if (action !== 'on') {
         $scope.pattern($event, call)
       } else {
         call()
