@@ -168,14 +168,14 @@ button.component-button h3 {
     margin-top: 0.3rem;
     margin-bottom: 0.3rem;
 }
-div[ng-controller] div.step {
+div[ng-controller] div.step, div[ng-controller] md-progress-circular.step {
     position: absolute;
     bottom: 1.1rem;
     height: 0;
     right: 0.4rem;
     font-size: 0.6rem;
 }
-button.component-button div.step {
+button.component-button div.step, button.component-button md-progress-circular.step {
     position: absolute;
     bottom: 1.8rem;
     height: 0;
