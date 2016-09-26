@@ -129,23 +129,23 @@ see the file license.txt that was included with the plugin bundle.
 
         /* Create our linear gradient for the outer ring */
         lingrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
-        lingrad.addColorStop(0, '#ECEFF1'); // 50
-        lingrad.addColorStop(1, '#90A4AE'); // 300
+        lingrad.addColorStop(0, '#9E9E9E'); // 50 300
+        lingrad.addColorStop(1, '#424242'); // 300 600
 
         /* Create inner gradient for the outer ring */
         innerGrad = ctx.createLinearGradient(cX, cX * 0.133333, cX, canvas.height - cX * 0.133333);
-        innerGrad.addColorStop(0, '#B0BEC5'); // 200
-        innerGrad.addColorStop(1, '#78909C'); // 400
+        innerGrad.addColorStop(0, '#616161'); // 200 500
+        innerGrad.addColorStop(1, '#323232'); // 400 700
 
         /* Tube gradient (background, not the spiral gradient) */
         tubeGrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
-        tubeGrad.addColorStop(0, '#90A4AE'); // 300
-        tubeGrad.addColorStop(1, '#78909C'); // 400
+        tubeGrad.addColorStop(0, '#616161'); // 300 600
+        tubeGrad.addColorStop(1, '#212121'); // 400 700
 
         /* knob gradient */
         knobgrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
-        knobgrad.addColorStop(0, '#FFFFFF'); // 50
-        knobgrad.addColorStop(1, '#CFD8DC'); // 100
+        knobgrad.addColorStop(0, '#BDBDBD'); // 50 300
+        knobgrad.addColorStop(1, '#757575'); // 100 500
 
         /* The inner circle is 2/3rds the size of the outer one */
         innerRadius = cX * 0.6666;
@@ -194,7 +194,7 @@ see the file license.txt that was included with the plugin bundle.
             /* draw outer circle */
             ctx.fillStyle = lingrad;
             ctx.beginPath();
-            ctx.strokeStyle = '#546E7A'; // 600
+            ctx.strokeStyle = '#212121'; // 900
             ctx.arc(cX, cY, radius, 0, Math.PI * 2, counterClockwise);
             ctx.fill();
             ctx.stroke();
@@ -204,7 +204,7 @@ see the file license.txt that was included with the plugin bundle.
             ctx.beginPath();
             ctx.arc(cX, cY, innerRadius, 0, Math.PI * 2, counterClockwise);
             ctx.fill();
-            ctx.strokeStyle = '#90A4AE99'; // 300 + alpha
+            ctx.strokeStyle = '#90424242'; // 800 + alpha
             ctx.stroke();
 
             ctx.beginPath();
@@ -252,7 +252,7 @@ see the file license.txt that was included with the plugin bundle.
 
             /* Background tube */
             ctx.beginPath();
-            ctx.strokeStyle = '#78909C66'; // 400 + alpha
+            ctx.strokeStyle = '#75757566'; // 700 + alpha
             makeInnerTubePath(startAngle, endAngle);
 
             ctx.fillStyle = tubeGrad;
@@ -290,13 +290,13 @@ see the file license.txt that was included with the plugin bundle.
             ctx.beginPath();
             ctx.arc(knob1X, knob1Y, innerRadius*0.25, 0, Math.PI * 2, counterClockwise);
             ctx.fill();
-            ctx.strokeStyle = '#CFD8DCaa'; // 100 + alpha
+            ctx.strokeStyle = '#BDBDBDaa'; // 400 + alpha
             ctx.stroke();
             ctx.fillStyle = knobgrad;
             ctx.beginPath();
             ctx.arc(knob2X, knob2Y, innerRadius*0.25, 0, Math.PI * 2, counterClockwise);
             ctx.fill();
-            ctx.strokeStyle = '#CFD8DCaa'; // 100 + alpha
+            ctx.strokeStyle = '#BDBDBDaa'; // 400 + alpha
             ctx.stroke();
 
 
