@@ -177,24 +177,26 @@ button.component-button h3 {
 }
 div[ng-controller] div.step, div[ng-controller] md-progress-circular.step {
     position: absolute;
-    bottom: 1.1rem;
+    top: 0.6rem;
     height: 0;
     right: 0.4rem;
     font-size: 0.6rem;
 }
 div[ng-controller] md-progress-circular.step {
-    bottom: 0.75rem;
+    top: 0.2rem;
     height: 0 !important;
-    right: 0.15rem;
+    right: 0.2rem;
 }
 button.component-button div.step, button.component-button md-progress-circular.step {
     position: absolute;
+    top: inherit;
     bottom: 2.05rem;
     height: 0;
     right: 0.45rem;
     font-size: 0.6rem;
 }
 button.component-button md-progress-circular.step {
+    top: inherit;
     bottom: 1.7rem;
     height: 0 !important;
     right: 0.2rem;

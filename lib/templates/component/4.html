@@ -48,7 +48,7 @@
         <md-icon aria-label="mode" class="material-icons button-icon-48">power_settings_new</md-icon>
     </md-button>
 </div>
-<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0.4rem;">
+<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0;">
     {{parsejson component.configuration 'description'}}
 </div>
 <div class="step"></div>
@@ -139,7 +139,7 @@
     $scope.isDisabled = function (heat, remoteState, processingState) {
       return (!heat || remoteState === 1 || processingState === 'processing')
     }
-    $scope.delayTimer = {progress: 100} // FIXME !1: position, tout deplacer en haut ? Puis passer à progress:0 par defaut
+    $scope.delayTimer = {progress: 0}
     $scope.play = function(action) {
       $scope.processingState = 'processing'
       $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {})
@@ -167,7 +167,18 @@
             stepsLabel = (3 - remaining) + '/2'
           }
           $('#component-{{component.id}} div.step').html(stepsLabel)
-          // TODO !1: timer
+
+          // timer show complex cases.
+          if ($scope.component.configuration.reset_delay === 0 && remaining === 1) {
+            $scope.timer($scope.delayTimer, $scope.component.configuration.delay * 60)
+          }
+          if ($scope.component.configuration.reset_delay > 0 && remaining === 2) {
+            $scope.timer($scope.delayTimer, $scope.component.configuration.delay * 60)
+          }
+          if (remaining === 1 && $scope.component.configuration.reset_delay > 0) {
+            $scope.timer($scope.delayTimer, $scope.component.configuration.reset_delay * 60)
+          }
+// TODO !0: tester
         } else {
           $('#component-{{component.id}} div.step').html('')
         }
