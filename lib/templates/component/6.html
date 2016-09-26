@@ -3,7 +3,7 @@
          class="ratio-content" style="max-height:20em;"
          title="{{component.title}}"></div>
 
-    <div flex style="padding-left:1.2em;" hide show-gt-md>
+    <div flex style="padding-left:1.2rem;" hide show-gt-md>
         TODO !1: information textuelles. cf brouillon dans Salon
         <br/><br/>
         TODO !1: bouton "forcer pendant 2h", cf brouillon dans Salon
@@ -52,7 +52,7 @@
 
 <script>
   {{#extend "controllerScript"}}
-    // TODO !2
+    // TODO !2: pas scalée, il faut l'initialiser seulement quand affichage prêt !
     $('div#double-knob-{{component.id}}').temperatureLoader({
 		minValue: 17,
 		maxValue: 22,

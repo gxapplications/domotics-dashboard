@@ -129,23 +129,23 @@ see the file license.txt that was included with the plugin bundle.
 
         /* Create our linear gradient for the outer ring */
         lingrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
-        lingrad.addColorStop(0, '#9E9E9E'); // 50 300
-        lingrad.addColorStop(1, '#424242'); // 300 600
+        lingrad.addColorStop(0, '#9E9E9E'); // 500
+        lingrad.addColorStop(1, '#424242'); // 800
 
         /* Create inner gradient for the outer ring */
         innerGrad = ctx.createLinearGradient(cX, cX * 0.133333, cX, canvas.height - cX * 0.133333);
-        innerGrad.addColorStop(0, '#616161'); // 200 500
-        innerGrad.addColorStop(1, '#323232'); // 400 700
+        innerGrad.addColorStop(0, '#616161'); // 700
+        innerGrad.addColorStop(1, '#323232'); // 850 ?
 
         /* Tube gradient (background, not the spiral gradient) */
         tubeGrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
-        tubeGrad.addColorStop(0, '#616161'); // 300 600
-        tubeGrad.addColorStop(1, '#212121'); // 400 700
+        tubeGrad.addColorStop(0, '#616161'); // 700
+        tubeGrad.addColorStop(1, '#212121'); // 900
 
         /* knob gradient */
         knobgrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
-        knobgrad.addColorStop(0, '#BDBDBD'); // 50 300
-        knobgrad.addColorStop(1, '#757575'); // 100 500
+        knobgrad.addColorStop(0, '#BDBDBD'); // 400
+        knobgrad.addColorStop(1, '#757575'); // 600
 
         /* The inner circle is 2/3rds the size of the outer one */
         innerRadius = cX * 0.6666;
@@ -252,7 +252,7 @@ see the file license.txt that was included with the plugin bundle.
 
             /* Background tube */
             ctx.beginPath();
-            ctx.strokeStyle = '#75757566'; // 700 + alpha
+            ctx.strokeStyle = '#75757566'; // 600 + alpha
             makeInnerTubePath(startAngle, endAngle);
 
             ctx.fillStyle = tubeGrad;
@@ -309,7 +309,7 @@ see the file license.txt that was included with the plugin bundle.
                 percentageText.style.top = ((settings.height / 2.15) - (fontSize / 2)).toString() + 'px';
                 percentageText.style.color = '#FFFFFF';
                 percentageText.style.font = fontSize.toString() + 'px';
-                percentageText.style.textShadow = '0 1px 1px #CFD8DC';
+                percentageText.style.textShadow = '0 1px 1px #757575';
 
                 /* Calculate the text for the progresses */
                 string = (degress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision) + ' ~ ' + (progress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision) + '<br/><small>' + settings.suffix + '</small>';
@@ -318,10 +318,10 @@ see the file license.txt that was included with the plugin bundle.
 
                 /* Calculate font and placement of small 'value' text */
                 smallSize = cX / 5.5;
-                valueText.style.color = '#ECEFF1'; // 100
+                valueText.style.color = '#E0E0E0'; // 300
                 valueText.style.font = smallSize.toString() + 'px';
                 valueText.style.height = smallSize.toString() + 'px';
-                valueText.style.textShadow = '0 1px 1px #CFD8DC';
+                valueText.style.textShadow = '0 1px 1px #757575';
 
                 /* Ugly vertical align calculations - fit into bottom ring.
                  * The bottom ring occupes 1/6 of the diameter of the circle */
@@ -639,7 +639,7 @@ see the file license.txt that was included with the plugin bundle.
 
 	    /* init */
         var size = Math.max(128, Math.min(thermostat.width(), thermostat.height()));
-	    thermostat.setSize(size); // also instanciate the component for the first time.
+	    thermostat.setSize(size); // also instantiate the component for the first time.
 
     	return this;
     };
