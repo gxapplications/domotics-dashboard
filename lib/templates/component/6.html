@@ -4,9 +4,9 @@
          title="{{component.title}}"></div>
 
     <div flex style="padding-left:1.2rem;" hide show-gt-md>
-        TODO !1: information textuelles. cf brouillon dans Salon
+        TODO !3: Data (temp et luminosité) depuis un capteur ID. OPTIONNEL
         <br/><br/>
-        TODO !1: bouton "forcer pendant 2h", cf brouillon dans Salon
+        TODO !4: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
     </div>
 </div>
 
@@ -52,25 +52,27 @@
 
 <script>
   {{#extend "controllerScript"}}
-    // TODO !2: pas scalée, il faut l'initialiser seulement quand affichage prêt !
-    $('div#double-knob-{{component.id}}').temperatureLoader({
+    // TODO !1: pas scalée, il faut l'initialiser seulement quand affichage prêt !
+    $scope.doubleKnob = $('div#double-knob-{{component.id}}').temperatureLoader({
 		minValue: 17,
 		maxValue: 22,
 		title: 'Test title',
-		scaleOffset: 14.0,
-		scaleAmplitude: 18.0,
+		scaleOffset: 15.0,
+		scaleAmplitude: 15.0,
 		precision: 0
 		/*onMinUpdate: onMinUpdate,
 		onMaxUpdate: onMaxUpdate,
 		onCenterClick: onCenterClick,
 		componentData: component*/
 	});
+    $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resize)
+
     $('div#planer-{{component.id}}').autoSizedPlaner({
       // TODO !4
 	});
   {{/extend}}
 
   {{#extend "settingsScript"}}
-    // TODO !1
+    // TODO !2
   {{/extend}}
 </script>

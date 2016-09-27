@@ -258,8 +258,21 @@
 	    },
 	    tools: {
 	      assignDeep: __webpack_require__(8),
-	      icons: Object.keys(_icons2.default)
+	      icons: Object.keys(_icons2.default),
+	      addAutoRescaler: function addAutoRescaler(listener) {
+	        $scope.edition.tools.addAutoRescaler.listeners.push(listener);
+	      }
 	    }
+	  };
+	  $scope.edition.tools.addAutoRescaler.listeners = [];
+	  $scope.edition.tools.addAutoRescaler.trigger = function () {
+	    $scope.edition.tools.addAutoRescaler.listeners = $scope.edition.tools.addAutoRescaler.listeners.filter(function (listener) {
+	      try {
+	        return listener();
+	      } catch (e) {
+	        return false;
+	      }
+	    });
 	  };
 	  $scope.edition = $rootScope.edition;
 
@@ -306,14 +319,17 @@
 	      });
 	    }
 	  };
+	  $scope.edition.tools.addAutoRescaler(function () {
+	    $scope.grid.gridStack.gridList('reflow');
+	    return true;
+	  });
 
 	  // Init
 	  $document.ready(function () {
 	    $($scope.grid.init());
 	    $scope.states.init();
-	    window.setTimeout(function () {
-	      $scope.grid.gridStack.gridList('reflow');
-	    }, 800);
+	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
+	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 900); // TODO !0 tester la valeur de cela...
 	  });
 	});
 

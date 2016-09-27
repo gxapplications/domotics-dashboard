@@ -309,7 +309,7 @@ see the file license.txt that was included with the plugin bundle.
                 percentageText.style.top = ((settings.height / 2.15) - (fontSize / 2)).toString() + 'px';
                 percentageText.style.color = '#FFFFFF';
                 percentageText.style.font = fontSize.toString() + 'px';
-                percentageText.style.textShadow = '0 1px 1px #757575';
+                percentageText.style.textShadow = '0 1px 1px #424242';
 
                 /* Calculate the text for the progresses */
                 string = (degress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision) + ' ~ ' + (progress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision) + '<br/><small>' + settings.suffix + '</small>';
@@ -321,7 +321,7 @@ see the file license.txt that was included with the plugin bundle.
                 valueText.style.color = '#E0E0E0'; // 300
                 valueText.style.font = smallSize.toString() + 'px';
                 valueText.style.height = smallSize.toString() + 'px';
-                valueText.style.textShadow = '0 1px 1px #757575';
+                valueText.style.textShadow = '0 1px 1px #424242';
 
                 /* Ugly vertical align calculations - fit into bottom ring.
                  * The bottom ring occupes 1/6 of the diameter of the circle */
@@ -529,7 +529,7 @@ see the file license.txt that was included with the plugin bundle.
 		    minValue: 17,
 		    maxValue: 25,
 		    scaleOffset: 14.0,
-            scaleAmplitude: 32.0,
+            scaleAmplitude: 18.0,
 		    title: 'Temperature'
 		    suffix: '( °C )',
             precision: 1,

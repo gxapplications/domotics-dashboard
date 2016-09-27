@@ -48,18 +48,34 @@
     <script>
       app.controllerProvider.register('CardCtrl-{{component.id}}', function ($rootScope, $scope, $mdDialog, $mdToast, $document, $sce) {
         $scope.edition = $rootScope.edition
-        this.speedDialOpened = false
+        this.speedDialOpened = false // Used for contextual menu
         $scope.component = {{tojson component}}
         $scope.component.configuration = {{{component.configuration}}}
-        $scope.component.extra_component = {{{component.extra_component}}}
+        $scope.component.extra_component = {{{component.extra_component}}} // FIXME !5: Still need more data ?
 
         // Cleaners array
         $rootScope.cleaners['CardCtrl-{{component.id}}'] = []
+        /**
+         * Adds a function to execute when the component is removed (if deleted, or for a refreshment)
+         * All listeners initialized at component loading should be registered to be cleaned at component removal.
+         *
+         * @param cleaner The function to execute to clean stuff before to remove the component.
+         */
         this.addCleaner = function(cleaner) {
           $rootScope.cleaners['CardCtrl-{{component.id}}'].push(cleaner)
         }
         $scope.addCleaner = this.addCleaner
 
+        /**
+         * Small tool to decrease a value periodically from 100 to 0.
+         * The object given should contain only a 'progress' attribute, and can be watched by an Angular watcher.
+         *
+         * @param {object}   value           An object that will contain the properties: progress, heart, variator.
+         * @param {integer}  value.progress  The value to decrease. Init to 100 at beginning.
+         * @param {unknown}  value.heart     Set by the method to the ID of the interval object from setInterval()
+         * @param {function} value.variator  The function set by the method, executed at each heart beat (decrease)
+         * @param {integer}  delay           The total amount of seconds to decrease from 100 to 0.
+         */
         $scope.timer = function(value, delay) {
           if (value.heart) {
             clearInterval(value.heart)

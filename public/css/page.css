@@ -179,7 +179,7 @@ div[ng-controller] div.step, div[ng-controller] md-progress-circular.step {
     position: absolute;
     top: 0.6rem;
     height: 0;
-    right: 0.4rem;
+    right: 0.45rem;
     font-size: 0.6rem;
 }
 div[ng-controller] md-progress-circular.step {
