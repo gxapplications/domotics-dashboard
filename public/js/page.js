@@ -329,7 +329,7 @@
 	    $($scope.grid.init());
 	    $scope.states.init();
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
-	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 900); // TODO !0 tester la valeur de cela...
+	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 900);
 	  });
 	});
 

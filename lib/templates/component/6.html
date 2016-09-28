@@ -4,9 +4,9 @@
          title="{{component.title}}"></div>
 
     <div flex style="padding-left:1.2rem;" hide show-gt-md>
-        TODO !3: Data (temp et luminosité) depuis un capteur ID. OPTIONNEL
+        TODO !1: Data (temp et luminosité) depuis un capteur ID. OPTIONNEL
         <br/><br/>
-        TODO !4: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
+        TODO !5: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
     </div>
 </div>
 
@@ -38,9 +38,22 @@
                       </md-select>
                   </md-list-item>
 
+                  // TODO !2, 3
+
               </md-list>
           </section>
           <md-divider></md-divider>
+          <section>
+              <md-subheader>Data provider (optional)</md-subheader>
+              <md-list layout="column" layout-padding>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-select placeholder="Data provider linked" ng-model="component.configuration.data" flex>
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="id" ng-repeat="(id, data) in states.data.value">{{ng-open}}data.name{{ng-close}}</md-option>
+                      </md-select>
+                  </md-list-item>
+              </md-list>
+          </section>
       </form>
   </md-dialog-content>
   <md-dialog-actions layout="row">
@@ -52,7 +65,16 @@
 
 <script>
   {{#extend "controllerScript"}}
-    // TODO !1: pas scalée, il faut l'initialiser seulement quand affichage prêt !
+    // Default values assignment
+    $scope.component = $scope.edition.tools.assignDeep({
+      configuration: {
+          title: 'Heating dashboard', icon: '',
+          data: ''
+      }
+    }, $scope.component)
+
+
+    // TODO !2
     $scope.doubleKnob = $('div#double-knob-{{component.id}}').temperatureLoader({
 		minValue: 17,
 		maxValue: 22,
@@ -65,14 +87,17 @@
 		onCenterClick: onCenterClick,
 		componentData: component*/
 	});
-    $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resize)
+    $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
 
     $('div#planer-{{component.id}}').autoSizedPlaner({
       // TODO !4
 	});
+
+
+    // TODO !1 : auto refresh quand le state du data provider evolue (watcher !)
   {{/extend}}
 
   {{#extend "settingsScript"}}
-    // TODO !2
+    // TODO !3
   {{/extend}}
 </script>

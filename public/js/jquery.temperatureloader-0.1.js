@@ -627,19 +627,17 @@ see the file license.txt that was included with the plugin bundle.
         thermostat.setSize = setSize;
 
 
+        this.resizer = function() {
+            var size = Math.max(128, Math.min(thermostat.width(), thermostat.height()));
+            thermostat.setSize(size);
+            return true;
+        };
 
-        $( window ).resize(function(e) {
-        	var size = Math.max(128, Math.min(thermostat.width(), thermostat.height()));
-        	thermostat.setSize(size);
-        });
-        thermostat.resize(function(e) {
-        	var size = Math.max(128, Math.min(thermostat.width(), thermostat.height()));
-        	thermostat.setSize(size);
-        });
+        $( window ).resize(this.resizer);
+        thermostat.resize(this.resizer);
 
 	    /* init */
-        var size = Math.max(128, Math.min(thermostat.width(), thermostat.height()));
-	    thermostat.setSize(size); // also instantiate the component for the first time.
+        this.resizer(); // also instantiate the component for the first time.
 
     	return this;
     };
