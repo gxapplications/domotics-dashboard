@@ -553,6 +553,7 @@ see the file license.txt that was included with the plugin bundle.
             onMinUpdate: function(oldValue, newValue, componentData) {},
             onMaxUpdate: function(oldValue, newValue, componentData) {},
             onCenterClick: function(componentData) {},
+            onUpdating: function() {},
             componentData: {}
 	    };
 
@@ -600,6 +601,7 @@ see the file license.txt that was included with the plugin bundle.
 	                	settings.maxValue = val2;
 	                	maxChanged = true;
                 	}
+                    settings.onUpdating();
                 },
                 onDegressUpdate : function(value) {
                 	var val2 = (settings.scaleOffset + value * settings.scaleAmplitude).toFixed(settings.precision);
@@ -608,6 +610,7 @@ see the file license.txt that was included with the plugin bundle.
                 		settings.minValue = val2;
                 		minChanged = true;
                 	}
+                    settings.onUpdating();
                 },
                 onCenterClick : function() {
                 	settings.onCenterClick(settings.componentData);
@@ -625,7 +628,6 @@ see the file license.txt that was included with the plugin bundle.
     	    });
         }
         thermostat.setSize = setSize;
-
 
         this.resizer = function() {
             var size = Math.max(128, Math.min(thermostat.width(), thermostat.height()));

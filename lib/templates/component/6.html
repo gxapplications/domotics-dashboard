@@ -4,7 +4,7 @@
          title="{{component.title}}"></div>
 
     <div flex style="padding-left:1.2rem;" hide show-gt-md>
-        TODO !1: Data (temp et luminosité) depuis un capteur ID. OPTIONNEL
+        TODO !1: Data (temp {{ng-open}}dataState.temperature{{ng-close}} et luminosité {{ng-open}}dataState.light{{ng-close}})
         <br/><br/>
         TODO !5: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
     </div>
@@ -73,18 +73,22 @@
       }
     }, $scope.component)
 
+// GROS TEST
+if ('speechSynthesis' in window && window.speechSynthesis.getVoices().length > 0) {
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance('Coucou !'));
+}
 
-    // TODO !2
+    // TODO !2: minValue and maxValue in component.configuration, but also scaleOffset scaleAmplitude
     $scope.doubleKnob = $('div#double-knob-{{component.id}}').temperatureLoader({
 		minValue: 17,
 		maxValue: 22,
-		title: 'Test title',
 		scaleOffset: 15.0,
 		scaleAmplitude: 15.0,
 		precision: 0
 		/*onMinUpdate: onMinUpdate,
 		onMaxUpdate: onMaxUpdate,
 		onCenterClick: onCenterClick,
+		onUpdating: onUpdating,
 		componentData: component*/
 	});
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
@@ -93,8 +97,14 @@
       // TODO !4
 	});
 
-
-    // TODO !1 : auto refresh quand le state du data provider evolue (watcher !)
+    // Data provider (temp, lightning)
+    if ($scope.component.configuration && $scope.component.configuration.data > 0) {
+      $scope.dataState = null;
+      $scope.updateDataProvider = function (data) {
+        $scope.dataState = data
+      }
+      this.addCleaner($scope.$watch('states.data.value[' + $scope.component.configuration.data + ']', $scope.updateDataProvider))
+    }
   {{/extend}}
 
   {{#extend "settingsScript"}}
