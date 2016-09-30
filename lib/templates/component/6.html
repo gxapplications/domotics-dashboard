@@ -127,7 +127,7 @@
   <md-dialog-actions layout="row">
     <span flex></span>
     <md-button ng-click="cancelConfig()"><md-icon aria-label="block" class="material-icons md-14">block</md-icon> Cancel</md-button>
-    <md-button class="md-primary md-raised" ng-click="saveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
+    <md-button class="md-primary md-raised" ng-click="preSaveConfig()" md-autofocus><md-icon aria-label="done" class="material-icons md-14">done</md-icon> Save</md-button>
   </md-dialog-actions>
 {{/extend}}
 
@@ -140,8 +140,7 @@
 
     $scope.component = $scope.edition.tools.assignDeep({
       configuration: {
-          title: 'Heating dashboard', icon: '',
-          data: '', // data sensor ID, optional
+          title: 'Heating dashboard', icon: '', data: '', // data sensor ID, optional
           temp_min_min: 15,
           temp_max_max: 30,
           temp_min_value: 15,
@@ -163,11 +162,7 @@
     // MIN MAX temperature pilot
     ////////////////////////////
 
-    // temp_min_min/temp_max_max watchers
-    // TODO !2: un watcher sur temp_min_min et temp_max_max: des qu'ils changent,
-    // il faut vérifier temp_min_value et temp_max_value: doivent rester dans l'intervalle, sinon, fixer les scenarii correspondants.
-
-    // scenarii config watchers
+    // scenarii config watchers: when scenario is changed from settings, look into for data to control.
     const scenarioConfiguratorGenerator = (configPath, isMin, isMaster) => {
       const configurator = function(newId, oldId) {
         const scenarioConf = _.get($scope.component.configuration, configPath)
@@ -175,11 +170,8 @@
             return
         }
 console.log("##", scenarioConf);
-        // TODO !1: genere un configurator selon les caractéristiques fournies (isMin, isMaster, configPath)
-        // une procédure de reconnaissance de la donnée à controller doit être faite chez Myfox via edition du scenarii en ajax.
-        // Si MASTER alors on doit prendre en compte la valeur et la mettre dans temp_min_value / temp_max_value (valeurs courantes)
-        // Control supp: si la valeur est hors [temp_min_min, temp_max_max], alors corriger la valeur dans le scenario.
-        // Si SLAVE alors on doit au passage modifier la valeur dans le scenario.
+        // TODO !1: une procédure de reconnaissance de la donnée à controller doit être faite chez Myfox
+        // via edition du scenarii en ajax. Le but est d'identifier la donner à controler
       }
       this.addCleaner($scope.$watch('component.configuration.' + configPath + '.id', configurator))
     }
@@ -228,5 +220,18 @@ console.log("##", scenarioConf);
       }
       this.addCleaner($scope.$watch('states.data.value[' + $scope.component.configuration.data + ']', $scope.updateDataProvider))
     }
+  {{/extend}}
+
+  {{#extend "settingsScript"}}
+    $scope.preSaveConfig = function () {
+      // TODO !2: sur temp_min_min et temp_max_max: s'ils changent,
+      // il faut vérifier temp_min_value et temp_max_value: doivent rester dans l'intervalle, sinon, fixer les scenarii correspondants.
+
+      // TODO !1: boucler sur les scenarii [min/max]_temp_control_[X] et fixer:
+      // Si MASTER (X==1) alors on doit prendre en compte la valeur et la mettre dans temp_min_value / temp_max_value (valeurs courantes)
+      // Control supp: si la valeur est hors [temp_min_min, temp_max_max], alors corriger la valeur dans le scenario.
+      // Si SLAVE (X>1) alors on doit modifier la valeur dans le scenario pour l'aligner avec le master.
+      $scope.saveConfig()
+    };
   {{/extend}}
 </script>
