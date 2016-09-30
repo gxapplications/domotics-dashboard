@@ -324,12 +324,35 @@
 	    return true;
 	  });
 
+	  // Speech service
+	  $rootScope.speech = {
+	    voice: undefined,
+	    speak: function speak(text) {
+	      if (!$rootScope.speech.voice) {
+	        $rootScope.speech.init();
+	      }
+
+	      var ut = new SpeechSynthesisUtterance(text);
+	      ut.voice = $rootScope.speech.voice;
+	      window.speechSynthesis.speak(ut);
+	    },
+	    init: function init() {
+	      if ('speechSynthesis' in window && window.speechSynthesis.getVoices()) {
+	        $rootScope.speech.voice = window.speechSynthesis.getVoices().filter(function (v) {
+	          // available on Mint: de-DE en-US en-GB es-ES es-US fr-FR hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
+	          return v.lang === 'en-US';
+	        })[0];
+	      }
+	    }
+	  };
+
 	  // Init
 	  $document.ready(function () {
 	    $($scope.grid.init());
 	    $scope.states.init();
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 900);
+	    $rootScope.speech.init();
 	  });
 	});
 

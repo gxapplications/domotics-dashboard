@@ -1,12 +1,17 @@
-<div layout="row" layout-padding layout-align="space-between stretch" style="min-height:15rem;">
+<div layout="row" layout-padding layout-align="space-between stretch" style="min-height:12rem;">
     <div id="double-knob-{{component.id}}" flex="50"
          class="ratio-content" style="max-height:20em;"
          title="{{component.title}}"></div>
 
-    <div flex style="padding-left:1.2rem;" hide show-gt-md>
-        TODO !1: Data (temp {{ng-open}}dataState.temperature{{ng-close}} et luminosité {{ng-open}}dataState.light{{ng-close}})
-        <br/><br/>
-        TODO !5: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
+    <div flex="50" style="padding-left:1.2rem;">
+        <span ng-if="dataState" style="color: rgba(255,255,255,.5);">
+            Currently
+            <h2 style="margin: 0.4rem 0; color: rgba(255,255,255,1);">{{ng-open}}dataState.temperature{{ng-close}}</h2>
+            {{ng-open}}dataState.light{{ng-close}}
+            <br/><br/>
+        </span>
+
+        TODO !4: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
     </div>
 </div>
 
@@ -37,9 +42,28 @@
                           </md-option>
                       </md-select>
                   </md-list-item>
-
-                  // TODO !2, 3
-
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-slider-container flex="50">
+                          <h5>Min. temperature (°C)</h5>
+                          <md-slider md-discrete ng-model="component.configuration.temp_min" min="10" max="35" step="1"
+                                     aria-label="Min. temperature"></md-slider>
+                      </md-slider-container>
+                      <md-slider-container flex="50">
+                          <h5>Max. temperature (°C)</h5>
+                          <md-slider md-discrete ng-model="component.configuration.temp_max" min="15" max="40" step="1"
+                                     aria-label="Max. temperature"></md-slider>
+                      </md-slider-container>
+                  </md-list-item>
+              </md-list>
+          </section>
+          <md-divider></md-divider>
+          <section>
+              <md-subheader>Scenarii to pilot</md-subheader>
+              <md-list layout="column" layout-padding>
+                  // TODO !2: listes des scenarii contenant MIN a controller (x4)
+                  // TODO !2: listes des scenarii contenant MAX a controller (x4)
+                  // TODO !2: listes des scenarii a activer en mode economique only (x4)
+                  // TODO !2: listes des scenarii a activer en mode confort only (x4)
               </md-list>
           </section>
           <md-divider></md-divider>
@@ -69,25 +93,24 @@
     $scope.component = $scope.edition.tools.assignDeep({
       configuration: {
           title: 'Heating dashboard', icon: '',
-          data: ''
+          data: '',
+          temp_min: 15,
+          temp_max: 30
       }
     }, $scope.component)
 
-// GROS TEST
-if ('speechSynthesis' in window && window.speechSynthesis.getVoices().length > 0) {
-    window.speechSynthesis.speak(new SpeechSynthesisUtterance('Coucou !'));
-}
-
-    // TODO !2: minValue and maxValue in component.configuration, but also scaleOffset scaleAmplitude
+    // TODO !1: minValue and maxValue in component.configuration, sinon, utiliser temp_min et temp_max de la config
+    const amplitude = $scope.component.configuration.temp_max - $scope.component.configuration.temp_min + 0.0
     $scope.doubleKnob = $('div#double-knob-{{component.id}}').temperatureLoader({
 		minValue: 17,
 		maxValue: 22,
-		scaleOffset: 15.0,
-		scaleAmplitude: 15.0,
-		precision: 0
-		/*onMinUpdate: onMinUpdate,
-		onMaxUpdate: onMaxUpdate,
-		onCenterClick: onCenterClick,
+		scaleOffset: $scope.component.configuration.temp_min + 0.0,
+		scaleAmplitude: amplitude,
+        title: 'Min/Max',
+		precision: (amplitude > 5) ? 0 : 1,
+		onMinUpdate: function (old, value) { console.log(value) },
+		onMaxUpdate: function (old, value) { console.log(value) },
+		/*onCenterClick: onCenterClick,
 		onUpdating: onUpdating,
 		componentData: component*/
 	});
@@ -108,6 +131,6 @@ if ('speechSynthesis' in window && window.speechSynthesis.getVoices().length > 0
   {{/extend}}
 
   {{#extend "settingsScript"}}
-    // TODO !3
+    // TODO !2
   {{/extend}}
 </script>

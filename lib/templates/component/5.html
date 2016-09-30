@@ -61,7 +61,7 @@
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
       <form name="componentForm" layout="column" flex layout-fill>
           <section>
-              <md-subheader class="md-accent">Heat mode</md-subheader>
+              <md-subheader class="md-accent">Alarm level</md-subheader>
               <md-list layout="column" layout-padding>
                   <md-list-item layout="row" layout-align="space-between stretch">
                       <md-input-container flex="80">
@@ -119,6 +119,7 @@
         $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {
           pattern: pattern || undefined
         }).done(function (data) {
+            $rootScope.speech.speak($scope.component.configuration[0].title + ' on ' + action + ' state.')
             $scope.processingState = 'waiting'
             $rootScope.states.macro[data.id] = {
               remaining: data.remaining,
@@ -128,6 +129,7 @@
             $scope.updateSwitch(action)
           })
           .fail(function () {
+            // TODO !0: speak
             $scope.processingState = 'error'
             $('div#component-{{component.id}}').parent('md-card').addClass('error')
             $rootScope.events.errorEvent('Error during Alarm level action!')
@@ -163,6 +165,7 @@
         preserveScope: true, // do not forget this if use parent scope
         template: content,
         onComplete: function ($scope) {
+          // TODO !0: speak
           new PatternLock('#patternHolder-{{component.id}}', {matrix:[3, 3], onDraw: function (pattern) {
             $scope.validPattern(pattern)
           }})

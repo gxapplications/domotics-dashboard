@@ -102,11 +102,13 @@
       $scope.processingState = 'processing'
       $.post('/{{page.slug}}/component/{{component.id}}/action', {})
         .done(function(data) {
+          $rootScope.speech.speak($scope.component.configuration[0].title + ' played.')
           $scope.processingState = 'waiting'
           $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
           $scope.updateStepCounter()
         })
         .fail(function() {
+          // TODO !0: speak
           $scope.processingState = 'error'
           $scope.updateStepCounter()
           $rootScope.events.errorEvent('Error during Scenario play action!')

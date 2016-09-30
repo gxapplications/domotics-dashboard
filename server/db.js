@@ -164,7 +164,9 @@ db.createComponent = function (slug, payload, callback) {
     let component = {type: 1, configuration: {}, extra_component: {}}
     Object.assign(component, payload)
     db.run('INSERT INTO components (id, type, configuration, extra_component) VALUES (NULL, ?, ?, ?)',
-      component.type, db.stringify(component.configuration, ['[*].delay']), db.stringify(component.extra_component), function (err) {
+      component.type,
+      db.stringify(component.configuration, ['[*].delay', 'delay', 'reset_delay', 'refresh', 'temp_min', 'temp_max'], ['allow_none']),
+      db.stringify(component.extra_component), function (err) {
         return callback(err, pageRow, Object.assign({id: this.lastID}, component))
       })
   })
@@ -189,7 +191,7 @@ db.updateComponent = function (slug, id, payload, callback) {
       db.run(
         'UPDATE components SET type=?, configuration=?, extra_component=? WHERE id=?',
         component.type,
-        db.stringify(component.configuration, ['[*].delay', 'delay', 'reset_delay', 'refresh'], ['allow_none']),
+        db.stringify(component.configuration, ['[*].delay', 'delay', 'reset_delay', 'refresh', 'temp_min', 'temp_max'], ['allow_none']),
         db.stringify(component.extra_component),
         id,
         (err) => {
