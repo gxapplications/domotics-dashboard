@@ -28,7 +28,7 @@
 
       <form name="componentForm" layout="column" flex layout-fill>
           <section>
-              <md-subheader class="md-accent">Heating dashboard - On/Off piloted</md-subheader>
+              <md-subheader class="md-accent">Heating dashboard - Scenarii piloted</md-subheader>
               <md-list layout="column" layout-padding>
                   <md-list-item layout="row" layout-align="space-between stretch">
                       <md-input-container flex="80">
@@ -45,12 +45,12 @@
                   <md-list-item layout="row" layout-align="space-between stretch">
                       <md-slider-container flex="50">
                           <h5>Min. temperature (°C)</h5>
-                          <md-slider md-discrete ng-model="component.configuration.temp_min" min="10" max="35" step="1"
+                          <md-slider md-discrete ng-model="component.configuration.temp_min_min" min="10" max="35" step="1"
                                      aria-label="Min. temperature"></md-slider>
                       </md-slider-container>
                       <md-slider-container flex="50">
                           <h5>Max. temperature (°C)</h5>
-                          <md-slider md-discrete ng-model="component.configuration.temp_max" min="15" max="40" step="1"
+                          <md-slider md-discrete ng-model="component.configuration.temp_max_max" min="15" max="40" step="1"
                                      aria-label="Max. temperature"></md-slider>
                       </md-slider-container>
                   </md-list-item>
@@ -60,10 +60,54 @@
           <section>
               <md-subheader>Scenarii to pilot</md-subheader>
               <md-list layout="column" layout-padding>
-                  // TODO !2: listes des scenarii contenant MIN a controller (x4)
-                  // TODO !2: listes des scenarii contenant MAX a controller (x4)
-                  // TODO !2: listes des scenarii a activer en mode economique only (x4)
-                  // TODO !2: listes des scenarii a activer en mode confort only (x4)
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <h4>Scenarii to control the LOWER temperature:</h4>
+                  </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-select placeholder="Scenario linked for MIN temperature #1" ng-model="component.configuration.scenarii.min_temp_control_1.id" flex="50" style="margin-right: 0.5rem;">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                      <md-select placeholder="Scenario linked for MIN temperature #2" ng-model="component.configuration.scenarii.min_temp_control_2.id" flex="50" style="margin-left: 0.5rem;">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                  </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-select placeholder="Scenario linked for MIN temperature #3" ng-model="component.configuration.scenarii.min_temp_control_3.id" flex="50" style="margin-right: 0.5rem;">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                      <md-select placeholder="Scenario linked for MIN temperature #4" ng-model="component.configuration.scenarii.min_temp_control_4.id" flex="50" style="margin-left: 0.5rem;">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                  </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <h4>Scenarii to control the HIGHER temperature:</h4>
+                  </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-select placeholder="Scenario linked for MAX temperature #1" ng-model="component.configuration.scenarii.max_temp_control_1.id" flex="50" style="margin-right: 0.5rem;">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                      <md-select placeholder="Scenario linked for MAX temperature #2" ng-model="component.configuration.scenarii.max_temp_control_2.id" flex="50" style="margin-left: 0.5rem;">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                  </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-select placeholder="Scenario linked for MAX temperature #3" ng-model="component.configuration.scenarii.max_temp_control_3.id" flex="50" style="margin-right: 0.5rem;">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                      <md-select placeholder="Scenario linked for MAX temperature #4" ng-model="component.configuration.scenarii.max_temp_control_4.id" flex="50" style="margin-left: 0.5rem;">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                  </md-list-item>
+                  // TODO !3: listes des scenarii a activer en mode economique only (x4)
+                  // TODO !3: listes des scenarii a activer en mode confort only (x4)
               </md-list>
           </section>
           <md-divider></md-divider>
@@ -89,22 +133,71 @@
 
 <script>
   {{#extend "controllerScript"}}
+
+    ////////////////////////////
     // Default values assignment
+    ////////////////////////////
+
     $scope.component = $scope.edition.tools.assignDeep({
       configuration: {
           title: 'Heating dashboard', icon: '',
-          data: '',
-          temp_min: 15,
-          temp_max: 30
+          data: '', // data sensor ID, optional
+          temp_min_min: 15,
+          temp_max_max: 30,
+          temp_min_value: 15,
+          temp_max_value: 30,
+          scenarii: {
+              min_temp_control_1: {id:''}, // master
+              min_temp_control_2: {id:''}, // slave
+              min_temp_control_3: {id:''}, // slave
+              min_temp_control_4: {id:''}, // slave
+              max_temp_control_1: {id:''}, // master
+              max_temp_control_2: {id:''}, // slave
+              max_temp_control_3: {id:''}, // slave
+              max_temp_control_4: {id:''} // slave
+          }
       }
     }, $scope.component)
 
-    // TODO !1: minValue and maxValue in component.configuration, sinon, utiliser temp_min et temp_max de la config
-    const amplitude = $scope.component.configuration.temp_max - $scope.component.configuration.temp_min + 0.0
+    ////////////////////////////
+    // MIN MAX temperature pilot
+    ////////////////////////////
+
+    // temp_min_min/temp_max_max watchers
+    // TODO !2: un watcher sur temp_min_min et temp_max_max: des qu'ils changent,
+    // il faut vérifier temp_min_value et temp_max_value: doivent rester dans l'intervalle, sinon, fixer les scenarii correspondants.
+
+    // scenarii config watchers
+    const scenarioConfiguratorGenerator = (configPath, isMin, isMaster) => {
+      const configurator = function(newId, oldId) {
+        const scenarioConf = _.get($scope.component.configuration, configPath)
+        if (!newId || newId === '' || newId === oldId) {
+            return
+        }
+console.log("##", scenarioConf);
+        // TODO !1: genere un configurator selon les caractéristiques fournies (isMin, isMaster, configPath)
+        // une procédure de reconnaissance de la donnée à controller doit être faite chez Myfox via edition du scenarii en ajax.
+        // Si MASTER alors on doit prendre en compte la valeur et la mettre dans temp_min_value / temp_max_value (valeurs courantes)
+        // Control supp: si la valeur est hors [temp_min_min, temp_max_max], alors corriger la valeur dans le scenario.
+        // Si SLAVE alors on doit au passage modifier la valeur dans le scenario.
+      }
+      this.addCleaner($scope.$watch('component.configuration.' + configPath + '.id', configurator))
+    }
+    scenarioConfiguratorGenerator('scenarii.min_temp_control_1', true, true)
+    scenarioConfiguratorGenerator('scenarii.min_temp_control_2', true, false)
+    scenarioConfiguratorGenerator('scenarii.min_temp_control_3', true, false)
+    scenarioConfiguratorGenerator('scenarii.min_temp_control_4', true, false)
+    scenarioConfiguratorGenerator('scenarii.max_temp_control_1', false, true)
+    scenarioConfiguratorGenerator('scenarii.max_temp_control_2', false, false)
+    scenarioConfiguratorGenerator('scenarii.max_temp_control_3', false, false)
+    scenarioConfiguratorGenerator('scenarii.max_temp_control_4', false, false)
+
+    // Double knob widget
+    const amplitude = $scope.component.configuration.temp_max_max - $scope.component.configuration.temp_min_min + 0.0
     $scope.doubleKnob = $('div#double-knob-{{component.id}}').temperatureLoader({
-		minValue: 17,
-		maxValue: 22,
-		scaleOffset: $scope.component.configuration.temp_min + 0.0,
+		minValue: $scope.component.configuration.temp_min_value || $scope.component.configuration.temp_min_min,
+		maxValue: $scope.component.configuration.temp_max_value || $scope.component.configuration.temp_max_max,
+		scaleOffset: $scope.component.configuration.temp_min_min + 0.0,
 		scaleAmplitude: amplitude,
         title: 'Min/Max',
 		precision: (amplitude > 5) ? 0 : 1,
@@ -116,11 +209,18 @@
 	});
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
 
+    ///////////////////////////
+    // Planer eco/confort pilot
+    ///////////////////////////
+
     $('div#planer-{{component.id}}').autoSizedPlaner({
       // TODO !4
 	});
 
+    //////////////////////////////////
     // Data provider (temp, lightning)
+    //////////////////////////////////
+
     if ($scope.component.configuration && $scope.component.configuration.data > 0) {
       $scope.dataState = null;
       $scope.updateDataProvider = function (data) {
@@ -128,9 +228,5 @@
       }
       this.addCleaner($scope.$watch('states.data.value[' + $scope.component.configuration.data + ']', $scope.updateDataProvider))
     }
-  {{/extend}}
-
-  {{#extend "settingsScript"}}
-    // TODO !2
   {{/extend}}
 </script>

@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* global $, angular */
+	/* global $, angular, SpeechSynthesisUtterance */
 	'use strict';
 
 	var _lodash = __webpack_require__(1);
@@ -336,11 +336,31 @@
 	      ut.voice = $rootScope.speech.voice;
 	      window.speechSynthesis.speak(ut);
 	    },
+	    listen: function listen(grammar) {
+	      // TODO !5: commandes vocales ? ou plus tard...
+	      /*
+	       var grammar = '#JSGF V1.0; grammar colors; public <color> = rouge | bleu | rose | jaune | vert | blanc | marron | violet | mauve | noir ;'
+	       var recognition = new webkitSpeechRecognition();
+	       var speechRecognitionList = new webkitSpeechGrammarList();
+	       speechRecognitionList.addFromString(grammar, 1);
+	       recognition.grammars = speechRecognitionList;
+	       //recognition.continuous = false;
+	       recognition.lang = 'fr-FR';
+	       recognition.interimResults = false;
+	       recognition.maxAlternatives = 1;
+	       recognition.onresult = function(event) {
+	         var color = event.results[0][0].transcript;
+	         console.log("RESULT:" + color);
+	       }
+	       */
+	    },
 	    init: function init() {
 	      if ('speechSynthesis' in window && window.speechSynthesis.getVoices()) {
 	        $rootScope.speech.voice = window.speechSynthesis.getVoices().filter(function (v) {
-	          // available on Mint: de-DE en-US en-GB es-ES es-US fr-FR hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
+	          // available on Mint: de-DE en-US (x2! M/F) en-GB es-ES es-US fr-FR
+	          // hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
 	          return v.lang === 'en-US';
+	          // FIXME !5: on Android, what voices are available ? what is the native OS one ? (Electra :))
 	        })[0];
 	      }
 	    }
