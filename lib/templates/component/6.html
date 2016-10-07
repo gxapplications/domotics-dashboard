@@ -36,7 +36,7 @@
                      ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.deviceSlaveId"
                      ng-model="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.checked">
             Main trigger (
-            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.deviceSlaveName{{ng-close}},
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.deviceSlaveName{{ng-close}}
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.operator === '1'"> &gt; </span>
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.operator === '0'"> &lt; </span>
             {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.value{{ng-close}} °C
@@ -46,7 +46,7 @@
                      ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.deviceSlaveId"
                      ng-model="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.checked">
             Sub condition 1 (
-            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.deviceSlaveName{{ng-close}},
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.deviceSlaveName{{ng-close}}
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.operator === '1'"> &gt; </span>
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.operator === '0'"> &lt; </span>
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.operator === '2'"> = </span>
@@ -57,7 +57,7 @@
                      ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.deviceSlaveId"
                      ng-model="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.checked">
             Sub condition 2 (
-            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.deviceSlaveName{{ng-close}},
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.deviceSlaveName{{ng-close}}
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.operator === '1'"> &gt; </span>
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.operator === '0'"> &lt; </span>
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.operator === '2'"> = </span>
@@ -272,13 +272,33 @@ console.log($scope.component.configuration, "##########"); // TODO !0: test it!
 
   {{#extend "settingsScript"}}
     $scope.preSaveConfig = function () {
+
+
       // TODO !2: sur temp_min_min et temp_max_max: s'ils changent,
       // il faut vérifier temp_min_value et temp_max_value: doivent rester dans l'intervalle, sinon, fixer les scenarii correspondants.
 
-      // TODO !1: boucler sur les scenarii [min/max]_temp_control_[X] et fixer:
-      // Si MASTER (X==1) alors on doit prendre en compte la valeur et la mettre dans temp_min_value / temp_max_value (valeurs courantes)
-      // Control supp: si la valeur est hors [temp_min_min, temp_max_max], alors corriger la valeur dans le scenario.
-      // Si SLAVE (X>1) alors on doit modifier la valeur dans le scenario pour l'aligner avec le master.
+      for (let scKey in $scope.component.configuration.scenarii) {
+        let sc = $scope.component.configuration.scenarii.scKey
+        let isMax = scKey.startsWith('max_')
+        if (scKey.endsWith('_1')) {
+            // TODO !1: on doit prendre en compte la valeur et la mettre dans temp_min_value / temp_max_value (valeurs courantes)
+            // TODO !1: Control supp: si la valeur est hors [temp_min_min, temp_max_max], alors corriger la valeur dans le scenario.
+        } else {
+            // TODO !1: on doit modifier la valeur dans le scenario pour l'aligner avec le master.
+        }
+      }
+
+      // Remove temperature values, used only when scenario change occurred.
+      for (let scKey in $scope.component.configuration.scenarii) {
+        let sc = $scope.component.configuration.scenarii.scKey
+        delete sc.controls.trigger_4.operator
+        delete sc.controls.trigger_4.value
+        delete sc.controls.condition_4_1.operator
+        delete sc.controls.condition_4_1.value
+        delete sc.controls.condition_4_2.operator
+        delete sc.controls.condition_4_2.value
+      }
+
       $scope.saveConfig()
     };
   {{/extend}}
