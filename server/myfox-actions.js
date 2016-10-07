@@ -193,6 +193,10 @@ const actions = function (api, reply, page, component, action = null, payload = 
           }
           reply(data)
         })
+      } else if (actionKey === 'fix_temperatures') {
+        // TODO !0: déporter le code du component 6 vers le côté serveur.
+        // On a la config dans la payload (elle n'est pas encore sauvee cote serveur, ca se fera tout seul apres)
+        // cette action doit retourner la config en retour, pour ecrasement côté angular.
       } else {
         // TODO autre actions a faire quand besoin
       }
