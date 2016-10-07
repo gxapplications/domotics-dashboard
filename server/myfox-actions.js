@@ -181,6 +181,23 @@ const actions = function (api, reply, page, component, action = null, payload = 
       }, macroId, ...steps)
       break
 
+    case 6:
+      // 6: Heating dashboard - Scenarii piloted
+      const [actionKey, actionData] = action.split('-')
+
+      if (actionKey === 'inspect_temperatures') {
+        api.inspectScenarioTemperatureSettings(actionData, (err, data) => {
+          if (err) {
+            console.log(err)
+            reply(err).code(500)
+          }
+          reply(data)
+        })
+      } else {
+        // TODO autre actions a faire quand besoin
+      }
+      break
+
     default:
       // Action not (yet) supported
       reply({}).code(418)

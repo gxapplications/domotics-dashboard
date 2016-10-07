@@ -9,6 +9,37 @@ import slugify from 'slug'
 const file = Path.join(__dirname, '..', 'var', 'data.db')
 const exists = fs.existsSync(file)
 
+const attributesToNumber = [
+  '[*].delay', 'delay', 'reset_delay', 'refresh',
+  'temp_min_min', 'temp_min_value', 'temp_max_max',
+  'temp_max_value']
+const attributesToBoolean = [
+  'allow_none',
+  'scenarii.min_temp_control_1.controls.trigger_4.checked',
+  'scenarii.min_temp_control_2.controls.trigger_4.checked',
+  'scenarii.min_temp_control_3.controls.trigger_4.checked',
+  'scenarii.min_temp_control_4.controls.trigger_4.checked',
+  'scenarii.max_temp_control_1.controls.trigger_4.checked',
+  'scenarii.max_temp_control_2.controls.trigger_4.checked',
+  'scenarii.max_temp_control_3.controls.trigger_4.checked',
+  'scenarii.max_temp_control_4.controls.trigger_4.checked',
+  'scenarii.min_temp_control_1.controls.condition_4_1.checked',
+  'scenarii.min_temp_control_2.controls.condition_4_1.checked',
+  'scenarii.min_temp_control_3.controls.condition_4_1.checked',
+  'scenarii.min_temp_control_4.controls.condition_4_1.checked',
+  'scenarii.max_temp_control_1.controls.condition_4_1.checked',
+  'scenarii.max_temp_control_2.controls.condition_4_1.checked',
+  'scenarii.max_temp_control_3.controls.condition_4_1.checked',
+  'scenarii.max_temp_control_4.controls.condition_4_1.checked',
+  'scenarii.min_temp_control_1.controls.condition_4_2.checked',
+  'scenarii.min_temp_control_2.controls.condition_4_2.checked',
+  'scenarii.min_temp_control_3.controls.condition_4_2.checked',
+  'scenarii.min_temp_control_4.controls.condition_4_2.checked',
+  'scenarii.max_temp_control_1.controls.condition_4_2.checked',
+  'scenarii.max_temp_control_2.controls.condition_4_2.checked',
+  'scenarii.max_temp_control_3.controls.condition_4_2.checked',
+  'scenarii.max_temp_control_4.controls.condition_4_2.checked'] // FIXME !0: support of wildcards should be useful :)
+
 if (!exists) {
   console.log('Creating DB file.')
   fs.openSync(file, 'w')
@@ -166,8 +197,8 @@ db.createComponent = function (slug, payload, callback) {
     db.run('INSERT INTO components (id, type, configuration, extra_component) VALUES (NULL, ?, ?, ?)',
       component.type,
       db.stringify(component.configuration,
-          ['[*].delay', 'delay', 'reset_delay', 'refresh', 'temp_min_min', 'temp_min_value', 'temp_max_max', 'temp_max_value'],
-          ['allow_none']),
+          attributesToNumber,
+          attributesToBoolean),
       db.stringify(component.extra_component), function (err) {
         return callback(err, pageRow, Object.assign({id: this.lastID}, component))
       })
@@ -194,8 +225,8 @@ db.updateComponent = function (slug, id, payload, callback) {
         'UPDATE components SET type=?, configuration=?, extra_component=? WHERE id=?',
         component.type,
         db.stringify(component.configuration,
-            ['[*].delay', 'delay', 'reset_delay', 'refresh', 'temp_min_min', 'temp_min_value', 'temp_max_max', 'temp_max_value'],
-            ['allow_none']),
+            attributesToNumber,
+            attributesToBoolean),
         db.stringify(component.extra_component),
         id,
         (err) => {

@@ -23,6 +23,50 @@
     TODO !4: Travailler sur le planer en barrettes. -> module JQuery. Canvas ?
 </div>
 
+{{#*inline "scenarioTemperatureSelector"}}
+    <md-select placeholder="Scenario linked for {{minmax}} temperature #{{idx}}" ng-model="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.id">
+        <md-option ng-value="">None</md-option>
+        <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+    </md-select>
+    <md-progress-circular md-mode="indeterminate"
+                          ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.id.length > 0 && component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.loading"></md-progress-circular>
+    <div ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.id.length > 0 && component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls"
+         layout="column">
+        <md-checkbox aria-label="trigger_4 condition"
+                     ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.deviceSlaveId"
+                     ng-model="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.checked">
+            Main trigger (
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.deviceSlaveName{{ng-close}},
+            <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.operator === '1'"> &gt; </span>
+            <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.operator === '0'"> &lt; </span>
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.value{{ng-close}} °C
+            )
+        </md-checkbox>
+        <md-checkbox aria-label="condition_4_1 condition"
+                     ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.deviceSlaveId"
+                     ng-model="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.checked">
+            Sub condition 1 (
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.deviceSlaveName{{ng-close}},
+            <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.operator === '1'"> &gt; </span>
+            <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.operator === '0'"> &lt; </span>
+            <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.operator === '2'"> = </span>
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.value{{ng-close}} °C
+            )
+        </md-checkbox>
+        <md-checkbox aria-label="condition_4_2 condition"
+                     ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.deviceSlaveId"
+                     ng-model="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.checked">
+            Sub condition 2 (
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.deviceSlaveName{{ng-close}},
+            <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.operator === '1'"> &gt; </span>
+            <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.operator === '0'"> &lt; </span>
+            <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.operator === '2'"> = </span>
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.value{{ng-close}} °C
+            )
+        </md-checkbox>
+    </div>
+{{/inline}}
+
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
 
@@ -64,48 +108,41 @@
                       <h4>Scenarii to control the LOWER temperature:</h4>
                   </md-list-item>
                   <md-list-item layout="row" layout-align="space-between stretch">
-                      <md-select placeholder="Scenario linked for MIN temperature #1" ng-model="component.configuration.scenarii.min_temp_control_1.id" flex="50" style="margin-right: 0.5rem;">
-                          <md-option ng-value="">None</md-option>
-                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
-                      </md-select>
-                      <md-select placeholder="Scenario linked for MIN temperature #2" ng-model="component.configuration.scenarii.min_temp_control_2.id" flex="50" style="margin-left: 0.5rem;">
-                          <md-option ng-value="">None</md-option>
-                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
-                      </md-select>
+                      <div layout="column" flex="50" layout-align="space-between stretch" style="margin-right: 0.5rem;">
+                          {{> scenarioTemperatureSelector minmax="min" idx="1"}}
+                      </div>
+                      <div layout="column" flex="50" layout-align="space-between stretch" style="margin-left: 0.5rem;">
+                          {{> scenarioTemperatureSelector minmax="min" idx="2"}}
+                      </div>
                   </md-list-item>
                   <md-list-item layout="row" layout-align="space-between stretch">
-                      <md-select placeholder="Scenario linked for MIN temperature #3" ng-model="component.configuration.scenarii.min_temp_control_3.id" flex="50" style="margin-right: 0.5rem;">
-                          <md-option ng-value="">None</md-option>
-                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
-                      </md-select>
-                      <md-select placeholder="Scenario linked for MIN temperature #4" ng-model="component.configuration.scenarii.min_temp_control_4.id" flex="50" style="margin-left: 0.5rem;">
-                          <md-option ng-value="">None</md-option>
-                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
-                      </md-select>
+                      <div layout="column" flex="50" layout-align="space-between stretch" style="margin-right: 0.5rem;">
+                          {{> scenarioTemperatureSelector minmax="min" idx="3"}}
+                      </div>
+                      <div layout="column" flex="50" layout-align="space-between stretch" style="margin-left: 0.5rem;">
+                          {{> scenarioTemperatureSelector minmax="min" idx="4"}}
+                      </div>
                   </md-list-item>
                   <md-list-item layout="row" layout-align="space-between stretch">
                       <h4>Scenarii to control the HIGHER temperature:</h4>
                   </md-list-item>
                   <md-list-item layout="row" layout-align="space-between stretch">
-                      <md-select placeholder="Scenario linked for MAX temperature #1" ng-model="component.configuration.scenarii.max_temp_control_1.id" flex="50" style="margin-right: 0.5rem;">
-                          <md-option ng-value="">None</md-option>
-                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
-                      </md-select>
-                      <md-select placeholder="Scenario linked for MAX temperature #2" ng-model="component.configuration.scenarii.max_temp_control_2.id" flex="50" style="margin-left: 0.5rem;">
-                          <md-option ng-value="">None</md-option>
-                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
-                      </md-select>
+                      <div layout="column" flex="50" layout-align="space-between stretch" style="margin-right: 0.5rem;">
+                          {{> scenarioTemperatureSelector minmax="max" idx="1"}}
+                      </div>
+                      <div layout="column" flex="50" layout-align="space-between stretch" style="margin-left: 0.5rem;">
+                          {{> scenarioTemperatureSelector minmax="max" idx="2"}}
+                      </div>
                   </md-list-item>
                   <md-list-item layout="row" layout-align="space-between stretch">
-                      <md-select placeholder="Scenario linked for MAX temperature #3" ng-model="component.configuration.scenarii.max_temp_control_3.id" flex="50" style="margin-right: 0.5rem;">
-                          <md-option ng-value="">None</md-option>
-                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
-                      </md-select>
-                      <md-select placeholder="Scenario linked for MAX temperature #4" ng-model="component.configuration.scenarii.max_temp_control_4.id" flex="50" style="margin-left: 0.5rem;">
-                          <md-option ng-value="">None</md-option>
-                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
-                      </md-select>
+                      <div layout="column" flex="50" layout-align="space-between stretch" style="margin-right: 0.5rem;">
+                          {{> scenarioTemperatureSelector minmax="max" idx="3"}}
+                      </div>
+                      <div layout="column" flex="50" layout-align="space-between stretch" style="margin-left: 0.5rem;">
+                          {{> scenarioTemperatureSelector minmax="max" idx="4"}}
+                      </div>
                   </md-list-item>
+
                   // TODO !3: listes des scenarii a activer en mode economique only (x4)
                   // TODO !3: listes des scenarii a activer en mode confort only (x4)
               </md-list>
@@ -162,16 +199,27 @@
     // MIN MAX temperature pilot
     ////////////////////////////
 
-    // scenarii config watchers: when scenario is changed from settings, look into for data to control.
+    // scenarii config watchers: when scenario is changed from settings, inspect temperature conditions to control.
     const scenarioConfiguratorGenerator = (configPath, isMin, isMaster) => {
       const configurator = function(newId, oldId) {
         const scenarioConf = _.get($scope.component.configuration, configPath)
         if (!newId || newId === '' || newId === oldId) {
             return
         }
-console.log("##", scenarioConf);
-        // TODO !1: une procédure de reconnaissance de la donnée à controller doit être faite chez Myfox
-        // via edition du scenarii en ajax. Le but est d'identifier la donner à controler
+
+        delete scenarioConf.controls
+        scenarioConf.loading = true
+        $.post('/{{page.slug}}/component/{{component.id}}/action/inspect_temperatures-' + newId, {})
+          .done(function(data) {
+            delete scenarioConf.loading
+            scenarioConf.controls = data
+console.log($scope.component.configuration, "##########"); // TODO !0: test it!
+          })
+          .fail(function() {
+            $scope.processingState = 'error'
+            $('div#component-{{component.id}}').parent('md-card').addClass('error')
+            $rootScope.events.errorEvent('Error during Scenario edition temperature inspection!')
+          })
       }
       this.addCleaner($scope.$watch('component.configuration.' + configPath + '.id', configurator))
     }
