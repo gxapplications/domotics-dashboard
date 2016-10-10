@@ -194,9 +194,39 @@ const actions = function (api, reply, page, component, action = null, payload = 
           reply(data)
         })
       } else if (actionKey === 'fix_temperatures') {
-        // TODO !0: déporter le code du component 6 vers le côté serveur.
-        // On a la config dans la payload (elle n'est pas encore sauvee cote serveur, ca se fera tout seul apres)
-        // cette action doit retourner la config en retour, pour ecrasement côté angular.
+        // do not use the configuration from DB: not yet updated at this step. Use received payload instead.
+        const volatileConfiguration = db.fixPayload(payload)
+
+        // TODO !2: sur temp_min_min et temp_max_max: s'ils changent,
+        // il faut vérifier temp_min_value et temp_max_value: doivent rester dans l'intervalle, sinon, fixer les scenarii correspondants.
+
+        for (let scKey in volatileConfiguration.scenarii) {
+          // let sc = volatileConfiguration.scenarii[scKey]
+          let isMax = scKey.startsWith('max_')
+          if (scKey.endsWith('_1')) { // master scenario
+            // TODO !1: Control supp: si la valeur est hors [temp_min_min, temp_max_max], alors corriger la valeur dans le scenario.
+            if (!isMax) {
+              if (!volatileConfiguration.temp_min_value) {
+                // no temperature configured yet: put the scenario temp in the configuration
+                // TODO !0: volatileConfiguration.temp_min_value = sc.controls.xxxx.value (utiliser la 1ere condition cochée)
+              } else {
+                // TODO !0: utiliser volatileConfiguration.temp_min_value pour modifier les conditions controlées dans sc.controls.xxx
+              }
+            } else {
+              if (!volatileConfiguration.temp_max_value) {
+                // no temperature configured yet: put the scenario temp in the configuration
+                // TODO !0: volatileConfiguration.temp_max_value = sc.controls.xxxx.value (utiliser la 1ere condition cochée)
+              } else {
+                // TODO !0: utiliser volatileConfiguration.temp_max_value pour modifier les conditions controlées dans sc.controls.xxx
+              }
+            }
+          } else { // slave scenarii
+            // TODO !1: utiliser volatileConfiguration.temp_{min|max}_value pour modifier les conditions controlées dans sc.controls.xxx
+          }
+        }
+
+        // return fixed configuration to front side
+        reply(volatileConfiguration)
       } else {
         // TODO autre actions a faire quand besoin
       }

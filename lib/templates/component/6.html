@@ -213,7 +213,6 @@
           .done(function(data) {
             delete scenarioConf.loading
             scenarioConf.controls = data
-console.log($scope.component.configuration, "##########"); // TODO !0: test it!
           })
           .fail(function() {
             $scope.processingState = 'error'
@@ -272,47 +271,30 @@ console.log($scope.component.configuration, "##########"); // TODO !0: test it!
 
   {{#extend "settingsScript"}}
     $scope.preSaveConfig = function () {
+      $.post('/{{page.slug}}/component/{{component.id}}/action/fix_temperatures', $scope.component.configuration)
+        .done(function(data) {
+          $scope.component.configuration = data // override config: changes may occurred.
 
-// TODO !0: tout cela doit se faire côté serveur !  appeler $.post('/{{page.slug}}/component/{{component.id}}/action/fix_temperatures') avec $scope.component.configuration en payload et on success, les scripts suivants
-
-      // TODO !2: sur temp_min_min et temp_max_max: s'ils changent,
-      // il faut vérifier temp_min_value et temp_max_value: doivent rester dans l'intervalle, sinon, fixer les scenarii correspondants.
-
-      for (let scKey in $scope.component.configuration.scenarii) {
-        let sc = $scope.component.configuration.scenarii[scKey]
-        let isMax = scKey.startsWith('max_')
-        if (scKey.endsWith('_1')) {
-          // TODO !1: Control supp: si la valeur est hors [temp_min_min, temp_max_max], alors corriger la valeur dans le scenario.
-          if (!isMax) {
-            if (!$scope.component.configuration.temp_min_value) {
-              // TODO !1: $scope.component.configuration.temp_min_value = sc.controls.xxxx.value (utiliser la 1ere condition cochée)
-            } else {
-              // TODO !1: utiliser $scope.component.configuration.temp_min_value pour modifier les conditions controlées dans sc.controls.xxx
-            }
-          } else {
-            if (!$scope.component.configuration.temp_max_value) {
-                // TODO !1: $scope.component.configuration.temp_max_value = sc.controls.xxxx.value (utiliser la 1ere condition cochée)
-            } else {
-                // TODO !1: utiliser $scope.component.configuration.temp_max_value pour modifier les conditions controlées dans sc.controls.xxx
+          // Remove temperature values, used only when scenario change occurred.
+          for (let scKey in $scope.component.configuration.scenarii) {
+            let sc = $scope.component.configuration.scenarii[scKey]
+            if (sc.controls) {
+              delete sc.controls.trigger_4.operator
+              delete sc.controls.trigger_4.value
+              delete sc.controls.condition_4_1.operator
+              delete sc.controls.condition_4_1.value
+              delete sc.controls.condition_4_2.operator
+              delete sc.controls.condition_4_2.value
             }
           }
-        } else {
-            // TODO !1: utiliser $scope.component.configuration.temp_{min|max}_value pour modifier les conditions controlées dans sc.controls.xxx
-        }
-      }
 
-      // Remove temperature values, used only when scenario change occurred.
-      for (let scKey in $scope.component.configuration.scenarii) {
-        let sc = $scope.component.configuration.scenarii[scKey]
-        delete sc.controls.trigger_4.operator
-        delete sc.controls.trigger_4.value
-        delete sc.controls.condition_4_1.operator
-        delete sc.controls.condition_4_1.value
-        delete sc.controls.condition_4_2.operator
-        delete sc.controls.condition_4_2.value
-      }
-
-      $scope.saveConfig()
+          $scope.saveConfig()
+        })
+        .fail(function() {
+          $scope.processingState = 'error'
+          $('div#component-{{component.id}}').parent('md-card').addClass('error')
+          $rootScope.events.errorEvent('Error during Scenario edition temperature correction!')
+        })
     }
   {{/extend}}
 </script>
