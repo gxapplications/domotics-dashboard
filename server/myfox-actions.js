@@ -197,36 +197,41 @@ const actions = function (api, reply, page, component, action = null, payload = 
         // do not use the configuration from DB: not yet updated at this step. Use received payload instead.
         const volatileConfiguration = db.fixPayload(payload)
 
-        // TODO !2: sur temp_min_min et temp_max_max: s'ils changent,
-        // il faut vérifier temp_min_value et temp_max_value: doivent rester dans l'intervalle, sinon, fixer les scenarii correspondants.
+        // fix min/max settings
+        if (volatileConfiguration.temp_max_max <= volatileConfiguration.temp_min_min) {
+          volatileConfiguration.temp_max_max = volatileConfiguration.temp_min_min + 1
+        }
+        /* if (! volatileConfiguration.temp_max_value || !volatileConfiguration.temp_min_value) {
+          volatileConfiguration.temp_max_value = volatileConfiguration.temp_max_max
+          volatileConfiguration.temp_min_value = volatileConfiguration.temp_min_min
+        } */
+        if (volatileConfiguration.temp_max_value > volatileConfiguration.temp_max_max) {
+          volatileConfiguration.temp_max_value = volatileConfiguration.temp_max_max
+        }
+        if (volatileConfiguration.temp_min_value < volatileConfiguration.temp_min_min) {
+          volatileConfiguration.temp_min_value = volatileConfiguration.temp_min_min
+        }
+        if (volatileConfiguration.temp_max_value <= volatileConfiguration.temp_min_value) {
+          volatileConfiguration.temp_max_value = volatileConfiguration.temp_min_value + 1
+        }
+        // TODO !0: tester tous les cas :s
 
+        const scenarioFixes = {} // {<scenario_id>: {toTemperature, controls}}
         for (let scKey in volatileConfiguration.scenarii) {
-          // let sc = volatileConfiguration.scenarii[scKey]
-          let isMax = scKey.startsWith('max_')
-          if (scKey.endsWith('_1')) { // master scenario
-            // TODO !1: Control supp: si la valeur est hors [temp_min_min, temp_max_max], alors corriger la valeur dans le scenario.
-            if (!isMax) {
-              if (!volatileConfiguration.temp_min_value) {
-                // no temperature configured yet: put the scenario temp in the configuration
-                // TODO !0: volatileConfiguration.temp_min_value = sc.controls.xxxx.value (utiliser la 1ere condition cochée)
-              } else {
-                // TODO !0: utiliser volatileConfiguration.temp_min_value pour modifier les conditions controlées dans sc.controls.xxx
-              }
-            } else {
-              if (!volatileConfiguration.temp_max_value) {
-                // no temperature configured yet: put the scenario temp in the configuration
-                // TODO !0: volatileConfiguration.temp_max_value = sc.controls.xxxx.value (utiliser la 1ere condition cochée)
-              } else {
-                // TODO !0: utiliser volatileConfiguration.temp_max_value pour modifier les conditions controlées dans sc.controls.xxx
-              }
-            }
-          } else { // slave scenarii
-            // TODO !1: utiliser volatileConfiguration.temp_{min|max}_value pour modifier les conditions controlées dans sc.controls.xxx
-          }
+          const toTemperature = scKey.startsWith('min_') ? volatileConfiguration.temp_min_value : volatileConfiguration.temp_max_value
+          const sc = volatileConfiguration.scenarii[scKey]
+          scenarioFixes[sc.id] = scenarioFixes[sc.id] || []
+          scenarioFixes[sc.id].push({
+            toTemperature: toTemperature,
+            controls: sc.controls.filter((v) => { return v.checked === true })
+          })
         }
 
+        console.log(scenarioFixes)
+        // TODO !1: loop over scenarioFixes, and make sequential promises to API call (new method that modifies temp...)
+
         // return fixed configuration to front side
-        reply(volatileConfiguration)
+        reply(volatileConfiguration) // TODO !2: when all promises resolved only!
       } else {
         // TODO autre actions a faire quand besoin
       }
