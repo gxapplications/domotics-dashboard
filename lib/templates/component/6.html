@@ -189,10 +189,18 @@
     ////////////////////////////
 
     // temp_max_max and temp_min_min must be 3°C distant at all times
-    $scope.keepMaxMaxMinMinDistances = function (who, a, b, c) {
-      // TODO !0: watcher pour que temp_max_max soit toujours supérieur à temp_min_min de 3°.
-      // Attention au cas des bornes. Attention a ne pas generer des watches en boucle !
-      console.log(who, a, b, c);
+    $scope.keepMaxMaxMinMinDistances = function (who, newValue, oldValue) {
+      if (newValue != oldValue) {
+        if (who === 'min') {
+          if ($scope.component.configuration.temp_max_max < newValue + 3) {
+            $scope.component.configuration.temp_max_max = newValue + 3
+          }
+        } else {
+          if ($scope.component.configuration.temp_min_min > newValue - 3) {
+            $scope.component.configuration.temp_min_min = newValue - 3
+          }
+        }
+      }
     }
     this.addCleaner($scope.$watch('component.configuration.temp_max_max', $scope.keepMaxMaxMinMinDistances.bind(this, 'max')))
     this.addCleaner($scope.$watch('component.configuration.temp_min_min', $scope.keepMaxMaxMinMinDistances.bind(this, 'min')))
@@ -238,13 +246,35 @@
 		scaleAmplitude: amplitude,
         title: 'Min / Max',
 		precision: (amplitude > 5) ? 0 : 1,
-		onMinUpdate: function (old, value) { console.log(value) }, // TODO !0: gerer les events. Forcer ici un ecart de 1°c. Attention aux bornes.
-		onMaxUpdate: function (old, value) { console.log(value) },
+		onMinUpdate: function (old, value) {
+          if (old === value) {
+              return
+          }
+          let min = (value > $scope.component.configuration.temp_max_max - 1) ? $scope.component.configuration.temp_max_max - 1 : value
+            $scope.component.configuration.temp_min_value = min
+            if ($scope.component.configuration.temp_max_value < min + 1) {
+                $scope.component.configuration.temp_max_value = min + 1
+            }
+        },
+		onMaxUpdate: function (old, value) {
+            if (old === value) {
+                return
+            }
+            let max = (value < $scope.component.configuration.temp_min_min + 1) ? $scope.component.configuration.temp_min_min + 1 : value
+            $scope.component.configuration.temp_max_value = max
+            if ($scope.component.configuration.temp_min_value > max - 1) {
+                $scope.component.configuration.temp_min_value = max - 1
+            }
+        },
 		/*onCenterClick: onCenterClick,
 		onUpdating: onUpdating,
 		componentData: component*/
 	});
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
+
+    // TODO !0: function on both watchers to call api temp update
+    this.addCleaner($scope.$watch('component.configuration.temp_min_value', _.noop.bind(this, 'min')))
+    this.addCleaner($scope.$watch('component.configuration.temp_max_value', _.noop.bind(this, 'max')))
 
     ///////////////////////////
     // Planer eco/confort pilot

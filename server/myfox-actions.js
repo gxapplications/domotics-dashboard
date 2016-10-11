@@ -230,11 +230,20 @@ const actions = function (api, reply, page, component, action = null, payload = 
           }
         }
 
-        console.log(scenarioFixes)
-        // TODO !1: loop over scenarioFixes, and make sequential promises to API call (new method that modifies temp...)
-
-        // return fixed configuration to front side
-        reply(volatileConfiguration) // TODO !2: when all promises resolved only!
+        // loop over scenarii to fix and chain promises sequentially to fix each
+        scenarioFixes.reduce((prom, fixData, scenarioId) => {
+          prom.then(() => {
+            // TODO !1: reduce will loop over scenarioFixes, and make sequential promises to API call (new method that modifies temp...)
+          })
+        }, Promise.resolve())
+        .then(() => {
+          // return fixed configuration to front side
+          reply(volatileConfiguration)
+        })
+        .catch((err) => {
+          console.log(err)
+          // TODO !1: error case...
+        })
       } else {
         // TODO autre actions a faire quand besoin
       }

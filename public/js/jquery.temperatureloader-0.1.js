@@ -312,7 +312,7 @@ see the file license.txt that was included with the plugin bundle.
                 percentageText.style.textShadow = '0 1px 1px #424242';
 
                 /* Calculate the text for the progresses */
-                string = (degress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision) + ' ~ ' + (progress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision) + '<br/><small>' + settings.suffix + '</small>';
+                string = (degress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision) + ' ~ ' + (progress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision) + '<br/><br/><small>' + settings.suffix + '</small>';
 
                 percentageText.innerHTML = string;
 
