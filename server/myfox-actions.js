@@ -1,5 +1,6 @@
 'use strict'
 
+import _ from 'lodash'
 import db from './db'
 import CryptoJS from 'crypto-js'
 
@@ -198,33 +199,35 @@ const actions = function (api, reply, page, component, action = null, payload = 
         const volatileConfiguration = db.fixPayload(payload)
 
         // fix min/max settings
-        if (volatileConfiguration.temp_max_max <= volatileConfiguration.temp_min_min) {
-          volatileConfiguration.temp_max_max = volatileConfiguration.temp_min_min + 1
+        if (volatileConfiguration.temp_max_max < volatileConfiguration.temp_min_min + 3) {
+          volatileConfiguration.temp_max_max = volatileConfiguration.temp_min_min + 3
         }
         /* if (! volatileConfiguration.temp_max_value || !volatileConfiguration.temp_min_value) {
           volatileConfiguration.temp_max_value = volatileConfiguration.temp_max_max
           volatileConfiguration.temp_min_value = volatileConfiguration.temp_min_min
         } */
-        if (volatileConfiguration.temp_max_value > volatileConfiguration.temp_max_max) {
+        if (volatileConfiguration.temp_max_value > volatileConfiguration.temp_max_max ||
+            volatileConfiguration.temp_max_value < volatileConfiguration.temp_min_min + 1 ||
+            volatileConfiguration.temp_min_value < volatileConfiguration.temp_min_min ||
+            volatileConfiguration.temp_min_value > volatileConfiguration.temp_max_max - 1) {
+          volatileConfiguration.temp_min_value = volatileConfiguration.temp_min_min
           volatileConfiguration.temp_max_value = volatileConfiguration.temp_max_max
         }
-        if (volatileConfiguration.temp_min_value < volatileConfiguration.temp_min_min) {
-          volatileConfiguration.temp_min_value = volatileConfiguration.temp_min_min
-        }
-        if (volatileConfiguration.temp_max_value <= volatileConfiguration.temp_min_value) {
+        if (volatileConfiguration.temp_max_value < volatileConfiguration.temp_min_value + 1) {
           volatileConfiguration.temp_max_value = volatileConfiguration.temp_min_value + 1
         }
-        // TODO !0: tester tous les cas :s
 
         const scenarioFixes = {} // {<scenario_id>: {toTemperature, controls}}
         for (let scKey in volatileConfiguration.scenarii) {
           const toTemperature = scKey.startsWith('min_') ? volatileConfiguration.temp_min_value : volatileConfiguration.temp_max_value
           const sc = volatileConfiguration.scenarii[scKey]
-          scenarioFixes[sc.id] = scenarioFixes[sc.id] || []
-          scenarioFixes[sc.id].push({
-            toTemperature: toTemperature,
-            controls: sc.controls.filter((v) => { return v.checked === true })
-          })
+          if (sc.id) {
+            scenarioFixes[sc.id] = scenarioFixes[sc.id] || []
+            scenarioFixes[sc.id].push({
+              toTemperature: toTemperature,
+              controls: _.filter(sc.controls, (v) => { return v.checked === true })
+            })
+          }
         }
 
         console.log(scenarioFixes)

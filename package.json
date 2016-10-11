@@ -11,11 +11,10 @@
     "test": "cross-env NODE_ENV=test mocha",
     "doc": "rimraf doc && jsdoc --package package.json --destination doc/jsdoc/ server/ lib/ && groc && cross-env NODE_ENV=test nyc --require babel-core/register --reporter=lcov mocha && rimraf .nyc_output",
     "doc:publish": "npm run doc && gh-pages -d doc",
-    "dev:webpack": "webpack --progress --colors",
-    "webpack": "webpack --progress --colors --optimize-minimize",
+    "webpack": "webpack --progress --colors",
     "lint": "standard --verbose | snazzy",
     "validate": "npm run webpack && npm run lint && npm test && npm ls",
-    "dev:start": "npm run dev:webpack && nodemon index.js",
+    "dev:start": "npm run webpack && nodemon index.js",
     "dev:test": "npm run test -- --watch",
     "debug:start": "iron-node index.js",
     "debug:test": "cross-env NODE_ENV=test iron-node node_modules/mocha/bin/_mocha"

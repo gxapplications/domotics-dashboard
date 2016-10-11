@@ -321,12 +321,13 @@ see the file license.txt that was included with the plugin bundle.
                 valueText.style.color = '#E0E0E0'; // 300
                 valueText.style.font = smallSize.toString() + 'px';
                 valueText.style.height = smallSize.toString() + 'px';
+                valueText.style.overflow = 'visible';
                 valueText.style.textShadow = '0 1px 1px #424242';
 
                 /* Ugly vertical align calculations - fit into bottom ring.
                  * The bottom ring occupes 1/6 of the diameter of the circle */
-                heightRemaining = (settings.height * 0.19) - smallSize;
-                valueText.style.top = ((settings.height * 0.81) + (heightRemaining / 4)).toString() + 'px';
+                heightRemaining = (settings.height * 0.15) - smallSize;
+                valueText.style.top = ((settings.height * 0.85) + (heightRemaining / 4)).toString() + 'px';
             }());
         };
 
@@ -538,7 +539,7 @@ see the file license.txt that was included with the plugin bundle.
 		});
      */
     $.fn.temperatureLoader = function (params) {
-    	var settings, loader, thermostat, setMinValue, setMaxValue, setSize, minChanged = false, maxChanged = false, oldMinValue, oldMaxValue;
+    	var settings, loader, thermostat, setMinValue, setMaxValue, setSize, setTitle, minChanged = false, maxChanged = false, oldMinValue, oldMaxValue;
     	thermostat = $(this);
 
 	    /* Specify default settings */
@@ -578,6 +579,12 @@ see the file license.txt that was included with the plugin bundle.
             loader.setProgress(settings.maxValue);
         };
         thermostat.setMaxValue = setMaxValue;
+
+        setTitle = function(val) {
+            settings.title = val;
+            loader.setValue(val);
+        };
+        thermostat.setTitle = setTitle;
 
         setSize = function(size) {
         	if (thermostat.children().length > 0) {
@@ -634,6 +641,8 @@ see the file license.txt that was included with the plugin bundle.
             thermostat.setSize(size);
             return true;
         };
+
+        this.setTitle = thermostat.setTitle;
 
         $( window ).resize(this.resizer);
         thermostat.resize(this.resizer);

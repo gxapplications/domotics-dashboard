@@ -1,26 +1,15 @@
-<div layout="row" layout-padding layout-align="space-between stretch" style="min-height:12rem;">
-    <div id="double-knob-{{component.id}}" flex="50"
-         class="ratio-content" style="max-height:20em;"
+<div layout="column" layout-padding layout-align="center center" flex="70">
+    <div id="double-knob-{{component.id}}" flex layout-fill
+         class="ratio-content" style="font-size: 1.1rem;"
          title="{{component.title}}"></div>
-
-    <div flex="50" style="padding-left:1.2rem;">
-        <span ng-if="dataState" style="color: rgba(255,255,255,.5);">
-            Currently
-            <h2 style="margin: 0.4rem 0; color: rgba(255,255,255,1);">{{ng-open}}dataState.temperature{{ng-close}}</h2>
-            {{ng-open}}dataState.light{{ng-close}}
-            <br/><br/>
-        </span>
-
-        TODO !5: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
-    </div>
 </div>
 
-<div flex layout-fill style="padding-top:1.1em;">
-    <div id="planer-{{component.id}}" style="width:100%; height:3em;"></div>
-</div>
-
-<div flex style="padding-top:1.1em;">
+<div layout="column" layout-padding layout-align="space-between stretch" flex="30" xstyle="min-height:12rem;">
+    TODO !5: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
     TODO !4: Travailler sur le planer en barrettes. -> module JQuery. Canvas ?
+    <div layout-fill style="padding-top:1.1em;">
+        <div id="planer-{{component.id}}" style="width:100%; height:3em;"></div>
+    </div>
 </div>
 
 {{#*inline "scenarioTemperatureSelector"}}
@@ -199,6 +188,15 @@
     // MIN MAX temperature pilot
     ////////////////////////////
 
+    // temp_max_max and temp_min_min must be 3°C distant at all times
+    $scope.keepMaxMaxMinMinDistances = function (who, a, b, c) {
+      // TODO !0: watcher pour que temp_max_max soit toujours supérieur à temp_min_min de 3°.
+      // Attention au cas des bornes. Attention a ne pas generer des watches en boucle !
+      console.log(who, a, b, c);
+    }
+    this.addCleaner($scope.$watch('component.configuration.temp_max_max', $scope.keepMaxMaxMinMinDistances.bind(this, 'max')))
+    this.addCleaner($scope.$watch('component.configuration.temp_min_min', $scope.keepMaxMaxMinMinDistances.bind(this, 'min')))
+
     // scenarii config watchers: when scenario is changed from settings, inspect temperature conditions to control.
     const scenarioConfiguratorGenerator = (configPath, isMin, isMaster) => {
       const configurator = function(newId, oldId) {
@@ -238,9 +236,9 @@
 		maxValue: $scope.component.configuration.temp_max_value || $scope.component.configuration.temp_max_max,
 		scaleOffset: $scope.component.configuration.temp_min_min + 0.0,
 		scaleAmplitude: amplitude,
-        title: 'Min/Max',
+        title: 'Min / Max',
 		precision: (amplitude > 5) ? 0 : 1,
-		onMinUpdate: function (old, value) { console.log(value) },
+		onMinUpdate: function (old, value) { console.log(value) }, // TODO !0: gerer les events. Forcer ici un ecart de 1°c. Attention aux bornes.
 		onMaxUpdate: function (old, value) { console.log(value) },
 		/*onCenterClick: onCenterClick,
 		onUpdating: onUpdating,
@@ -264,6 +262,7 @@
       $scope.dataState = null;
       $scope.updateDataProvider = function (data) {
         $scope.dataState = data
+        $scope.doubleKnob.setTitle(data.temperature)
       }
       this.addCleaner($scope.$watch('states.data.value[' + $scope.component.configuration.data + ']', $scope.updateDataProvider))
     }
