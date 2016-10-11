@@ -190,7 +190,7 @@
 
     // temp_max_max and temp_min_min must be 3°C distant at all times
     $scope.keepMaxMaxMinMinDistances = function (who, newValue, oldValue) {
-      if (newValue != oldValue) {
+      if (newValue !== oldValue) {
         if (who === 'min') {
           if ($scope.component.configuration.temp_max_max < newValue + 3) {
             $scope.component.configuration.temp_max_max = newValue + 3
@@ -272,9 +272,14 @@
 	});
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
 
-    // TODO !0: function on both watchers to call api temp update
-    this.addCleaner($scope.$watch('component.configuration.temp_min_value', _.noop.bind(this, 'min')))
-    this.addCleaner($scope.$watch('component.configuration.temp_max_value', _.noop.bind(this, 'max')))
+    // listeners to call API temperature updates
+    $scope.updateMinMaxTemperatureScenario = function (who, newValue, oldValue) {
+      if (newValue !== oldValue) {
+          // TODO !0: call api temp update (feature to do first on myfox-wrapper-api lib) with who and newValue.
+      }
+    }
+    this.addCleaner($scope.$watch('component.configuration.temp_min_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'min')))
+    this.addCleaner($scope.$watch('component.configuration.temp_max_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'max')))
 
     ///////////////////////////
     // Planer eco/confort pilot
