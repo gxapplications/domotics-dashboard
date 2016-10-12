@@ -284,7 +284,7 @@
           value: newValue
         })
         .done(function() {
-          $rootScope.speech.speak(who + ' temperature updated to ' + newValue + ' degrees.')
+          $rootScope.speech.speak((who === 'min' ? 'Economy' : 'Comfort') + ' temperature updated to ' + newValue + ' degrees.')
           $scope.processingState = 'waiting'
         })
         .fail(function() {
@@ -295,8 +295,8 @@
         })
       }
     }
-    this.addCleaner($scope.$watch('component.configuration.temp_min_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'minimal')))
-    this.addCleaner($scope.$watch('component.configuration.temp_max_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'maximal')))
+    this.addCleaner($scope.$watch('component.configuration.temp_min_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'min')))
+    this.addCleaner($scope.$watch('component.configuration.temp_max_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'max')))
 
     ///////////////////////////
     // Planer eco/confort pilot

@@ -229,13 +229,19 @@ const actions = function (api, reply, page, component, action = null, payload = 
             })
           }
         }
-
+// TODO !0: tester tout ca ! bien sequentiel ? bonne donnees arrivent ?
         // loop over scenarii to fix and chain promises sequentially to fix each
-        scenarioFixes.reduce((prom, fixData, scenarioId) => {
+        _.reduce(scenarioFixes, (prom, fixData, scenarioId) => {
           // fixData is [{toTemperature, controls: {only checked conditions, 0 to 3}}]
           return prom.then(() => {
             return new Promise((resolve, reject) => {
-              // TODO !0: api.callMachinTruc(data, (err, res) => { if (err) reject(err); resolve(res); })
+              api.updateScenarioTemperatureSettings(scenarioId, fixData, (err, res) => {
+                if (err) {
+                  reject(err)
+                } else {
+                  resolve(res)
+                }
+              })
             })
           })
         }, Promise.resolve())
@@ -248,11 +254,11 @@ const actions = function (api, reply, page, component, action = null, payload = 
           reply(err).code(500)
         })
       } else if (actionKey === 'update_temperature') {
-        const {minmax, value} = db.fixPayload(payload)
-        // minmax contient 'minimal' ou 'maximal' en entier
+        // const {minmax, value} = db.fixPayload(payload)
+        // minmax contient 'min' ou 'max' en entier
         // TODO !0: recup from configuration.scenarii.(min_|max_) un tableau sous le format : [{toTemperature, controls: {only checked conditions, 0 to 3}}]
       } else {
-        // TODO !1: autre actions a faire quand besoin
+        // TODO !3: autre actions a faire quand besoin
       }
       break
 
