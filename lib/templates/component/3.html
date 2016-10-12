@@ -123,7 +123,7 @@
           $scope.updateSwitch(toActivate)
         })
         .fail(function() {
-          // TODO !0: speak
+          $rootScope.speech.speak('Domotic command not sent.', 'error')
           $scope.processingState = 'error'
           $('div#component-{{component.id}}').parent('md-card').addClass('error')
           $scope.updateStepCounter()

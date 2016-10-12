@@ -5,8 +5,8 @@
 </div>
 
 <div layout="column" layout-padding layout-align="space-between stretch" flex="30" xstyle="min-height:12rem;">
-    TODO !5: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
-    TODO !4: Travailler sur le planer en barrettes. -> module JQuery. Canvas ?
+    TODO !4: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
+    TODO !3: Travailler sur le planer en barrettes. -> module JQuery. Canvas ?
     <div layout-fill style="padding-top:1.1em;">
         <div id="planer-{{component.id}}" style="width:100%; height:3em;"></div>
     </div>
@@ -132,8 +132,8 @@
                       </div>
                   </md-list-item>
 
-                  // TODO !3: listes des scenarii a activer en mode economique only (x4)
-                  // TODO !3: listes des scenarii a activer en mode confort only (x4)
+                  // TODO !2: listes des scenarii a activer en mode economique only (x4)
+                  // TODO !2: listes des scenarii a activer en mode confort only (x4)
               </md-list>
           </section>
           <md-divider></md-divider>
@@ -183,6 +183,8 @@
           }
       }
     }, $scope.component)
+
+    $scope.processingState = 'waiting' // or 'processing', 'error'
 
     ////////////////////////////
     // MIN MAX temperature pilot
@@ -275,18 +277,33 @@
     // listeners to call API temperature updates
     $scope.updateMinMaxTemperatureScenario = function (who, newValue, oldValue) {
       if (newValue !== oldValue) {
-          // TODO !0: call api temp update (feature to do first on myfox-wrapper-api lib) with who and newValue.
+        $scope.processingState = 'processing'
+
+        $.post('/{{page.slug}}/component/{{component.id}}/action/update_temperature-' + who, {
+          minmax: who,
+          value: newValue
+        })
+        .done(function() {
+          $rootScope.speech.speak(who + ' temperature updated to ' + newValue + ' degrees.')
+          $scope.processingState = 'waiting'
+        })
+        .fail(function() {
+          $rootScope.speech.speak('Temperature update failed.', 'error')
+          $scope.processingState = 'error'
+          $('div#component-{{component.id}}').parent('md-card').addClass('error')
+          $rootScope.events.errorEvent('Error during temperature update!')
+        })
       }
     }
-    this.addCleaner($scope.$watch('component.configuration.temp_min_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'min')))
-    this.addCleaner($scope.$watch('component.configuration.temp_max_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'max')))
+    this.addCleaner($scope.$watch('component.configuration.temp_min_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'minimal')))
+    this.addCleaner($scope.$watch('component.configuration.temp_max_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'maximal')))
 
     ///////////////////////////
     // Planer eco/confort pilot
     ///////////////////////////
 
     $('div#planer-{{component.id}}').autoSizedPlaner({
-      // TODO !4
+      // TODO !3
 	});
 
     //////////////////////////////////

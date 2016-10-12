@@ -115,11 +115,13 @@
       $scope.processingState = 'processing'
       $.post('/{{page.slug}}/component/{{component.id}}/action/' + actionIdx + '-' +
           ($scope.realStates.includes(actionIdx) ? 'off' : 'on'), {})
-        .done(function(data) {
+        .done(function() {
+          $rootScope.speech.speak($scope.component.configuration.title + ' mode switched.')
           $scope.processingState = 'waiting'
           $scope.updateSwitch(actionIdx)
         })
         .fail(function() {
+          $rootScope.speech.speak('A scenario did not switch properly.', 'error')
           $scope.processingState = 'error'
           $rootScope.events.errorEvent('Error during Multiple scenarii switch action!')
         })

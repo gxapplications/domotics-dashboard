@@ -108,7 +108,7 @@
           $scope.updateStepCounter()
         })
         .fail(function() {
-          // TODO !0: speak
+          $rootScope.speech.speak($scope.component.configuration[0].title + ' not played properly.', 'error')
           $scope.processingState = 'error'
           $scope.updateStepCounter()
           $rootScope.events.errorEvent('Error during Scenario play action!')
