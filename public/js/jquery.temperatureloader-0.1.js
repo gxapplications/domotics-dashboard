@@ -130,7 +130,7 @@ see the file license.txt that was included with the plugin bundle.
         /* Create our linear gradient for the outer ring */
         lingrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
         lingrad.addColorStop(0, '#9E9E9E'); // 500
-        lingrad.addColorStop(1, '#424242'); // 800
+        lingrad.addColorStop(1, '#616161'); // 700
 
         /* Create inner gradient for the outer ring */
         innerGrad = ctx.createLinearGradient(cX, cX * 0.133333, cX, canvas.height - cX * 0.133333);
@@ -140,12 +140,12 @@ see the file license.txt that was included with the plugin bundle.
         /* Tube gradient (background, not the spiral gradient) */
         tubeGrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
         tubeGrad.addColorStop(0, '#616161'); // 700
-        tubeGrad.addColorStop(1, '#212121'); // 900
+        tubeGrad.addColorStop(1, '#323232'); // 850 ?
 
         /* knob gradient */
         knobgrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
-        knobgrad.addColorStop(0, '#BDBDBD'); // 400
-        knobgrad.addColorStop(1, '#757575'); // 600
+        knobgrad.addColorStop(0, '#00796B'); // teal 700
+        knobgrad.addColorStop(1, '#004D40'); // teal 900
 
         /* The inner circle is 2/3rds the size of the outer one */
         innerRadius = cX * 0.6666;
@@ -194,7 +194,7 @@ see the file license.txt that was included with the plugin bundle.
             /* draw outer circle */
             ctx.fillStyle = lingrad;
             ctx.beginPath();
-            ctx.strokeStyle = '#212121'; // 900
+            ctx.strokeStyle = '#424242'; // 800
             ctx.arc(cX, cY, radius, 0, Math.PI * 2, counterClockwise);
             ctx.fill();
             ctx.stroke();
@@ -204,7 +204,6 @@ see the file license.txt that was included with the plugin bundle.
             ctx.beginPath();
             ctx.arc(cX, cY, innerRadius, 0, Math.PI * 2, counterClockwise);
             ctx.fill();
-            ctx.strokeStyle = '#90424242'; // 800 + alpha
             ctx.stroke();
 
             ctx.beginPath();
@@ -284,21 +283,24 @@ see the file license.txt that was included with the plugin bundle.
             ctx.stroke();
 
             // rajout des knobs.
+            ctx.shadowColor = "rgba(21,21,21,0.4)";
+            ctx.shadowBlur = 4;
+            ctx.shadowOffsetY = 3;
+
 			var knob2X = cX + Math.cos(completeAngle2)*knobRadius, knob2Y = cY + Math.sin(completeAngle2)*knobRadius,
 			    knob1X = cX + Math.cos(completeAngle1)*knobRadius, knob1Y = cY + Math.sin(completeAngle1)*knobRadius;
 			ctx.fillStyle = knobgrad;
             ctx.beginPath();
             ctx.arc(knob1X, knob1Y, innerRadius*0.25, 0, Math.PI * 2, counterClockwise);
             ctx.fill();
-            ctx.strokeStyle = '#BDBDBDaa'; // 400 + alpha
-            ctx.stroke();
             ctx.fillStyle = knobgrad;
             ctx.beginPath();
             ctx.arc(knob2X, knob2Y, innerRadius*0.25, 0, Math.PI * 2, counterClockwise);
             ctx.fill();
-            ctx.strokeStyle = '#BDBDBDaa'; // 400 + alpha
-            ctx.stroke();
 
+            ctx.shadowColor = '#000000';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
 
             /*** TEXT ***/
             (function () {

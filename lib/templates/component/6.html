@@ -320,22 +320,24 @@
 		precision: (amplitude > 5) ? 0 : 1,
 		onMinUpdate: function (old, value) {
           if (old === value) {
-              return
+            return
           }
+          value = parseFloat(value) // cast. Can be int or float
           let min = (value > $scope.component.configuration.temp_max_max - 1) ? $scope.component.configuration.temp_max_max - 1 : value
-            $scope.component.configuration.temp_min_value = min
-            if ($scope.component.configuration.temp_max_value < min + 1) {
-                $scope.component.configuration.temp_max_value = min + 1
-            }
+          $scope.component.configuration.temp_min_value = min
+          if ($scope.component.configuration.temp_max_value < min + 1) {
+            $scope.component.configuration.temp_max_value = min + 1
+          }
         },
 		onMaxUpdate: function (old, value) {
             if (old === value) {
-                return
+              return
             }
+            value = parseFloat(value) // cast. Can be int or float
             let max = (value < $scope.component.configuration.temp_min_min + 1) ? $scope.component.configuration.temp_min_min + 1 : value
             $scope.component.configuration.temp_max_value = max
             if ($scope.component.configuration.temp_min_value > max - 1) {
-                $scope.component.configuration.temp_min_value = max - 1
+              $scope.component.configuration.temp_min_value = max - 1
             }
         }
 	});
