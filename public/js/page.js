@@ -328,10 +328,13 @@
 	  $rootScope.speech = {
 	    voice: undefined,
 	    speak: function speak(text) {
+	      var intonation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'normal';
+
 	      if (!$rootScope.speech.voice) {
 	        $rootScope.speech.init();
 	      }
 
+	      // TODO !5: use intonation (== (normal|error))
 	      var ut = new SpeechSynthesisUtterance(text);
 	      ut.voice = $rootScope.speech.voice;
 	      window.speechSynthesis.speak(ut);

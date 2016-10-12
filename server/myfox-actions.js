@@ -186,6 +186,25 @@ const actions = function (api, reply, page, component, action = null, payload = 
       // 6: Heating dashboard - Scenarii piloted
       const [actionKey, actionData] = action.split('-')
 
+      // TODO !6: after modularization, the following method should be static
+      // loop over scenarii to fix and chain promises sequentially to fix each
+      const chainUpdateScenarioTemperatureSettings = function (scenarioFixes, api) {
+        return _.reduce(scenarioFixes, (prom, fixData, scenarioId) => {
+          // fixData is [{toTemperature, controls: {only checked conditions, 0 to 3}}]
+          return prom.then(() => {
+            return new Promise((resolve, reject) => {
+              api.updateScenarioTemperatureSettings(scenarioId, fixData, (err, res) => {
+                if (err) {
+                  reject(err)
+                } else {
+                  resolve(res)
+                }
+              })
+            })
+          })
+        }, Promise.resolve())
+      }
+
       if (actionKey === 'inspect_temperatures') {
         api.inspectScenarioTemperatureSettings(actionData, (err, data) => {
           if (err) {
@@ -229,22 +248,8 @@ const actions = function (api, reply, page, component, action = null, payload = 
             })
           }
         }
-// TODO !0: tester tout ca ! bien sequentiel ? bonne donnees arrivent ?
-        // loop over scenarii to fix and chain promises sequentially to fix each
-        _.reduce(scenarioFixes, (prom, fixData, scenarioId) => {
-          // fixData is [{toTemperature, controls: {only checked conditions, 0 to 3}}]
-          return prom.then(() => {
-            return new Promise((resolve, reject) => {
-              api.updateScenarioTemperatureSettings(scenarioId, fixData, (err, res) => {
-                if (err) {
-                  reject(err)
-                } else {
-                  resolve(res)
-                }
-              })
-            })
-          })
-        }, Promise.resolve())
+
+        chainUpdateScenarioTemperatureSettings(scenarioFixes, api)
         .then(() => {
           // return fixed configuration to front side
           reply(volatileConfiguration)
@@ -254,9 +259,31 @@ const actions = function (api, reply, page, component, action = null, payload = 
           reply(err).code(500)
         })
       } else if (actionKey === 'update_temperature') {
-        // const {minmax, value} = db.fixPayload(payload)
-        // minmax contient 'min' ou 'max' en entier
-        // TODO !0: recup from configuration.scenarii.(min_|max_) un tableau sous le format : [{toTemperature, controls: {only checked conditions, 0 to 3}}]
+        const {minmax, value} = db.fixPayload(payload)
+        const scenarii = _.filter(configuration.scenarii, (scenario, key) => {
+          return key.startsWith(minmax)
+        })
+
+        const scenarioFixes = {} // {<scenario_id>: {toTemperature, controls}}
+        scenarii.forEach((sc) => {
+          if (sc.id) {
+            scenarioFixes[sc.id] = scenarioFixes[sc.id] || []
+            scenarioFixes[sc.id].push({
+              toTemperature: value,
+              controls: _.filter(sc.controls, (v) => { return v.checked === true })
+            })
+          }
+        })
+
+        chainUpdateScenarioTemperatureSettings(scenarioFixes, api)
+        .then(() => {
+          // return fixed configuration to front side
+          reply({'status': 'ok'})
+        })
+        .catch((err) => {
+          console.log(err)
+          reply(err).code(500)
+        })
       } else {
         // TODO !3: autre actions a faire quand besoin
       }

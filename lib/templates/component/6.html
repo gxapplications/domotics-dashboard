@@ -4,9 +4,12 @@
          title="{{component.title}}"></div>
 </div>
 
-<div layout="column" layout-padding layout-align="space-between stretch" flex="30" xstyle="min-height:12rem;">
-    TODO !4: bouton "forcer pendant 2h", couplé au widget en batons (planning, avec possibilité de forcer à confort 2h)
-    TODO !3: Travailler sur le planer en barrettes. -> module JQuery. Canvas ?
+<div layout="column" layout-padding layout-align="space-between stretch" flex="30">
+    <md-button class="md-raised md-primary" flex id="component-force-button-{{component.id}}"
+               ng-class="{'md-warn': processingState === 'error'}"
+               ng-click="">
+        Force COMFORT for 2hrs
+    </md-button>
     <div layout-fill style="padding-top:1.1em;">
         <div id="planer-{{component.id}}" style="width:100%; height:3em;"></div>
     </div>
@@ -28,7 +31,7 @@
             {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.deviceSlaveName{{ng-close}}
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.operator === '1'"> &gt; </span>
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.operator === '0'"> &lt; </span>
-            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.value{{ng-close}} °C
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.trigger_4.value{{ng-close}}
             )
         </md-checkbox>
         <md-checkbox aria-label="condition_4_1 condition"
@@ -39,7 +42,7 @@
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.operator === '1'"> &gt; </span>
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.operator === '0'"> &lt; </span>
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.operator === '2'"> = </span>
-            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.value{{ng-close}} °C
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_1.value{{ng-close}}
             )
         </md-checkbox>
         <md-checkbox aria-label="condition_4_2 condition"
@@ -50,7 +53,7 @@
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.operator === '1'"> &gt; </span>
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.operator === '0'"> &lt; </span>
             <span ng-if="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.operator === '2'"> = </span>
-            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.value{{ng-close}} °C
+            {{ng-open}}component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.controls.condition_4_2.value{{ng-close}}
             )
         </md-checkbox>
     </div>
@@ -91,7 +94,7 @@
           </section>
           <md-divider></md-divider>
           <section>
-              <md-subheader>Scenarii to pilot</md-subheader>
+              <md-subheader>Scenarii to pilot (temperature control)</md-subheader>
               <md-list layout="column" layout-padding>
                   <md-list-item layout="row" layout-align="space-between stretch">
                       <h4>Scenarii to control the LOWER temperature:</h4>
@@ -131,9 +134,66 @@
                           {{> scenarioTemperatureSelector minmax="max" idx="4"}}
                       </div>
                   </md-list-item>
-
-                  // TODO !2: listes des scenarii a activer en mode economique only (x4)
-                  // TODO !2: listes des scenarii a activer en mode confort only (x4)
+              </md-list>
+          </section>
+          <md-divider></md-divider>
+          <section>
+              <md-subheader>Scenarii to pilot (eco/comfort mode control)</md-subheader>
+              <md-list layout="column" layout-padding>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <h4>Scenarii to active in ECO mode:</h4>
+                  </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-select placeholder="Scenario linked for ECO mode"
+                                 flex="50" style="margin-right: 0.5rem;" ng-model="component.configuration.mode_scenarii.eco_1">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                      <md-select placeholder="Scenario linked for ECO mode"
+                                 flex="50" style="margin-left: 0.5rem;" ng-model="component.configuration.mode_scenarii.eco_2">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                  </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-select placeholder="Scenario linked for ECO mode"
+                                 flex="50" style="margin-right: 0.5rem;" ng-model="component.configuration.mode_scenarii.eco_3">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                      <md-select placeholder="Scenario linked for ECO mode"
+                                 flex="50" style="margin-left: 0.5rem;" ng-model="component.configuration.mode_scenarii.eco_4">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                  </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <h4>Scenarii to active in COMFORT mode:</h4>
+                  </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-select placeholder="Scenario linked for COMFORT mode"
+                                 flex="50" style="margin-right: 0.5rem;" ng-model="component.configuration.mode_scenarii.comfort_1">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                      <md-select placeholder="Scenario linked for COMFORT mode"
+                                 flex="50" style="margin-left: 0.5rem;" ng-model="component.configuration.mode_scenarii.comfort_2">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                  </md-list-item>
+                  <md-list-item layout="row" layout-align="space-between stretch">
+                      <md-select placeholder="Scenario linked for COMFORT mode"
+                                 flex="50" style="margin-right: 0.5rem;" ng-model="component.configuration.mode_scenarii.comfort_3">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                      <md-select placeholder="Scenario linked for COMFORT mode"
+                                 flex="50" style="margin-left: 0.5rem;" ng-model="component.configuration.mode_scenarii.comfort_4">
+                          <md-option ng-value="">None</md-option>
+                          <md-option ng-value="scenario.id" ng-repeat="scenario in states.activableScenarii">{{ng-open}}scenario.label{{ng-close}}</md-option>
+                      </md-select>
+                  </md-list-item>
               </md-list>
           </section>
           <md-divider></md-divider>
@@ -180,6 +240,16 @@
               max_temp_control_2: {id:''}, // slave
               max_temp_control_3: {id:''}, // slave
               max_temp_control_4: {id:''} // slave
+          },
+          mode_scenarii: {
+              comfort_1: '',
+              comfort_2: '',
+              comfort_3: '',
+              comfort_4: '',
+              eco_1: '',
+              eco_2: '',
+              eco_3: '',
+              eco_4: ''
           }
       }
     }, $scope.component)
@@ -267,10 +337,7 @@
             if ($scope.component.configuration.temp_min_value > max - 1) {
                 $scope.component.configuration.temp_min_value = max - 1
             }
-        },
-		/*onCenterClick: onCenterClick,
-		onUpdating: onUpdating,
-		componentData: component*/
+        }
 	});
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
 
@@ -284,8 +351,20 @@
           value: newValue
         })
         .done(function() {
-          $rootScope.speech.speak((who === 'min' ? 'Economy' : 'Comfort') + ' temperature updated to ' + newValue + ' degrees.')
-          $scope.processingState = 'waiting'
+          // Save config for new value to be persisted
+          $.ajax({
+            url: '/{{page.slug}}/component/{{component.id}}',
+            method: 'PATCH',
+            data: $scope.component
+          }).done(function() {
+            $rootScope.speech.speak((who === 'min' ? 'Economy' : 'Comfort') + ' temperature updated to ' + newValue + ' degrees.')
+            $scope.processingState = 'waiting'
+          }).fail(function() {
+            $rootScope.speech.speak('Temperature saving failed.', 'error')
+            $scope.processingState = 'error'
+            $('div#component-{{component.id}}').parent('md-card').addClass('error')
+            $rootScope.events.errorEvent('Temperature settings NOT saved!')
+          })
         })
         .fail(function() {
           $rootScope.speech.speak('Temperature update failed.', 'error')
@@ -303,7 +382,9 @@
     ///////////////////////////
 
     $('div#planer-{{component.id}}').autoSizedPlaner({
-      // TODO !3
+      // TODO !1: planer: jQuery plugin first
+      // TODO !2: plug planer to angular controls
+      // TODO !3: force 2hrs button
 	});
 
     //////////////////////////////////
@@ -329,11 +410,15 @@
           // Remove temperature values, used only when scenario change occurred.
           for (let scKey in $scope.component.configuration.scenarii) {
             let sc = $scope.component.configuration.scenarii[scKey]
-            if (sc.controls) {
+            if (sc.controls && sc.controls.trigger_4) {
               delete sc.controls.trigger_4.operator
               delete sc.controls.trigger_4.value
+            }
+            if (sc.controls && sc.controls.condition_4_1) {
               delete sc.controls.condition_4_1.operator
               delete sc.controls.condition_4_1.value
+            }
+            if (sc.controls && sc.controls.condition_4_2) {
               delete sc.controls.condition_4_2.operator
               delete sc.controls.condition_4_2.value
             }
