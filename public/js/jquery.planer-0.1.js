@@ -10,7 +10,7 @@
      * @param	params	Specify options in {}.
      */
     $.fn.planer = function (params) {
-        var settings, canvas, ctx, lingrad, insetgrad, outerDiv, draw, setSize;
+        var settings, canvas, ctx, lingrad, insetgrad, ledOnGrad, ledOffGrad, outerDiv, draw, setSize, getLedCoords, coords;
         var planer = $(this);
 
         /* Specify default settings */
@@ -46,14 +46,35 @@
 
         /* Create our linear gradient for the outer recf */
         lingrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        lingrad.addColorStop(0, '#CFD8DC'); // 50
-        lingrad.addColorStop(1, '#90A4AE'); // 300
+        lingrad.addColorStop(0, '#9E9E9E'); // 500
+        lingrad.addColorStop(1, '#616161'); // 700
         insetgrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        insetgrad.addColorStop(0, '#607D8B'); // 500
-        insetgrad.addColorStop(1, '#78909C'); // 400
+        insetgrad.addColorStop(0, '#323232'); // 850
+        insetgrad.addColorStop(1, '#616161'); // 700
+
+        ledOnGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        ledOnGrad.addColorStop(0, '#1DE9B6'); // A400
+        ledOnGrad.addColorStop(1, '#00897B'); // 600
+        ledOffGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        ledOffGrad.addColorStop(0, '#00695C'); // 800
+        ledOffGrad.addColorStop(1, '#004D40'); // 900
 
         /* Borders should be 1px */
         ctx.lineWidth = 1;
+
+        getLedCoords = function(idx, total) {
+            var availableWidth = canvas.width - 14;
+            var margin = 7;
+            var ledWidth = Math.floor(availableWidth / total);
+            var delta = Math.floor((availableWidth - (ledWidth * total)) / 2);
+            var ledMargin = Math.floor(ledWidth *0.14);
+            return [
+                margin + (idx*ledWidth) + ledMargin + delta,
+                margin + ledMargin + Math.floor(delta / 2),
+                ledWidth - (2*ledMargin),
+                canvas.height - (2*margin) - (2*ledMargin) - delta
+            ];
+        };
 
         /**
          * render the widget in its entirety.
@@ -67,18 +88,31 @@
             /* draw outer rect */
             ctx.fillStyle = lingrad;
             ctx.beginPath();
-            ctx.strokeStyle = '#546E7A'; // 600
             ctx.rect(0, 0, canvas.width, canvas.height);
             ctx.fill();
-            ctx.stroke();
-
             ctx.fillStyle = insetgrad;
             ctx.beginPath();
-            ctx.strokeStyle = '#546E7A'; // 600
-            ctx.rect(8, 8, canvas.width-16, canvas.height-16);
+            ctx.rect(5, 5, canvas.width-10, canvas.height-10);
             ctx.fill();
-            ctx.stroke();
 
+            // tests
+            ctx.fillStyle = ledOnGrad;
+            ctx.beginPath();
+            coords = getLedCoords(0, 48);
+            ctx.rect(coords[0], coords[1], coords[2], coords[3]);
+            ctx.fill();
+
+            ctx.fillStyle = ledOffGrad;
+            ctx.beginPath();
+            coords = getLedCoords(1, 48);
+            ctx.rect(coords[0], coords[1], coords[2], coords[3]);
+            ctx.fill();
+
+            ctx.fillStyle = ledOffGrad;
+            ctx.beginPath();
+            coords = getLedCoords(47, 48);
+            ctx.rect(coords[0], coords[1], coords[2], coords[3]);
+            ctx.fill();
         };
 
         /* Do an initial draw */
@@ -122,18 +156,16 @@
         planer.setSize = setSize;
 
         /* auto resize management */
-        $( window ).resize(function(e) {
-        	var size = Math.max(256, planer.width());
-        	planer.setSize(size);
-        });
-        planer.resize(function(e) {
-        	var size = Math.max(256, planer.width());
-        	planer.setSize(size);
-        });
+        this.resizer = function() {
+            var size = Math.max(256, planer.width());
+            planer.setSize(size);
+            return true;
+        };
+        $( window ).resize(this.resizer);
+        planer.resize(this.resizer);
 
 	    /* init */
-        var size = Math.max(256, planer.width());
-    	planer.setSize(size); // also instanciate the component for the first time.
+        this.resizer(); // also instantiate the component for the first time.
     	settings.height = planer.height();
 
     	return this;
