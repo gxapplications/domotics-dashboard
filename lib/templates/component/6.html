@@ -1,15 +1,17 @@
-<div layout="column" layout-padding layout-align="center center" flex>
+<div layout="column" layout-align="center center" flex>
     <div id="double-knob-{{component.id}}" flex layout-fill
          class="ratio-content double-knob" title="{{component.title}}"></div>
 </div>
 
-<div layout="column" layout-padding layout-align="space-between stretch">
+<div layout="column" layout-align="space-between stretch">
     <md-button class="md-raised md-primary" flex id="component-force-button-{{component.id}}"
                ng-class="{'md-warn': processingState === 'error'}"
                ng-click="">
         Force COMFORT for 2hrs
     </md-button>
 </div>
+
+{{#extend "cardCss"}}{'no-card': !edition.active, 'gridlist-card': edition.active}{{/extend}}
 
 {{#*inline "scenarioTemperatureSelector"}}
     <md-select placeholder="Scenario linked for {{minmax}} temperature #{{idx}}" ng-model="component.configuration.scenarii.{{minmax}}_temp_control_{{idx}}.id">
@@ -341,8 +343,9 @@
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
 
   // TODO !1: planer: jQuery plugin first
+  // TODO !1: temp knobs: current interval is displayed on knob directly instead of center. During move, displayed above !
   // TODO !2: plug planer to angular controls
-  // TODO !3: force 2hrs button
+  // TODO !3: force 2hrs button -> transfer it in center click on double knob
 
     // listeners to call API temperature updates
     $scope.updateMinMaxTemperatureScenario = function (who, newValue, oldValue) {
@@ -388,7 +391,7 @@
       $scope.dataState = null;
       $scope.updateDataProvider = function (data) {
         $scope.dataState = data
-        $scope.doubleKnob.setTitle(data.temperature + '<br/>' + data.light)
+        $scope.doubleKnob.setTitle(data.temperature + 'C<br/><small>' + data.light + '</small>')
       }
       this.addCleaner($scope.$watch('states.data.value[' + $scope.component.configuration.data + ']', $scope.updateDataProvider))
     }

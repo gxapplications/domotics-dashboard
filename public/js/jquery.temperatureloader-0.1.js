@@ -23,18 +23,6 @@ see the file license.txt that was included with the plugin bundle.
 
     /** Percentage loader
      * @param	params	Specify options in {}. May be on of width, height, progress or value.
-     *
-     * @example $("#myloader-container).percentageLoader({
-		    width : 256,  // width in pixels
-		    height : 256, // height in pixels
-		    degress: 0,   // initialise degress bar position, within the range [0..1]
-		    progress: 1,  // initialise progress bar position, within the range [0..1]
-		    scaleOffset: 0.0,
-            scaleAmplitude: 100.0,
-		    value: 'Progress'  // initialise text label to this value
-		    suffix: '',
-            precision: 0,
-		});
      */
     $.fn.percentageLoader = function (params) {
         var settings, canvas, percentageText, valueText, items, i, item, selectors, s, ctx, progress, degress,
@@ -42,6 +30,9 @@ see the file license.txt that was included with the plugin bundle.
             radius, startAngle, endAngle, counterClockwise, completeAngle1, completeAngle2, setProgress, setDegress, setValue,
             applyAngle, drawLoader, clipValue, outerDiv, innerBarRadius2, outerBarRadius2, ledOnGrad, ledOffGrad, startAngleLed,
             endAngleLed;
+        var ledModifyingStart = false;
+        var ledModifyingState = false;
+        var ledModifyingEnd = false;
 
         /* Specify default settings */
         settings = {
@@ -55,7 +46,10 @@ see the file license.txt that was included with the plugin bundle.
             suffix: '',
             precision: 0,
             controllable: false,
-            ledCount: 24
+            ledCount: 24,
+            ledLabelCount: 24,
+            ledLabelOffset: 0,
+            ledStates: Array(24).fill(1)
         };
 
         /* Override default settings with provided params, if any */
@@ -64,6 +58,13 @@ see the file license.txt that was included with the plugin bundle.
         } else {
             params = settings;
         }
+
+        /* Fix ledStates if needed */
+        var newLedStates = [];
+        for (var i=0; i<settings.ledCount; i++) {
+            newLedStates[i] = settings.ledStates[i] || 0;
+        }
+        settings.ledStates = newLedStates;
 
         outerDiv = document.createElement('div');
         outerDiv.style.width = settings.width + 'px';
@@ -174,10 +175,10 @@ see the file license.txt that was included with the plugin bundle.
 
         /* Bottom left angle */
         startAngle = 2.1707963267949 + 0.9707963267949/3;
-        startAngleLed = 2.1707963267949 + 0.9707963267949/7;
+        startAngleLed = 2.1707963267949 + 0.9707963267949/9;
         /* Bottom right angle */
         endAngle = 0.9707963267949 - (0.9707963267949/3) + (Math.PI * 2.0);
-        endAngleLed = 0.9707963267949 - (0.9707963267949/7) + (Math.PI * 2.0);
+        endAngleLed = 0.9707963267949 - (0.9707963267949/9) + (Math.PI * 2.0);
 
         /* Nicer to pass counterClockwise / clockwise into canvas functions
         * than true / false */
@@ -263,6 +264,8 @@ see the file license.txt that was included with the plugin bundle.
                 c2 = applyAngle(point1, controlAngle, capLength);
 
                 ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, point1.x, point1.y);
+
+                return [c1.x, c1.y, c2.x, c2.y, point1.x, point1.y];
             }
 
             /* Background tube */
@@ -306,7 +309,7 @@ see the file license.txt that was included with the plugin bundle.
             ctx.stroke();
 
             /* draw planer leds */
-            function drawLed(position, isOn) {
+            function drawLed(position, isOn, label) {
                 var angleInterval = endAngleLed - startAngleLed;
                 var ledAngleAmplitude = angleInterval / settings.ledCount;
                 var ledAngleMargin = ledAngleAmplitude * 0.31;
@@ -316,20 +319,28 @@ see the file license.txt that was included with the plugin bundle.
 
                 ctx.fillStyle = isOn ? ledOnGrad : ledOffGrad;
                 ctx.beginPath();
-                makeInnerTubePath(ledStartAngle, ledEndAngle, innerBarRadius2 + ledRadiusMargin, outerBarRadius2 - ledRadiusMargin, 1);
+                var coords = makeInnerTubePath(ledStartAngle, ledEndAngle, innerBarRadius2 + ledRadiusMargin, outerBarRadius2 - ledRadiusMargin, 1);
                 ctx.fill();
+
+                if (label !== undefined) {
+                    var a = (coords[0] + coords[2]) / 2;
+                    var b = (coords[1] + coords[3]) / 2;
+                    ctx.fillStyle = '#ff0000'; // FIXME: meilleure couleur, a la fois pour isOn et !isOn ?
+                    ctx.fillText(label, a, b); // FIXME: algo de meilleur positionnement a faire. Une rotation peut ê ?
+                }
             }
-            drawLed(0, true);
-            drawLed(1, false);
-            drawLed(2, true);
-            drawLed(3, true);
-            drawLed(4, false);
-            drawLed(5, false);
-            drawLed(6, true);
-            drawLed(7, true);
-            drawLed(8, false);
-            // TODO !0.toute la logique: utiliser la matrice de leds pour afficher leurs états, mais si un mousemove est
-            // en cours (mouseDown3 == true) alors il faut aussi prendre en compte l'état stocké et l'intervalle de led a surcharger.
+            for (var i=0; i<settings.ledCount; i++) {
+                var label = i * (settings.ledLabelCount / settings.ledCount) + settings.ledLabelOffset;
+                label = (Math.floor(label) === label) ? label : undefined;
+                if (ledModifyingStart !== false && (
+                    (i >= ledModifyingStart && i <= ledModifyingEnd) ||
+                    (i >= ledModifyingEnd && i <= ledModifyingStart)
+                )) {
+                    drawLed(i, ledModifyingState, label);
+                } else {
+                    drawLed(i, settings.ledStates[i] === 1, label);
+                }
+            }
 
             /* knobs */
             ctx.shadowColor = "rgba(21,21,21,0.4)";
@@ -377,8 +388,9 @@ see the file license.txt that was included with the plugin bundle.
 
                 /* Ugly vertical align calculations - fit into bottom ring.
                  * The bottom ring occupes 1/6 of the diameter of the circle */
-                heightRemaining = (settings.height * 0.26) - smallSize;
-                valueText.style.top = ((settings.height * 0.74) + (heightRemaining / 4)).toString() + 'px';
+                heightRemaining = (settings.height * 0.28) - smallSize;
+                valueText.style.top = ((settings.height * 0.72) + (heightRemaining / 4)).toString() + 'px';
+                valueText.style.lineHeight = '1.1rem';
             }());
         };
 
@@ -443,7 +455,7 @@ see the file license.txt that was included with the plugin bundle.
         /* In controllable mode, add event handlers */
         if (params.controllable === true) {
             (function () {
-                var mouseDown1, mouseDown2, mouseDown3, getDistance, adjustProgressWithXY, adjustDegressWithXY;
+                var mouseDown1, mouseDown2, mouseDown3, getDistance, adjustProgressWithXY, adjustDegressWithXY, getLedWithXY;
                 getDistance = function (x1, y1, x2, y2) {
                     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
                 };
@@ -514,6 +526,28 @@ see the file license.txt that was included with the plugin bundle.
                     progress = oldProgress;
                 };
 
+                getLedWithXY = function (x, y) {
+                    /* within the bar, calculate angle of touch point */
+                    var pX, pY, angle, startTouchAngle, range, posValue;
+                    pX = x - cX;
+                    pY = y - cY;
+
+                    angle = Math.atan2(pY, pX);
+                    if (angle > Math.PI / 2.0) {
+                        angle -= (Math.PI * 2.0);
+                    }
+
+                    startTouchAngle = startAngleLed - (Math.PI * 2.0);
+                    range = endAngleLed - startAngleLed;
+                    posValue = (angle - startTouchAngle) / range;
+
+                    if (posValue < 0 || posValue > 1) {
+                        return false; // out of led track
+                    }
+
+                    return Math.floor(posValue * settings.ledCount);
+                };
+
                 $(outerDiv).mousedown(function (e) {
                     var offset, x, y, distance;
                     offset = $(this).offset();
@@ -543,7 +577,11 @@ see the file license.txt that was included with the plugin bundle.
                     if (distance < radius * 1.1 && distance > (innerBarRadius + radius) / 2) {
                         outerDiv.style.cursor = 'move';
                         mouseDown3 = true;
-                        // TODO !0: stocker la led de départ, et le contraire de son état on/off. refresh graphics.
+                        ledModifyingEnd = ledModifyingStart = getLedWithXY(x, y);
+                        if (ledModifyingStart !== false) {
+                            ledModifyingState = (settings.ledStates[ledModifyingStart] === 0);
+                            drawLoader();
+                        }
                     }
                     if (distance <= innerRadius*0.9) {
                     	if (params.onCenterClick) {
@@ -560,22 +598,24 @@ see the file license.txt that was included with the plugin bundle.
                     if (mouseDown3) {
                         mouseDown3 = false;
                         outerDiv.style.cursor = 'default';
-                        // TODO !0: utiliser l'état stocké (on/off) pour envoyer la nouvelle matrice de leds a un event externe.
+                        // TODO !0: utiliser ledModifyingState, ledModifyingStart, ledModifyingEnd pour envoyer
+                        // TODO la nouvelle matrice de leds a un event externe.
+                        ledModifyingStart = false;
+                        ledModifyingEnd = false;
+                        drawLoader();
                     }
                 }).mousemove(function (e) {
                     var offset, x, y;
+                    offset = $(outerDiv).offset();
+                    x = e.pageX - offset.left;
+                    y = e.pageY - offset.top;
                     if (mouseDown1) {
-                        offset = $(outerDiv).offset();
-                        x = e.pageX - offset.left;
-                        y = e.pageY - offset.top;
                         adjustDegressWithXY(x, y);
                     } else if (mouseDown2) {
-                        offset = $(outerDiv).offset();
-                        x = e.pageX - offset.left;
-                        y = e.pageY - offset.top;
                         adjustProgressWithXY(x, y);
                     } else if (mouseDown3) {
-                        // TODO !0: stocker la position courante pour avoir l'intervalle de led, et les mettre a l'état stocké.
+                        ledModifyingEnd = getLedWithXY(x, y);
+                        drawLoader();
                     }
                 }).mouseleave(function () {
                     if (mouseDown1 || mouseDown2) {
@@ -587,7 +627,11 @@ see the file license.txt that was included with the plugin bundle.
                     if (mouseDown3) {
                         mouseDown3 = false;
                         outerDiv.style.cursor = 'default';
-                        // TODO !0: si clic simple, activer/deactiver la led correspondante.
+                        // TODO !0: utiliser ledModifyingState, ledModifyingStart, ledModifyingEnd pour envoyer
+                        // TODO la nouvelle matrice de leds a un event externe.
+                        ledModifyingStart = false;
+                        ledModifyingEnd = false;
+                        drawLoader();
                     }
                 });
             }());
