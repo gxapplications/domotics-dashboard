@@ -325,8 +325,8 @@ see the file license.txt that was included with the plugin bundle.
                 if (label !== undefined) {
                     var a = (coords[0] + coords[2]) / 2;
                     var b = (coords[1] + coords[3]) / 2;
-                    ctx.fillStyle = '#ff0000'; // FIXME: meilleure couleur, a la fois pour isOn et !isOn ?
-                    ctx.fillText(label, a, b); // FIXME: algo de meilleur positionnement a faire. Une rotation peut ê ?
+                    ctx.fillStyle = isOn ? '#004D40' : '#1DE9B6';
+                    ctx.fillText(label, a, b); // TODO !0: algo de meilleur positionnement a faire. Une rotation peut ê ? plus petit aussi...
                 }
             }
             for (var i=0; i<settings.ledCount; i++) {
@@ -598,8 +598,8 @@ see the file license.txt that was included with the plugin bundle.
                     if (mouseDown3) {
                         mouseDown3 = false;
                         outerDiv.style.cursor = 'default';
-                        // TODO !0: utiliser ledModifyingState, ledModifyingStart, ledModifyingEnd pour envoyer
-                        // TODO la nouvelle matrice de leds a un event externe.
+                        // TODO !1: utiliser ledModifyingState, ledModifyingStart, ledModifyingEnd pour envoyer
+                        // TODO la nouvelle matrice de leds a un event externe. + mettre a jour settings.ledStates
                         ledModifyingStart = false;
                         ledModifyingEnd = false;
                         drawLoader();
@@ -627,8 +627,8 @@ see the file license.txt that was included with the plugin bundle.
                     if (mouseDown3) {
                         mouseDown3 = false;
                         outerDiv.style.cursor = 'default';
-                        // TODO !0: utiliser ledModifyingState, ledModifyingStart, ledModifyingEnd pour envoyer
-                        // TODO la nouvelle matrice de leds a un event externe.
+                        // TODO !1: utiliser ledModifyingState, ledModifyingStart, ledModifyingEnd pour envoyer
+                        // TODO la nouvelle matrice de leds a un event externe. + mettre a jour settings.ledStates
                         ledModifyingStart = false;
                         ledModifyingEnd = false;
                         drawLoader();
