@@ -1,17 +1,14 @@
-<div layout="column" layout-padding layout-align="center center" flex="70">
+<div layout="column" layout-padding layout-align="center center" flex>
     <div id="double-knob-{{component.id}}" flex layout-fill
          class="ratio-content double-knob" title="{{component.title}}"></div>
 </div>
 
-<div layout="column" layout-padding layout-align="space-between stretch" flex="30">
+<div layout="column" layout-padding layout-align="space-between stretch">
     <md-button class="md-raised md-primary" flex id="component-force-button-{{component.id}}"
                ng-class="{'md-warn': processingState === 'error'}"
                ng-click="">
         Force COMFORT for 2hrs
     </md-button>
-    <div flex style="padding-top:0.4rem;">
-        <div id="planer-{{component.id}}" class="planer"></div>
-    </div>
 </div>
 
 {{#*inline "scenarioTemperatureSelector"}}
@@ -255,9 +252,9 @@
 
     $scope.processingState = 'waiting' // or 'processing', 'error'
 
-    ////////////////////////////
-    // MIN MAX temperature pilot
-    ////////////////////////////
+    ///////////////////////////////////////
+    // MIN MAX temperature pilot and planer
+    ///////////////////////////////////////
 
     // temp_max_max and temp_min_min must be 3°C distant at all times
     $scope.keepMaxMaxMinMinDistances = function (who, newValue, oldValue) {
@@ -308,7 +305,7 @@
     scenarioConfiguratorGenerator('scenarii.max_temp_control_3', false, false)
     scenarioConfiguratorGenerator('scenarii.max_temp_control_4', false, false)
 
-    // Double knob widget
+    // Double knob & planer widget
     const amplitude = $scope.component.configuration.temp_max_max - $scope.component.configuration.temp_min_min + 0.0
     $scope.doubleKnob = $('div#double-knob-{{component.id}}').temperatureLoader({
 		minValue: $scope.component.configuration.temp_min_value || $scope.component.configuration.temp_min_min,
@@ -317,6 +314,7 @@
 		scaleAmplitude: amplitude,
         title: 'Min / Max',
 		precision: (amplitude > 5) ? 0 : 1,
+        planerPrecision: 0.5,
 		onMinUpdate: function (old, value) {
           if (old === value) {
             return
@@ -341,6 +339,10 @@
         }
 	});
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
+
+  // TODO !1: planer: jQuery plugin first
+  // TODO !2: plug planer to angular controls
+  // TODO !3: force 2hrs button
 
     // listeners to call API temperature updates
     $scope.updateMinMaxTemperatureScenario = function (who, newValue, oldValue) {
@@ -378,17 +380,6 @@
     this.addCleaner($scope.$watch('component.configuration.temp_min_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'min')))
     this.addCleaner($scope.$watch('component.configuration.temp_max_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'max')))
 
-    ///////////////////////////
-    // Planer eco/confort pilot
-    ///////////////////////////
-
-    $scope.planer = $('div#planer-{{component.id}}').autoSizedPlaner({
-      // TODO !1: planer: jQuery plugin first
-      // TODO !2: plug planer to angular controls
-      // TODO !3: force 2hrs button
-	});
-    $scope.edition.tools.addAutoRescaler($scope.planer.resizer)
-
     //////////////////////////////////
     // Data provider (temp, lightning)
     //////////////////////////////////
@@ -397,7 +388,7 @@
       $scope.dataState = null;
       $scope.updateDataProvider = function (data) {
         $scope.dataState = data
-        $scope.doubleKnob.setTitle(data.temperature)
+        $scope.doubleKnob.setTitle(data.temperature + '<br/>' + data.light)
       }
       this.addCleaner($scope.$watch('states.data.value[' + $scope.component.configuration.data + ']', $scope.updateDataProvider))
     }
