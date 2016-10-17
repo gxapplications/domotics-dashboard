@@ -323,10 +323,19 @@ see the file license.txt that was included with the plugin bundle.
                 ctx.fill();
 
                 if (label !== undefined) {
-                    var a = (coords[0] + coords[2]) / 2;
-                    var b = (coords[1] + coords[3]) / 2;
+                    ctx.save();
+                    ctx.translate(cX, cY);
+                    var textSize = ctx.measureText(label).width/2;
+                    if (position < settings.ledCount/2) { // left part
+                        ctx.rotate(ledEndAngle + Math.PI - Math.PI/51); // Fine tuning
+                        ctx.translate(-innerBarRadius2*1.097 - textSize, 0);
+                    } else { // right part
+                        ctx.rotate(ledEndAngle - Math.PI/500); // Fine tuning
+                        ctx.translate(innerBarRadius2*1.097 - textSize, 0);
+                    }
                     ctx.fillStyle = isOn ? '#004D40' : '#1DE9B6';
-                    ctx.fillText(label, a, b); // TODO !0: algo de meilleur positionnement a faire. Une rotation peut ê ? plus petit aussi...
+                    ctx.fillText(label, 0, 0);
+                    ctx.restore();
                 }
             }
             for (var i=0; i<settings.ledCount; i++) {
