@@ -119,7 +119,7 @@
         $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {
           pattern: pattern || undefined
         }).done(function (data) {
-            $rootScope.speech.speak($scope.component.configuration[0].title + ' on ' + action + ' state.')
+            $rootScope.speech.speak($scope.component.configuration.title + ' on ' + action + ' state.')
             $scope.processingState = 'waiting'
             $rootScope.states.macro[data.id] = {
               remaining: data.remaining,

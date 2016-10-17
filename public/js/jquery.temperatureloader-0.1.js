@@ -207,6 +207,8 @@ see the file license.txt that was included with the plugin bundle.
             /* Clear canvas entirely */
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+// TODO !0: textes tous en taille relative à la hauteur cY
+
             /*** IMAGERY ***/
 
             /* draw outer circle */
@@ -381,14 +383,10 @@ see the file license.txt that was included with the plugin bundle.
             if (!mouseDown1) {
                 var textSize = ctx.measureText(degressLabel);
                 ctx.fillText(degressLabel, knob1X - textSize.width / 2, knob1Y + 7);
-            } else {
-                // TODO !0: show it above finger!
             }
             if (!mouseDown2) {
                 var textSize = ctx.measureText(progressLabel);
                 ctx.fillText(progressLabel, knob2X - textSize.width / 2, knob2Y + 7);
-            } else {
-                // TODO !0: show it above finger!
             }
             ctx.restore();
 
@@ -404,7 +402,13 @@ see the file license.txt that was included with the plugin bundle.
                 percentageText.style.textShadow = '0 1px 1px #424242';
 
                 /* Calculate the text for the progresses */
-                string = 'TODO !2<br/>center button'; // TODO !2
+                if (mouseDown1) {
+                    string = degressLabel;
+                } else if (mouseDown2) {
+                    string = progressLabel;
+                } else {
+                    string = settings.suffix;
+                }
 
                 percentageText.innerHTML = string;
 
@@ -694,7 +698,7 @@ see the file license.txt that was included with the plugin bundle.
 		    scaleOffset: 14.0,
             scaleAmplitude: 18.0,
 		    title: 'Temperature',
-		    suffix: '( °C )',
+		    suffix: '°C',
             precision: 1,
             onMinUpdate: function(oldValue, newValue, componentData) {},
             onMaxUpdate: function(oldValue, newValue, componentData) {},

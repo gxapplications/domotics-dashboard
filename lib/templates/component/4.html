@@ -144,7 +144,7 @@
       $scope.processingState = 'processing'
       $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {})
         .done(function(data) {
-          $rootScope.speech.speak($scope.component.configuration[0].title + ' turned in ' + action + 'mode.')
+          $rootScope.speech.speak($scope.component.configuration.title + ' turned in ' + action + 'mode.')
           $scope.processingState = 'waiting'
           $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
           $scope.updateStepCounter()

@@ -3,14 +3,6 @@
          class="ratio-content double-knob" title="{{component.title}}"></div>
 </div>
 
-<div layout="column" layout-align="space-between stretch">
-    <md-button class="md-raised md-primary" flex id="component-force-button-{{component.id}}"
-               ng-class="{'md-warn': processingState === 'error'}"
-               ng-click="">
-        Force COMFORT for 2hrs
-    </md-button>
-</div>
-
 {{#extend "cardCss"}}{'no-card': !edition.active, 'gridlist-card': edition.active}{{/extend}}
 
 {{#*inline "scenarioTemperatureSelector"}}
@@ -334,7 +326,8 @@
       },
       onPlanerUpdate: function (old, value) {
         // TODO !1: plug planer to angular controls
-      }
+      },
+      suffix: 'Force<br/>COMFORT<br/>for 2hrs'
 	});
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
 
@@ -356,7 +349,7 @@
             method: 'PATCH',
             data: $scope.component
           }).done(function() {
-            $rootScope.speech.speak((who === 'min' ? 'Economy' : 'Comfort') + ' temperature updated to ' + newValue + ' degrees.')
+            $rootScope.speech.speak((who === 'min' ? 'Economy' : 'Comfort') + ' temperature updated to ' + newValue + ' degrees for ' + $scope.component.configuration.title + '.')
             $scope.processingState = 'waiting'
           }).fail(function() {
             $rootScope.speech.speak('Temperature saving failed.', 'error')
