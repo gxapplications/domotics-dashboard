@@ -309,43 +309,36 @@
 
     // Double knob & planer widget
     const amplitude = $scope.component.configuration.temp_max_max - $scope.component.configuration.temp_min_min + 0.0
-    $scope.doubleKnob = $('div#double-knob-{{component.id}}').temperatureLoader({
-		minValue: $scope.component.configuration.temp_min_value || $scope.component.configuration.temp_min_min,
-		maxValue: $scope.component.configuration.temp_max_value || $scope.component.configuration.temp_max_max,
-		scaleOffset: $scope.component.configuration.temp_min_min + 0.0,
-		scaleAmplitude: amplitude,
-        title: 'Min / Max',
-		precision: (amplitude > 5) ? 0 : 1,
-        planerPrecision: 0.5,
-		onMinUpdate: function (old, value) {
-          if (old === value) {
-            return
-          }
-          value = parseFloat(value) // cast. Can be int or float
-          let min = (value > $scope.component.configuration.temp_max_max - 1) ? $scope.component.configuration.temp_max_max - 1 : value
-          $scope.component.configuration.temp_min_value = min
-          if ($scope.component.configuration.temp_max_value < min + 1) {
-            $scope.component.configuration.temp_max_value = min + 1
-          }
-        },
-		onMaxUpdate: function (old, value) {
-            if (old === value) {
-              return
-            }
-            value = parseFloat(value) // cast. Can be int or float
-            let max = (value < $scope.component.configuration.temp_min_min + 1) ? $scope.component.configuration.temp_min_min + 1 : value
-            $scope.component.configuration.temp_max_value = max
-            if ($scope.component.configuration.temp_min_value > max - 1) {
-              $scope.component.configuration.temp_min_value = max - 1
-            }
+    $scope.doubleKnob = $('div#double-knob-{{component.id}}').temperatureLoader({minValue: $scope.component.configuration.temp_min_value || $scope.component.configuration.temp_min_min, maxValue: $scope.component.configuration.temp_max_value || $scope.component.configuration.temp_max_max, scaleOffset: $scope.component.configuration.temp_min_min + 0.0, scaleAmplitude: amplitude,
+      title: 'Min / Max', precision: (amplitude > 5) ? 0 : 1,
+      planerPrecision: 0.5, onMinUpdate: function (old, value) {
+        if (old === value) {
+          return
         }
+        value = parseFloat(value) // cast. Can be int or float
+        let min = (value > $scope.component.configuration.temp_max_max - 1) ? $scope.component.configuration.temp_max_max - 1 : value
+        $scope.component.configuration.temp_min_value = min
+        if ($scope.component.configuration.temp_max_value < min + 1) {
+          $scope.component.configuration.temp_max_value = min + 1
+        }
+      }, onMaxUpdate: function (old, value) {
+        if (old === value) {
+          return
+        }
+        value = parseFloat(value) // cast. Can be int or float
+        let max = (value < $scope.component.configuration.temp_min_min + 1) ? $scope.component.configuration.temp_min_min + 1 : value
+        $scope.component.configuration.temp_max_value = max
+        if ($scope.component.configuration.temp_min_value > max - 1) {
+          $scope.component.configuration.temp_min_value = max - 1
+        }
+      },
+      onPlanerUpdate: function (old, value) {
+        // TODO !1: plug planer to angular controls
+      }
 	});
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
 
-  // TODO !1: planer: jQuery plugin first
-  // TODO !1: temp knobs: current interval is displayed on knob directly instead of center. During move, displayed above !
-  // TODO !2: plug planer to angular controls
-  // TODO !3: force 2hrs button -> transfer it in center click on double knob
+    // TODO !3: force 2hrs button -> transfer it in center click on double knob
 
     // listeners to call API temperature updates
     $scope.updateMinMaxTemperatureScenario = function (who, newValue, oldValue) {

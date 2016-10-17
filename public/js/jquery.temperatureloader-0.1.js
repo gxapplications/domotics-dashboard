@@ -29,10 +29,11 @@ see the file license.txt that was included with the plugin bundle.
             value, cX, cY, lingrad, innerGrad, knobgrad, tubeGrad, innerRadius, innerBarRadius, outerBarRadius, knobRadius,
             radius, startAngle, endAngle, counterClockwise, completeAngle1, completeAngle2, setProgress, setDegress, setValue,
             applyAngle, drawLoader, clipValue, outerDiv, innerBarRadius2, outerBarRadius2, ledOnGrad, ledOffGrad, startAngleLed,
-            endAngleLed;
+            endAngleLed, progressLabel, degressLabel;
         var ledModifyingStart = false;
         var ledModifyingState = false;
         var ledModifyingEnd = false;
+        var mouseDown1, mouseDown2, mouseDown3;
 
         /* Specify default settings */
         settings = {
@@ -352,6 +353,10 @@ see the file license.txt that was included with the plugin bundle.
             }
 
             /* knobs */
+            degressLabel = (degress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision);
+            progressLabel = (progress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision);
+
+            ctx.save();
             ctx.shadowColor = "rgba(21,21,21,0.4)";
             ctx.shadowBlur = 4;
             ctx.shadowOffsetY = 3;
@@ -362,7 +367,6 @@ see the file license.txt that was included with the plugin bundle.
             ctx.beginPath();
             ctx.arc(knob1X, knob1Y, (outerBarRadius - innerBarRadius)*0.8, 0, Math.PI * 2, counterClockwise);
             ctx.fill();
-            ctx.fillStyle = knobgrad;
             ctx.beginPath();
             ctx.arc(knob2X, knob2Y, (outerBarRadius - innerBarRadius)*0.8, 0, Math.PI * 2, counterClockwise);
             ctx.fill();
@@ -370,6 +374,23 @@ see the file license.txt that was included with the plugin bundle.
             ctx.shadowColor = '#000000';
             ctx.shadowBlur = 0;
             ctx.shadowOffsetY = 0;
+
+            // knobs labels
+            ctx.font = "bold 20px Roboto, sans-serif, Arial";
+            ctx.fillStyle = '#ffffff';
+            if (!mouseDown1) {
+                var textSize = ctx.measureText(degressLabel);
+                ctx.fillText(degressLabel, knob1X - textSize.width / 2, knob1Y + 7);
+            } else {
+                // TODO !0: show it above finger!
+            }
+            if (!mouseDown2) {
+                var textSize = ctx.measureText(progressLabel);
+                ctx.fillText(progressLabel, knob2X - textSize.width / 2, knob2Y + 7);
+            } else {
+                // TODO !0: show it above finger!
+            }
+            ctx.restore();
 
             /*** TEXT ***/
             (function () {
@@ -383,7 +404,7 @@ see the file license.txt that was included with the plugin bundle.
                 percentageText.style.textShadow = '0 1px 1px #424242';
 
                 /* Calculate the text for the progresses */
-                string = (degress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision) + ' ~ ' + (progress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision) + '<br/><br/><small>' + settings.suffix + '</small>';
+                string = 'TODO !2<br/>center button'; // TODO !2
 
                 percentageText.innerHTML = string;
 
@@ -464,7 +485,7 @@ see the file license.txt that was included with the plugin bundle.
         /* In controllable mode, add event handlers */
         if (params.controllable === true) {
             (function () {
-                var mouseDown1, mouseDown2, mouseDown3, getDistance, adjustProgressWithXY, adjustDegressWithXY, getLedWithXY;
+                var getDistance, adjustProgressWithXY, adjustDegressWithXY, getLedWithXY, triggerLedChanged;
                 getDistance = function (x1, y1, x2, y2) {
                     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
                 };
@@ -557,6 +578,25 @@ see the file license.txt that was included with the plugin bundle.
                     return Math.floor(posValue * settings.ledCount);
                 };
 
+                triggerLedChanged = function () {
+                    mouseDown3 = false;
+                    outerDiv.style.cursor = 'default';
+
+                    var newLedStates = settings.ledStates.slice();
+                    for (var i = Math.min(ledModifyingStart, ledModifyingEnd); i <= Math.max(ledModifyingStart, ledModifyingEnd); i++) {
+                        newLedStates[i] = ledModifyingState ? 1 : 0;
+                    }
+
+                    if (params.onLedUpdate) {
+                        params.onLedUpdate(settings.ledStates, newLedStates);
+                    }
+
+                    settings.ledStates = newLedStates;
+                    ledModifyingStart = false;
+                    ledModifyingEnd = false;
+                    drawLoader();
+                };
+
                 $(outerDiv).mousedown(function (e) {
                     var offset, x, y, distance;
                     offset = $(this).offset();
@@ -603,15 +643,10 @@ see the file license.txt that was included with the plugin bundle.
                         mouseDown2 = false;
                         outerDiv.style.cursor = 'default';
                         if (params.onKnobRelease) params.onKnobRelease();
+                        drawLoader();
                     }
                     if (mouseDown3) {
-                        mouseDown3 = false;
-                        outerDiv.style.cursor = 'default';
-                        // TODO !1: utiliser ledModifyingState, ledModifyingStart, ledModifyingEnd pour envoyer
-                        // TODO la nouvelle matrice de leds a un event externe. + mettre a jour settings.ledStates
-                        ledModifyingStart = false;
-                        ledModifyingEnd = false;
-                        drawLoader();
+                        triggerLedChanged();
                     }
                 }).mousemove(function (e) {
                     var offset, x, y;
@@ -632,15 +667,10 @@ see the file license.txt that was included with the plugin bundle.
                         mouseDown2 = false;
                         outerDiv.style.cursor = 'default';
                         if (params.onKnobRelease) params.onKnobRelease();
+                        drawLoader();
                     }
                     if (mouseDown3) {
-                        mouseDown3 = false;
-                        outerDiv.style.cursor = 'default';
-                        // TODO !1: utiliser ledModifyingState, ledModifyingStart, ledModifyingEnd pour envoyer
-                        // TODO la nouvelle matrice de leds a un event externe. + mettre a jour settings.ledStates
-                        ledModifyingStart = false;
-                        ledModifyingEnd = false;
-                        drawLoader();
+                        triggerLedChanged();
                     }
                 });
             }());
@@ -670,6 +700,7 @@ see the file license.txt that was included with the plugin bundle.
             onMaxUpdate: function(oldValue, newValue, componentData) {},
             onCenterClick: function(componentData) {},
             onUpdating: function() {},
+            onPlanerUpdate: function(oldValue, newValue) {},
             componentData: {},
             planerPrecision: 0.5
 	    };
@@ -748,6 +779,9 @@ see the file license.txt that was included with the plugin bundle.
                 		settings.onMinUpdate(oldMinValue, settings.minValue, settings.componentData);
                 		minChanged = false;
                 	}
+                },
+                onLedUpdate : function(old, value) {
+                    settings.onPlanerUpdate(old, value);
                 }
     	    });
         }
