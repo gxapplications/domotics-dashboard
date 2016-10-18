@@ -27,13 +27,12 @@ see the file license.txt that was included with the plugin bundle.
     $.fn.percentageLoader = function (params) {
         var settings, canvas, percentageText, valueText, items, i, item, selectors, s, ctx, progress, degress,
             value, cX, cY, lingrad, innerGrad, knobgrad, tubeGrad, innerRadius, innerBarRadius, outerBarRadius, knobRadius,
-            radius, startAngle, endAngle, counterClockwise, completeAngle1, completeAngle2, setProgress, setDegress, setValue,
+            radius, startAngle, endAngle, completeAngle1, completeAngle2, setProgress, setDegress, setValue,
             applyAngle, drawLoader, clipValue, outerDiv, innerBarRadius2, outerBarRadius2, ledOnGrad, ledOffGrad, startAngleLed,
-            endAngleLed, progressLabel, degressLabel;
+            endAngleLed, progressLabel, degressLabel, mouseDown1, mouseDown2, mouseDown3;
         var ledModifyingStart = false;
         var ledModifyingState = false;
         var ledModifyingEnd = false;
-        var mouseDown1, mouseDown2, mouseDown3;
 
         /* Specify default settings */
         settings = {
@@ -73,7 +72,6 @@ see the file license.txt that was included with the plugin bundle.
         outerDiv.style.position = 'relative';
         outerDiv.style.cursor = 'default';
         $(outerDiv).addClass('temperatureShadow');
-
         $(this).append(outerDiv);
 
         /* Create our canvas object */
@@ -87,14 +85,14 @@ see the file license.txt that was included with the plugin bundle.
          * fonts as it is hard to guarantee when they become available
          * with differences between browsers. DOM is a safer bet here */
         percentageText = document.createElement('div');
-        percentageText.style.width = (settings.width.toString() - 2) + 'px';
+        percentageText.style.width = (settings.width - 2) + 'px';
         percentageText.style.textAlign = 'center';
-        percentageText.style.height = '50px';
+        percentageText.style.height = (settings.width*0.4) + 'px';
         percentageText.style.left = 0;
         percentageText.style.position = 'absolute';
 
         valueText = document.createElement('div');
-        valueText.style.width = (settings.width - 2).toString() + 'px';
+        valueText.style.width = (settings.width - 2) + 'px';
         valueText.style.textAlign = 'center';
         valueText.style.height = '0px';
         valueText.style.overflow = 'hidden';
@@ -168,7 +166,7 @@ see the file license.txt that was included with the plugin bundle.
         /* Calculate the radii of the inner tube */
         innerBarRadius = innerRadius + (cX * 0.07);
         outerBarRadius = (innerBarRadius + radius) / 2 - (cX * 0.07);
-        knobRadius = (innerBarRadius+outerBarRadius)/2,
+        knobRadius = (innerBarRadius+outerBarRadius)/2;
 
         /* Second inner tube (planer) */
         innerBarRadius2 = (innerBarRadius + radius) / 2 + (cX * 0.02);
@@ -180,10 +178,6 @@ see the file license.txt that was included with the plugin bundle.
         /* Bottom right angle */
         endAngle = 0.9707963267949 - (0.9707963267949/3) + (Math.PI * 2.0);
         endAngleLed = 0.9707963267949 - (0.9707963267949/9) + (Math.PI * 2.0);
-
-        /* Nicer to pass counterClockwise / clockwise into canvas functions
-        * than true / false */
-        counterClockwise = false;
 
         /* Borders should be 1px */
         ctx.lineWidth = 1;
@@ -207,22 +201,20 @@ see the file license.txt that was included with the plugin bundle.
             /* Clear canvas entirely */
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-// TODO !0: textes tous en taille relative à la hauteur cY
-
             /*** IMAGERY ***/
 
             /* draw outer circle */
             ctx.fillStyle = lingrad;
             ctx.beginPath();
             ctx.strokeStyle = '#424242'; // 800
-            ctx.arc(cX, cY, radius, 0, Math.PI * 2, counterClockwise);
+            ctx.arc(cX, cY, radius, 0, Math.PI * 2, false);
             ctx.fill();
             ctx.stroke();
 
             /* draw inner circle */
             ctx.fillStyle = innerGrad;
             ctx.beginPath();
-            ctx.arc(cX, cY, innerRadius, 0, Math.PI * 2, counterClockwise);
+            ctx.arc(cX, cY, innerRadius, 0, Math.PI * 2, false);
             ctx.fill();
             ctx.stroke();
 
@@ -328,12 +320,13 @@ see the file license.txt that was included with the plugin bundle.
                 if (label !== undefined) {
                     ctx.save();
                     ctx.translate(cX, cY);
+                    ctx.font = (cX/15) + 'px Roboto, sans-serif, Arial';
                     var textSize = ctx.measureText(label).width/2;
                     if (position < settings.ledCount/2) { // left part
                         ctx.rotate(ledEndAngle + Math.PI - Math.PI/51); // Fine tuning
                         ctx.translate(-innerBarRadius2*1.097 - textSize, 0);
                     } else { // right part
-                        ctx.rotate(ledEndAngle - Math.PI/500); // Fine tuning
+                        ctx.rotate(ledEndAngle - Math.PI/350); // Fine tuning
                         ctx.translate(innerBarRadius2*1.097 - textSize, 0);
                     }
                     ctx.fillStyle = isOn ? '#004D40' : '#1DE9B6';
@@ -358,7 +351,7 @@ see the file license.txt that was included with the plugin bundle.
             degressLabel = (degress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision);
             progressLabel = (progress * settings.scaleAmplitude + settings.scaleOffset).toFixed(settings.precision);
 
-            ctx.save();
+
             ctx.shadowColor = "rgba(21,21,21,0.4)";
             ctx.shadowBlur = 4;
             ctx.shadowOffsetY = 3;
@@ -367,64 +360,66 @@ see the file license.txt that was included with the plugin bundle.
 			    knob1X = cX + Math.cos(completeAngle1)*knobRadius, knob1Y = cY + Math.sin(completeAngle1)*knobRadius;
 			ctx.fillStyle = knobgrad;
             ctx.beginPath();
-            ctx.arc(knob1X, knob1Y, (outerBarRadius - innerBarRadius)*0.8, 0, Math.PI * 2, counterClockwise);
+            ctx.arc(knob1X, knob1Y, (outerBarRadius - innerBarRadius)*0.8, 0, Math.PI * 2, false);
             ctx.fill();
             ctx.beginPath();
-            ctx.arc(knob2X, knob2Y, (outerBarRadius - innerBarRadius)*0.8, 0, Math.PI * 2, counterClockwise);
+            ctx.arc(knob2X, knob2Y, (outerBarRadius - innerBarRadius)*0.8, 0, Math.PI * 2, false);
             ctx.fill();
 
             ctx.shadowColor = '#000000';
             ctx.shadowBlur = 0;
             ctx.shadowOffsetY = 0;
 
-            // knobs labels
-            ctx.font = "bold 20px Roboto, sans-serif, Arial";
-            ctx.fillStyle = '#ffffff';
-            if (!mouseDown1) {
-                var textSize = ctx.measureText(degressLabel);
-                ctx.fillText(degressLabel, knob1X - textSize.width / 2, knob1Y + 7);
-            }
-            if (!mouseDown2) {
-                var textSize = ctx.measureText(progressLabel);
-                ctx.fillText(progressLabel, knob2X - textSize.width / 2, knob2Y + 7);
-            }
-            ctx.restore();
-
             /*** TEXT ***/
             (function () {
                 var fontSize, string, smallSize, heightRemaining;
-                /* Calculate the size of the font based on the canvas size */
-                fontSize = cX / 4;
 
-                percentageText.style.top = ((settings.height / 2.15) - (fontSize / 2)).toString() + 'px';
-                percentageText.style.color = '#FFFFFF';
-                percentageText.style.font = fontSize.toString() + 'px';
-                percentageText.style.textShadow = '0 1px 1px #424242';
+                /* Calculate the size of the font based on the canvas size */
+                fontSize = cX / 7;
+
+                // knobs labels
+                ctx.save();
+                ctx.font = 'bold ' + fontSize + 'px Roboto, sans-serif, Arial';
+                ctx.fillStyle = '#ffffff';
+                if (!mouseDown1) {
+                    var textSize = ctx.measureText(degressLabel);
+                    ctx.fillText(degressLabel, knob1X - textSize.width/2, knob1Y + fontSize/2.6);
+                }
+                if (!mouseDown2) {
+                    var textSize = ctx.measureText(progressLabel);
+                    ctx.fillText(progressLabel, knob2X - textSize.width/2, knob2Y + fontSize/2.6);
+                }
+                ctx.restore();
 
                 /* Calculate the text for the progresses */
+                percentageText.style.color = '#FFFFFF';
+                percentageText.style.lineHeight = '1.2em';
+                percentageText.style.textShadow = '0 1px 1px #424242';
                 if (mouseDown1) {
+                    percentageText.style.fontSize = (fontSize*1.8) + 'px';
+                    percentageText.style.top = (settings.width*0.42) + 'px';
                     string = degressLabel;
                 } else if (mouseDown2) {
+                    percentageText.style.fontSize = (fontSize*1.8) + 'px';
+                    percentageText.style.top = (settings.width*0.42) + 'px';
                     string = progressLabel;
                 } else {
+                    percentageText.style.fontSize = fontSize.toString() + 'px';
+                    percentageText.style.top = (settings.width*0.37) + 'px';
                     string = settings.suffix;
                 }
-
                 percentageText.innerHTML = string;
 
                 /* Calculate font and placement of small 'value' text */
-                smallSize = cX / 5.5;
+                smallSize = cX / 6.5;
                 valueText.style.color = '#E0E0E0'; // 300
-                valueText.style.font = smallSize.toString() + 'px';
-                valueText.style.height = smallSize.toString() + 'px';
+                valueText.style.fontSize = smallSize.toString() + 'px';
+                valueText.style.lineHeight = '1.2em';
+                valueText.style.height = (3*smallSize).toString() + 'px';
                 valueText.style.overflow = 'visible';
                 valueText.style.textShadow = '0 1px 1px #424242';
-
-                /* Ugly vertical align calculations - fit into bottom ring.
-                 * The bottom ring occupes 1/6 of the diameter of the circle */
-                heightRemaining = (settings.height * 0.28) - smallSize;
-                valueText.style.top = ((settings.height * 0.72) + (heightRemaining / 4)).toString() + 'px';
-                valueText.style.lineHeight = '1.1rem';
+                heightRemaining = (settings.height * 0.30) - smallSize;
+                valueText.style.top = ((settings.height * 0.70) + (heightRemaining / 4)).toString() + 'px';
             }());
         };
 
@@ -792,7 +787,7 @@ see the file license.txt that was included with the plugin bundle.
         thermostat.setSize = setSize;
 
         this.resizer = function() {
-            var size = Math.max(128, Math.min(thermostat.width(), thermostat.height()));
+            var size = Math.max(180, Math.min(thermostat.width(), thermostat.height()));
             thermostat.setSize(size);
             return true;
         };

@@ -260,7 +260,7 @@ md-progress-circular.step svg {
 }
 
 div.double-knob .temperatureShadow {
-    font-size: 1.1rem;
+    font-size: inherit;
     background-color: rgba(0, 0, 0, 0.3);
     box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px 0px;
     border-radius: 50%;
