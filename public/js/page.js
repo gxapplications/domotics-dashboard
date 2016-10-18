@@ -65,6 +65,10 @@
 
 	var _events2 = _interopRequireDefault(_events);
 
+	var _speech = __webpack_require__(8);
+
+	var _speech2 = _interopRequireDefault(_speech);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	window.app.controller('PageControls', function ($rootScope, $scope, $document, $http, $window, $mdToast, $mdDialog) {
@@ -257,7 +261,7 @@
 	      });
 	    },
 	    tools: {
-	      assignDeep: __webpack_require__(8),
+	      assignDeep: __webpack_require__(9),
 	      icons: Object.keys(_icons2.default),
 	      addAutoRescaler: function addAutoRescaler(listener) {
 	        $scope.edition.tools.addAutoRescaler.listeners.push(listener);
@@ -325,49 +329,7 @@
 	  });
 
 	  // Speech service
-	  $rootScope.speech = {
-	    voice: undefined,
-	    speak: function speak(text) {
-	      var intonation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'normal';
-
-	      if (!$rootScope.speech.voice) {
-	        $rootScope.speech.init();
-	      }
-
-	      // TODO !5: use intonation (== (normal|error))
-	      var ut = new SpeechSynthesisUtterance(text);
-	      ut.voice = $rootScope.speech.voice;
-	      window.speechSynthesis.speak(ut);
-	    },
-	    listen: function listen(grammar) {
-	      // TODO !5: commandes vocales ? ou plus tard...
-	      /*
-	       var grammar = '#JSGF V1.0; grammar colors; public <color> = rouge | bleu | rose | jaune | vert | blanc | marron | violet | mauve | noir ;'
-	       var recognition = new webkitSpeechRecognition();
-	       var speechRecognitionList = new webkitSpeechGrammarList();
-	       speechRecognitionList.addFromString(grammar, 1);
-	       recognition.grammars = speechRecognitionList;
-	       //recognition.continuous = false;
-	       recognition.lang = 'fr-FR';
-	       recognition.interimResults = false;
-	       recognition.maxAlternatives = 1;
-	       recognition.onresult = function(event) {
-	         var color = event.results[0][0].transcript;
-	         console.log("RESULT:" + color);
-	       }
-	       */
-	    },
-	    init: function init() {
-	      if ('speechSynthesis' in window && window.speechSynthesis.getVoices()) {
-	        $rootScope.speech.voice = window.speechSynthesis.getVoices().filter(function (v) {
-	          // available on Mint: de-DE en-US (x2! M/F) en-GB es-ES es-US fr-FR
-	          // hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
-	          return v.lang === 'en-US';
-	          // FIXME !5: on Android, what voices are available ? what is the native OS one ? (Electra :))
-	        })[0];
-	      }
-	    }
-	  };
+	  (0, _speech2.default)($rootScope);
 
 	  // Init
 	  $document.ready(function () {
@@ -375,7 +337,7 @@
 	    $scope.states.init();
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 900);
-	    $rootScope.speech.init();
+	    $rootScope.speech.init('fr-FR'); // TODO !5: langue depending on the user/keyword ?
 	  });
 	});
 
@@ -19243,6 +19205,88 @@
 
 /***/ },
 /* 8 */
+/***/ function(module, exports) {
+
+	/* global $, angular, SpeechSynthesisUtterance */
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	exports.default = function (scope) {
+	    scope.speech = {
+	        voice: undefined,
+	        lang: undefined,
+	        speak: function speak(text) {
+	            var intonation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'normal';
+
+	            if (!scope.speech.voice) {
+	                scope.speech.init(scope.speech.lang);
+	            }
+
+	            // TODO !5: use intonation (== (normal|error))
+	            var ut = new SpeechSynthesisUtterance(text);
+	            ut.voice = scope.speech.voice;
+	            window.speechSynthesis.speak(ut);
+	        },
+	        speakLang: function speakLang(textRef) {
+	            var replacements = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	            var intonation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'normal';
+
+	            var text = textReferences[textRef] && (textReferences[textRef][scope.speech.lang] || textReferences[textRef]['en-US']);
+	            for (var replacement in replacements) {
+	                text = text.replace('{' + replacement + '}', replacements[replacement]);
+	            }
+	            scope.speech.speak(text, intonation);
+	        },
+	        listen: function listen(grammar) {
+	            // TODO !5: commandes vocales ? ou plus tard...
+	            /*
+	             var grammar = '#JSGF V1.0; grammar colors; public <color> = rouge | bleu | rose | jaune | vert | blanc | marron | violet | mauve | noir ;'
+	             var recognition = new webkitSpeechRecognition();
+	             var speechRecognitionList = new webkitSpeechGrammarList();
+	             speechRecognitionList.addFromString(grammar, 1);
+	             recognition.grammars = speechRecognitionList;
+	             //recognition.continuous = false;
+	             recognition.lang = 'fr-FR';
+	             recognition.interimResults = false;
+	             recognition.maxAlternatives = 1;
+	             recognition.onresult = function(event) {
+	             var color = event.results[0][0].transcript;
+	             console.log("RESULT:" + color);
+	             }
+	             */
+	        },
+	        init: function init() {
+	            var lang = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'en-US';
+
+	            if ('speechSynthesis' in window && window.speechSynthesis.getVoices()) {
+	                if (lang !== scope.speech.lang) {
+	                    scope.speech.voice = window.speechSynthesis.getVoices().filter(function (v) {
+	                        // available on Mint: de-DE en-US (x2! M/F) en-GB es-ES es-US fr-FR
+	                        // hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
+	                        return v.lang === lang;
+	                        // FIXME !5: on Android, what voices are available ? what is the native OS one ? (Electra :))
+	                    })[0];
+	                    scope.speech.lang = lang;
+	                }
+	            }
+	        }
+	    };
+	};
+
+	var textReferences = {
+	    'welcome': { 'en-US': 'Welcome!', 'fr-FR': 'Bienvenue !' },
+	    'scenario_played': { 'en-US': '{title} played.', 'fr-FR': '{title} joué.' },
+	    'scenario_played_error': { 'en-US': '{title} not played properly!', 'fr-FR': '{title} n\'a pas été joué correctement !' },
+	    '': { 'en-US': '', 'fr-FR': '' }
+	};
+
+	;
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -19254,9 +19298,9 @@
 
 	'use strict';
 
-	var isPrimitive = __webpack_require__(9);
-	var assignSymbols = __webpack_require__(10);
-	var typeOf = __webpack_require__(11);
+	var isPrimitive = __webpack_require__(10);
+	var assignSymbols = __webpack_require__(11);
+	var typeOf = __webpack_require__(12);
 
 	function assign(target/*, objects*/) {
 	  target = target || {};
@@ -19323,7 +19367,7 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	/*!
@@ -19342,7 +19386,7 @@
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	/*!
@@ -19388,10 +19432,10 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var isBuffer = __webpack_require__(16);
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var isBuffer = __webpack_require__(17);
 	var toString = Object.prototype.toString;
 
 	/**
@@ -19505,10 +19549,10 @@
 	  return 'object';
 	};
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -19521,9 +19565,9 @@
 
 	'use strict'
 
-	var base64 = __webpack_require__(13)
-	var ieee754 = __webpack_require__(14)
-	var isArray = __webpack_require__(15)
+	var base64 = __webpack_require__(14)
+	var ieee754 = __webpack_require__(15)
+	var isArray = __webpack_require__(16)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -21301,10 +21345,10 @@
 	  return val !== val // eslint-disable-line no-self-compare
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -21419,7 +21463,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -21509,7 +21553,7 @@
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -21520,7 +21564,7 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	/**

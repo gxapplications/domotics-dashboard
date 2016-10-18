@@ -15,30 +15,12 @@ const defaultAttributesToNumber = [
   'temp_max_value']
 const defaultAttributesToBoolean = [
   'allow_none',
-  'scenarii.min_temp_control_1.controls.trigger_4.checked',
-  'scenarii.min_temp_control_2.controls.trigger_4.checked',
-  'scenarii.min_temp_control_3.controls.trigger_4.checked',
-  'scenarii.min_temp_control_4.controls.trigger_4.checked',
-  'scenarii.max_temp_control_1.controls.trigger_4.checked',
-  'scenarii.max_temp_control_2.controls.trigger_4.checked',
-  'scenarii.max_temp_control_3.controls.trigger_4.checked',
-  'scenarii.max_temp_control_4.controls.trigger_4.checked',
-  'scenarii.min_temp_control_1.controls.condition_4_1.checked',
-  'scenarii.min_temp_control_2.controls.condition_4_1.checked',
-  'scenarii.min_temp_control_3.controls.condition_4_1.checked',
-  'scenarii.min_temp_control_4.controls.condition_4_1.checked',
-  'scenarii.max_temp_control_1.controls.condition_4_1.checked',
-  'scenarii.max_temp_control_2.controls.condition_4_1.checked',
-  'scenarii.max_temp_control_3.controls.condition_4_1.checked',
-  'scenarii.max_temp_control_4.controls.condition_4_1.checked',
-  'scenarii.min_temp_control_1.controls.condition_4_2.checked',
-  'scenarii.min_temp_control_2.controls.condition_4_2.checked',
-  'scenarii.min_temp_control_3.controls.condition_4_2.checked',
-  'scenarii.min_temp_control_4.controls.condition_4_2.checked',
-  'scenarii.max_temp_control_1.controls.condition_4_2.checked',
-  'scenarii.max_temp_control_2.controls.condition_4_2.checked',
-  'scenarii.max_temp_control_3.controls.condition_4_2.checked',
-  'scenarii.max_temp_control_4.controls.condition_4_2.checked'] // FIXME !0: support of wildcards should be useful :)
+  'scenarii.min_temp_control_{1,4}.controls.trigger_4.checked',
+  'scenarii.max_temp_control_{1,4}.controls.trigger_4.checked',
+  'scenarii.min_temp_control_{1,4}.controls.condition_4_1.checked',
+  'scenarii.max_temp_control_{1,4}.controls.condition_4_1.checked',
+  'scenarii.min_temp_control_{1,4}.controls.condition_4_2.checked',
+  'scenarii.max_temp_control_{1,4}.controls.condition_4_2.checked']
 
 if (!exists) {
   console.log('Creating DB file.')
@@ -59,13 +41,21 @@ if (!exists) {
 
 // Tools
 db.typeFixer = function (data, attributePath, transformer) {
-  // Adding [*] wildcard support for arrays
+  let matches
   if (attributePath.match(/\[\*\]/)) {
-    const matches = attributePath.match(/(^.*?\[\*\])(.*$)/)
+    // Adding [*] wildcard support for arrays
+    matches = attributePath.match(/(^.*?\[\*\])(.*$)/)
     let idx = 0
     while (_.has(data, matches[1].replace('*', idx))) {
       data = db.typeFixer(data, matches[1].replace('*', idx) + matches[2], transformer)
       idx++
+    }
+  } else if ((matches = attributePath.match(/\{([0-9]+),([0-9]+)\}/)) && matches.length === 3) {
+    // Adding {n,N} wildcard support for enums
+    for (let i = matches[1]; i <= matches[2]; i++) {
+      if (_.has(data, attributePath.replace(matches[0], i))) {
+        _.update(data, attributePath.replace(matches[0], i), transformer)
+      }
     }
   } else {
     if (_.has(data, attributePath)) {

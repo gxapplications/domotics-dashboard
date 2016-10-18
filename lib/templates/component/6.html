@@ -327,11 +327,12 @@
       onPlanerUpdate: function (old, value) {
         // TODO !1: plug planer to angular controls
       },
-      suffix: 'Force<br/>COMFORT<br/>for 2hrs'
+      suffix: 'Force<br/>COMFORT<br/>for 2hrs',
+      onCenterClick: function () {
+        // TODO !3: force 2hrs button
+      }
 	});
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
-
-    // TODO !3: force 2hrs button -> transfer it in center click on double knob
 
     // listeners to call API temperature updates
     $scope.updateMinMaxTemperatureScenario = function (who, newValue, oldValue) {

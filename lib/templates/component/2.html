@@ -112,6 +112,7 @@
       const toActivate = !$scope.activationState
       $.post('/{{page.slug}}/component/{{component.id}}/action/' + (toActivate ? 'on' : 'off'), {})
         .done(function(data) {
+          // TODO !0: use speakLang here and on each component!
           $rootScope.speech.speak($scope.component.configuration.title + ' turned ' + (toActivate ? 'on' : 'off') + '.')
           $scope.processingState = 'waiting'
           $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
