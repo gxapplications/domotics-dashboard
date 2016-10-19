@@ -144,14 +144,14 @@
       $scope.processingState = 'processing'
       $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {})
         .done(function(data) {
-          $rootScope.speech.speak($scope.component.configuration.title + ' turned in ' + action + 'mode.')
+          $rootScope.speech.speakLang('heat_mode', {title: $scope.component.configuration.title, mode: action})
           $scope.processingState = 'waiting'
           $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
           $scope.updateStepCounter()
           $scope.updateSwitch(action)
         })
         .fail(function() {
-          $rootScope.speech.speak('Heat mode not switched properly.', 'error')
+          $rootScope.speech.speakLang('heat_mode_error', {title: $scope.component.configuration.title, mode: action}, 'error')
           $scope.processingState = 'error'
           $('div#component-{{component.id}}').parent('md-card').addClass('error')
           $scope.updateStepCounter()

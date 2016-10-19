@@ -19263,18 +19263,13 @@
 
 	      scope.speech.lang = lang;
 	      if ('speechSynthesis' in window && window.speechSynthesis.getVoices()) {
-	        // FIXME !0: problem : still with german voice, even for fr-FR !
 	        scope.speech.voice = window.speechSynthesis.getVoices().filter(function (v) {
 	          // available on Mint: de-DE en-US (x2! M/F) en-GB es-ES es-US fr-FR
 	          // hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
-	          if (v.lang === lang) {
-	            console.log('#####', lang);
-	          }
 	          return v.lang === lang;
 	          // FIXME !5: on Android, what voices are available ? what is the native OS one ? (Electra :))
 	        })[0];
 	      }
-	      console.log('+++++++', lang);
 	    }
 	  };
 	};
