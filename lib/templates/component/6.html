@@ -350,11 +350,11 @@
             method: 'PATCH',
             data: $scope.component
           }).done(function() {
-              // FIXME !0
+            // FIXME !0 $rootScope.speech.speakLang('temp_dashboard_temp_update', {title: $scope.component.configuration.title, who: who, value: newValue})
             $rootScope.speech.speak((who === 'min' ? 'Economy' : 'Comfort') + ' temperature updated to ' + newValue + ' degrees for ' + $scope.component.configuration.title + '.')
             $scope.processingState = 'waiting'
           }).fail(function() {
-              // FIXME !0
+            // FIXME !0 $rootScope.speech.speakLang('temp_dashboard_temp_update_error', {title: $scope.component.configuration.title})
             $rootScope.speech.speak('Temperature saving failed.', 'error')
             $scope.processingState = 'error'
             $('div#component-{{component.id}}').parent('md-card').addClass('error')
@@ -362,7 +362,7 @@
           })
         })
         .fail(function() {
-                    // FIXME !0
+          // FIXME !0 $rootScope.speech.speakLang('temp_dashboard_temp_update_error', {title: $scope.component.configuration.title})
           $rootScope.speech.speak('Temperature update failed.', 'error')
           $scope.processingState = 'error'
           $('div#component-{{component.id}}').parent('md-card').addClass('error')

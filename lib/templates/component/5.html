@@ -119,8 +119,7 @@
         $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {
           pattern: pattern || undefined
         }).done(function (data) {
-            // FIXME !0
-            $rootScope.speech.speak($scope.component.configuration.title + ' on ' + action + ' state.')
+            $rootScope.speech.speakLang('alarm_level', {title: $scope.component.configuration.title, level: action})
             $scope.processingState = 'waiting'
             $rootScope.states.macro[data.id] = {
               remaining: data.remaining,
@@ -130,8 +129,7 @@
             $scope.updateSwitch(action)
           })
           .fail(function () {
-                    // FIXME !0
-            $rootScope.speech.speak('Alarm level not changed properly.', 'error')
+            $rootScope.speech.speakLang('alarm_level_error', {title: $scope.component.configuration.title}, 'error')
             $scope.processingState = 'error'
             $('div#component-{{component.id}}').parent('md-card').addClass('error')
             $rootScope.events.errorEvent('Error during Alarm level action!')
@@ -167,8 +165,7 @@
         preserveScope: true, // do not forget this if use parent scope
         template: content,
         onComplete: function ($scope) {
-            // FIXME !0
-          $rootScope.speech.speak('Please draw your pattern.')
+          $rootScope.speech.speakLang('alarm_pattern_ask')
           new PatternLock('#patternHolder-{{component.id}}', {matrix:[3, 3], onDraw: function (pattern) {
             $scope.validPattern(pattern)
           }})

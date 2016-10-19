@@ -337,7 +337,7 @@
 	    $scope.states.init();
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 900);
-	    $rootScope.speech.init('fr-FR'); // TODO !5: langue depending on the user/keyword ?
+	    $rootScope.speech.init('fr-FR'); // TODO !6: langue depending on the user/keyword ?
 	  });
 	});
 
@@ -19213,8 +19213,29 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.default = plugSpeech;
+	var textReferences = {
+	  'welcome': { 'en-US': 'Welcome!', 'fr-FR': 'Bienvenue !' },
+	  'scenario_played': { 'en-US': '{title} played.', 'fr-FR': '{title} exécuté.' },
+	  'scenario_played_error': { 'en-US': '{title} not played properly!', 'fr-FR': '{title} n\'a pas été exécuté correctement !' },
+	  'scenario_turned_on': { 'en-US': '{title} turned on.', 'fr-FR': '{title} allumé.' },
+	  'scenario_turned_off': { 'en-US': '{title} tunred off.', 'fr-FR': '{title} éteint.' },
+	  'scenario_turned_on_error': { 'en-US': '{title} not turned on properly!', 'fr-FR': '{title} n\'a pas été allumé correctement !' },
+	  'scenario_turned_off_error': { 'en-US': '{title} not turned off properly!', 'fr-FR': '{title} n\'a pas été éteint correctement !' },
+	  'domotic_turned_on': { 'en-US': '{title} turned on.', 'fr-FR': '{title} allumé.' },
+	  'domotic_turned_off': { 'en-US': '{title} tunred off.', 'fr-FR': '{title} éteint.' },
+	  'domotic_turned_on_error': { 'en-US': '{title} not turned on properly!', 'fr-FR': '{title} n\'a pas été allumé correctement !' },
+	  'domotic_turned_off_error': { 'en-US': '{title} not turned off properly!', 'fr-FR': '{title} n\'a pas été éteint correctement !' },
+	  'heat_mode': {
+	    'en-US': { _: '{title} turned in {mode} mode.', mode: { eco: 'economic', frost: 'frost', on: 'comfort', off: 'off' } },
+	    'fr-FR': { _: '{title} est passé en mode {mode}.', mode: { eco: 'économique', frost: 'hors gel', on: 'confort', off: 'éteint' } }
+	  },
+	  'heat_mode_error': { 'en-US': '{title} mode not turned properly!', 'fr-FR': 'Le mode pour {title} n\'a pas été modifié correctement !' },
 
-	exports.default = function (scope) {
+	  '': { 'en-US': '', 'fr-FR': '' }
+	};
+
+	function plugSpeech(scope) {
 	  scope.speech = {
 	    voice: undefined,
 	    lang: undefined,
@@ -19225,7 +19246,7 @@
 	        scope.speech.init(scope.speech.lang);
 	      }
 
-	      // TODO !5: use intonation (== (normal|error))
+	      // TODO !5: use intonation (== (normal|error)). normal: pitch 1.0, rate 1.2. erreur: pitch 1.3, rate 1.0
 	      var ut = new SpeechSynthesisUtterance(text);
 	      ut.voice = scope.speech.voice;
 	      window.speechSynthesis.speak(ut);
@@ -19235,13 +19256,22 @@
 	      var intonation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'normal';
 
 	      var text = textReferences[textRef] && (textReferences[textRef][scope.speech.lang] || textReferences[textRef]['en-US']);
-	      for (var replacement in replacements) {
-	        text = text.replace('{' + replacement + '}', replacements[replacement]);
+	      if (text instanceof Object) {
+	        for (var replacement in replacements) {
+	          if (text[replacement] && text[replacement][replacements[replacement]]) {
+	            replacements[replacement] = text[replacement][replacements[replacement]];
+	          }
+	        }
+	        // TODO !0: check this with heat mode component
+	        text = text._;
+	      }
+	      for (var _replacement in replacements) {
+	        text = text.replace('{' + _replacement + '}', replacements[_replacement]);
 	      }
 	      scope.speech.speak(text, intonation);
 	    },
 	    listen: function listen(grammar) {
-	      // TODO !5: commandes vocales ? ou plus tard...
+	      // TODO !6: commandes vocales ? ou plus tard...
 	      /*
 	       var grammar = '#JSGF V1.0; grammar colors; public <color> = rouge | bleu | rose | jaune | vert | blanc | marron | violet | mauve | noir ;'
 	       var recognition = new webkitSpeechRecognition();
@@ -19272,14 +19302,7 @@
 	      }
 	    }
 	  };
-	};
-
-	var textReferences = {
-	  'welcome': { 'en-US': 'Welcome!', 'fr-FR': 'Bienvenue !' },
-	  'scenario_played': { 'en-US': '{title} played.', 'fr-FR': '{title} exécuté.' },
-	  'scenario_played_error': { 'en-US': '{title} not played properly!', 'fr-FR': '{title} n\'a pas été exécuté correctement !' },
-	  '': { 'en-US': '', 'fr-FR': '' }
-	};
+	}
 
 /***/ },
 /* 9 */
