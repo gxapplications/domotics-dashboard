@@ -162,6 +162,9 @@ server.route({
 
         api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
         api.callHome(afterHomeCalled(401))
+
+        // TODO !6: modulariser ci-dessous quand il faudra isoler les components
+        // TODO !1: finaliser myfox-wrapper-api avant de continuer ici...
         // TODO !1: monter en memoire les pendules des components de type 6 de facon stateFUL, et les lancer pour piloter les heures creuses...
       })
     } else {
