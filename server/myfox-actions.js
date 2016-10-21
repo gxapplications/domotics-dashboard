@@ -285,10 +285,14 @@ const actions = function (api, reply, page, component, action = null, payload = 
           reply(err).code(500)
         })
       } else if (actionKey === 'update_planer') {
-        console.log(payload, db.fixPayload(payload), page, component) // page->slug ? component->id ?
-        // use db.updateComponent(slug, id, payload, callback)
-        // TODO !0: il faut sauvegarder en base,
-        // TODO !2: puis appeler une methode pour mettre a jour le pendule en statefull (qui reste à créer)...
+        db.updateComponent(page.slug, component.id, payload.planer, (err, page, updatedComponent) => {
+          if (err) {
+            console.log(err)
+            return reply(err).code(500)
+          }
+          // TODO !2: puis appeler une methode pour mettre a jour le pendule en statefull (qui reste à créer)...
+          reply({'status': 'ok'})
+        })
       } else {
         // TODO !3: actions bouton "Force 2hrs": force ON et force OFF, comme une bascule bistable
       }
