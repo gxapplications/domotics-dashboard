@@ -240,7 +240,8 @@
               eco_2: '',
               eco_3: '',
               eco_4: ''
-          }
+          },
+          planer: Array(48).fill(1)
       }
     }, $scope.component)
 
@@ -301,9 +302,16 @@
 
     // Double knob & planer widget
     const amplitude = $scope.component.configuration.temp_max_max - $scope.component.configuration.temp_min_min + 0.0
-    $scope.doubleKnob = $('div#double-knob-{{component.id}}').temperatureLoader({minValue: $scope.component.configuration.temp_min_value || $scope.component.configuration.temp_min_min, maxValue: $scope.component.configuration.temp_max_value || $scope.component.configuration.temp_max_max, scaleOffset: $scope.component.configuration.temp_min_min + 0.0, scaleAmplitude: amplitude,
-      title: 'Min / Max', precision: (amplitude > 5) ? 0 : 1,
-      planerPrecision: 0.5, onMinUpdate: function (old, value) {
+    $scope.doubleKnob = $('div#double-knob-{{component.id}}').temperatureLoader({
+      minValue: $scope.component.configuration.temp_min_value || $scope.component.configuration.temp_min_min,
+      maxValue: $scope.component.configuration.temp_max_value || $scope.component.configuration.temp_max_max,
+      scaleOffset: $scope.component.configuration.temp_min_min + 0.0,
+      scaleAmplitude: amplitude,
+      title: 'Min / Max',
+      precision: (amplitude > 5) ? 0 : 1,
+      planerPrecision: 0.5,
+      planer: $scope.component.configuration.planer || [],
+      onMinUpdate: function (old, value) {
         if (old === value) {
           return
         }
@@ -325,7 +333,7 @@
         }
       },
       onPlanerUpdate: function (old, value) {
-        // TODO !1: plug planer to angular controls
+        $scope.component.configuration.planer = value
       },
       suffix: 'Force<br/>COMFORT<br/>for 2hrs',
       onCenterClick: function () {
@@ -350,20 +358,17 @@
             method: 'PATCH',
             data: $scope.component
           }).done(function() {
-            // FIXME !0 $rootScope.speech.speakLang('temp_dashboard_temp_update', {title: $scope.component.configuration.title, who: who, value: newValue})
-            $rootScope.speech.speak((who === 'min' ? 'Economy' : 'Comfort') + ' temperature updated to ' + newValue + ' degrees for ' + $scope.component.configuration.title + '.')
+            $rootScope.speech.speakLang('temp_dashboard_temp_update', {title: $scope.component.configuration.title, who: who, value: newValue})
             $scope.processingState = 'waiting'
           }).fail(function() {
-            // FIXME !0 $rootScope.speech.speakLang('temp_dashboard_temp_update_error', {title: $scope.component.configuration.title})
-            $rootScope.speech.speak('Temperature saving failed.', 'error')
+            $rootScope.speech.speakLang('temp_dashboard_temp_update_error', {title: $scope.component.configuration.title}, 'error')
             $scope.processingState = 'error'
             $('div#component-{{component.id}}').parent('md-card').addClass('error')
             $rootScope.events.errorEvent('Temperature settings NOT saved!')
           })
         })
         .fail(function() {
-          // FIXME !0 $rootScope.speech.speakLang('temp_dashboard_temp_update_error', {title: $scope.component.configuration.title})
-          $rootScope.speech.speak('Temperature update failed.', 'error')
+          $rootScope.speech.speakLang('temp_dashboard_temp_update_error', {title: $scope.component.configuration.title}, 'error')
           $scope.processingState = 'error'
           $('div#component-{{component.id}}').parent('md-card').addClass('error')
           $rootScope.events.errorEvent('Error during temperature update!')
@@ -372,6 +377,28 @@
     }
     this.addCleaner($scope.$watch('component.configuration.temp_min_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'min')))
     this.addCleaner($scope.$watch('component.configuration.temp_max_value', $scope.updateMinMaxTemperatureScenario.bind(this, 'max')))
+
+    // listeners to call API planer updates
+    $scope.updatePlaner = function (newValue, oldValue) {
+      if (newValue !== oldValue) {
+        $scope.processingState = 'processing'
+
+        $.post('/{{page.slug}}/component/{{component.id}}/action/update_planer', {
+          planer: newValue
+        })
+        .done(function() {
+          $rootScope.speech.speakLang('temp_dashboard_planer_update', {title: $scope.component.configuration.title})
+          $scope.processingState = 'waiting'
+        }).fail(function() {
+          $rootScope.speech.speakLang('temp_dashboard_planer_update_error', {title: $scope.component.configuration.title}, 'error')
+          $scope.processingState = 'error'
+          $('div#component-{{component.id}}').parent('md-card').addClass('error')
+          $rootScope.events.errorEvent('Planer settings NOT saved!')
+        })
+      }
+    }
+    this.addCleaner($scope.$watch('component.configuration.planer', $scope.updatePlaner.bind(this)))
+
 
     //////////////////////////////////
     // Data provider (temp, lightning)
@@ -390,33 +417,33 @@
   {{#extend "settingsScript"}}
     $scope.preSaveConfig = function () {
       $.post('/{{page.slug}}/component/{{component.id}}/action/fix_temperatures', $scope.component.configuration)
-        .done(function(data) {
-          $scope.component.configuration = data // override config: changes may occurred.
+      .done(function(data) {
+        $scope.component.configuration = data // override config: changes may occurred.
 
-          // Remove temperature values, used only when scenario change occurred.
-          for (let scKey in $scope.component.configuration.scenarii) {
-            let sc = $scope.component.configuration.scenarii[scKey]
-            if (sc.controls && sc.controls.trigger_4) {
-              delete sc.controls.trigger_4.operator
-              delete sc.controls.trigger_4.value
-            }
-            if (sc.controls && sc.controls.condition_4_1) {
-              delete sc.controls.condition_4_1.operator
-              delete sc.controls.condition_4_1.value
-            }
-            if (sc.controls && sc.controls.condition_4_2) {
-              delete sc.controls.condition_4_2.operator
-              delete sc.controls.condition_4_2.value
-            }
+        // Remove temperature values, used only when scenario change occurred.
+        for (let scKey in $scope.component.configuration.scenarii) {
+          let sc = $scope.component.configuration.scenarii[scKey]
+          if (sc.controls && sc.controls.trigger_4) {
+            delete sc.controls.trigger_4.operator
+            delete sc.controls.trigger_4.value
           }
+          if (sc.controls && sc.controls.condition_4_1) {
+            delete sc.controls.condition_4_1.operator
+            delete sc.controls.condition_4_1.value
+          }
+          if (sc.controls && sc.controls.condition_4_2) {
+            delete sc.controls.condition_4_2.operator
+            delete sc.controls.condition_4_2.value
+          }
+        }
 
-          $scope.saveConfig()
-        })
-        .fail(function() {
-          $scope.processingState = 'error'
-          $('div#component-{{component.id}}').parent('md-card').addClass('error')
-          $rootScope.events.errorEvent('Error during Scenario edition temperature correction!')
-        })
+        $scope.saveConfig()
+      })
+      .fail(function() {
+        $scope.processingState = 'error'
+        $('div#component-{{component.id}}').parent('md-card').addClass('error')
+        $rootScope.events.errorEvent('Error during Scenario edition temperature correction!')
+      })
     }
   {{/extend}}
 </script>

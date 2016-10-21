@@ -25,8 +25,8 @@ see the file license.txt that was included with the plugin bundle.
      * @param	params	Specify options in {}. May be on of width, height, progress or value.
      */
     $.fn.percentageLoader = function (params) {
-        var settings, canvas, percentageText, valueText, items, i, item, selectors, s, ctx, progress, degress,
-            value, cX, cY, lingrad, innerGrad, knobgrad, tubeGrad, innerRadius, innerBarRadius, outerBarRadius, knobRadius,
+        var settings, canvas, percentageText, valueText, items, item, selectors, s, ctx, progress, degress,
+            value, cX, cY, lingrad, innerGrad, tubeGrad, innerRadius, innerBarRadius, outerBarRadius, knobRadius,
             radius, startAngle, endAngle, completeAngle1, completeAngle2, setProgress, setDegress, setValue,
             applyAngle, drawLoader, clipValue, outerDiv, innerBarRadius2, outerBarRadius2, ledOnGrad, ledOffGrad, startAngleLed,
             endAngleLed, progressLabel, degressLabel, mouseDown1, mouseDown2, mouseDown3;
@@ -151,11 +151,6 @@ see the file license.txt that was included with the plugin bundle.
         ledOffGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
         ledOffGrad.addColorStop(0, '#00695C'); // 800
         ledOffGrad.addColorStop(1, '#004D40'); // 900
-
-        /* knob gradient */
-        knobgrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
-        knobgrad.addColorStop(0, '#00796B'); // teal 700
-        knobgrad.addColorStop(1, '#004D40'); // teal 900
 
         /* The inner circle is 2/3rds the size of the outer one */
         innerRadius = cX * 0.45;
@@ -358,10 +353,11 @@ see the file license.txt that was included with the plugin bundle.
 
 			var knob2X = cX + Math.cos(completeAngle2)*knobRadius, knob2Y = cY + Math.sin(completeAngle2)*knobRadius,
 			    knob1X = cX + Math.cos(completeAngle1)*knobRadius, knob1Y = cY + Math.sin(completeAngle1)*knobRadius;
-			ctx.fillStyle = knobgrad;
+			ctx.fillStyle = ledOffGrad;
             ctx.beginPath();
             ctx.arc(knob1X, knob1Y, (outerBarRadius - innerBarRadius)*0.8, 0, Math.PI * 2, false);
             ctx.fill();
+            ctx.fillStyle = ledOnGrad;
             ctx.beginPath();
             ctx.arc(knob2X, knob2Y, (outerBarRadius - innerBarRadius)*0.8, 0, Math.PI * 2, false);
             ctx.fill();
@@ -701,7 +697,8 @@ see the file license.txt that was included with the plugin bundle.
             onUpdating: function() {},
             onPlanerUpdate: function(oldValue, newValue) {},
             componentData: {},
-            planerPrecision: 0.5
+            planerPrecision: 0.5,
+            planer: Array(48).fill(1)
 	    };
 
 	    /* Override default settings with provided params, if any */
@@ -748,6 +745,7 @@ see the file license.txt that was included with the plugin bundle.
                 precision: settings.precision,
                 controllable: true,
                 ledCount: 24 / settings.planerPrecision,
+                ledStates: settings.planer,
                 onProgressUpdate : function(value) {
                 	var val2 = (settings.scaleOffset + value * settings.scaleAmplitude).toFixed(settings.precision);
                 	if (!maxChanged) oldMaxValue = settings.maxValue;

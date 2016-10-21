@@ -162,6 +162,7 @@ server.route({
 
         api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
         api.callHome(afterHomeCalled(401))
+        // TODO !1: monter en memoire les pendules des components de type 6 de facon stateFUL, et les lancer pour piloter les heures creuses...
       })
     } else {
       return reply({}).code(412) // Malformed request: stops here

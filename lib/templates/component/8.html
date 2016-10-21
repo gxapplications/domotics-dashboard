@@ -116,12 +116,12 @@
       $.post('/{{page.slug}}/component/{{component.id}}/action/' + actionIdx + '-' +
           ($scope.realStates.includes(actionIdx) ? 'off' : 'on'), {})
         .done(function() {
-          $rootScope.speech.speak($scope.component.configuration.title + ' mode switched.')
+          $rootScope.speech.speakLang('multiple_scenario_switch', {title: $scope.component.configuration.title})
           $scope.processingState = 'waiting'
           $scope.updateSwitch(actionIdx)
         })
         .fail(function() {
-          $rootScope.speech.speak('A scenario did not switch properly.', 'error')
+          $rootScope.speech.speakLang('multiple_scenario_switch_error', {}, 'error')
           $scope.processingState = 'error'
           $rootScope.events.errorEvent('Error during Multiple scenarii switch action!')
         })

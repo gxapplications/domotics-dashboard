@@ -284,8 +284,11 @@ const actions = function (api, reply, page, component, action = null, payload = 
           console.log(err)
           reply(err).code(500)
         })
+      } else if (actionKey === 'update_planer') {
+        // TODO !0: il faut sauvegarder en base,
+        // TODO !2: puis appeler une methode pour mettre a jour le pendule en statefull (qui reste à créer)...
       } else {
-        // TODO !3: autre actions a faire quand besoin
+        // TODO !3: actions bouton "Force 2hrs"
       }
       break
 

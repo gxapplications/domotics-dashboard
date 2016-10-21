@@ -19231,7 +19231,19 @@
 	    'fr-FR': { _: '{title} est passé en mode {mode}.', mode: { eco: 'économique', frost: 'hors gel', on: 'confort', off: 'éteint' } }
 	  },
 	  'heat_mode_error': { 'en-US': '{title} mode not turned properly!', 'fr-FR': 'Le mode pour {title} n\'a pas été modifié correctement !' },
-
+	  'alarm_level': {
+	    'en-US': '{title} changed to {level} level.',
+	    'fr-FR': { _: '{title} {level}.', level: { off: 'désarmée', half: 'partiellement armée', on: 'armée' } }
+	  },
+	  'alarm_level_error': { 'en-US': '{title} level change failed!', 'fr-FR': 'Le changement de niveau a échoué pour {title} !' },
+	  'alarm_pattern_ask': { 'en-US': 'Please draw your pattern.', 'fr-FR': 'Veuillez dessiner votre schéma.' },
+	  'temp_dashboard_temp_update': {
+	    'en-US': { _: '{who} temperature updated to {value} degrees for {title}.', who: { min: 'economic', max: 'comfort' } },
+	    'fr-FR': { _: 'Température {who} modifiée à {value} degrés pour {title}.', who: { min: 'en mode économique', max: 'de comfort' } }
+	  },
+	  'temp_dashboard_temp_update_error': { 'en-US': 'Temperature update failed for {title}!', 'fr-FR': 'Modification de la température pour {title} échouée!' },
+	  'multiple_scenario_switch': { 'en-US': '{title} mode switched.', 'fr-FR': 'Mode basculé pour {title}.' },
+	  'multiple_scenario_switch_error': { 'en-US': 'A scenario did not switch properly!', 'fr-FR': 'Un scénario n\'a pas basculé correctement!' },
 	  '': { 'en-US': '', 'fr-FR': '' }
 	};
 
@@ -19262,7 +19274,6 @@
 	            replacements[replacement] = text[replacement][replacements[replacement]];
 	          }
 	        }
-	        // TODO !0: check this with heat mode component
 	        text = text._;
 	      }
 	      for (var _replacement in replacements) {
