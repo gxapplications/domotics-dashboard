@@ -244,7 +244,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
             scenarioFixes[sc.id] = scenarioFixes[sc.id] || []
             scenarioFixes[sc.id].push({
               toTemperature: toTemperature,
-              controls: _.filter(sc.controls, (v) => { return v.checked === true })
+              controls: _.filter(_.map(sc.controls, (control, idx) => { return Object.assign({condition: idx}, control) }), (v) => { return v.checked === true })
             })
           }
         }
@@ -270,7 +270,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
             scenarioFixes[sc.id] = scenarioFixes[sc.id] || []
             scenarioFixes[sc.id].push({
               toTemperature: value,
-              controls: _.filter(sc.controls, (v) => { return v.checked === true })
+              controls: _.filter(_.map(sc.controls, (control, idx) => { return Object.assign({condition: idx}, control) }), (v) => { return v.checked === true })
             })
           }
         })
@@ -285,7 +285,8 @@ const actions = function (api, reply, page, component, action = null, payload = 
           reply(err).code(500)
         })
       } else if (actionKey === 'update_planer') {
-        db.updateComponent(page.slug, component.id, payload.planer, (err, page, updatedComponent) => {
+        // TODO !0: NE MARCHE PAS ! SEMBLE ECRASER TOUT LE PLANER !
+        db.updateComponent(page.slug, component.id, {configuration: payload}, (err, page, updatedComponent) => {
           if (err) {
             console.log(err)
             return reply(err).code(500)

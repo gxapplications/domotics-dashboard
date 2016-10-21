@@ -19242,6 +19242,8 @@
 	    'fr-FR': { _: 'Température {who} modifiée à {value} degrés pour {title}.', who: { min: 'en mode économique', max: 'de comfort' } }
 	  },
 	  'temp_dashboard_temp_update_error': { 'en-US': 'Temperature update failed for {title}!', 'fr-FR': 'Modification de la température pour {title} échouée!' },
+	  'temp_dashboard_planer_update': { 'en-US': 'Planification updated for {title}.', 'fr-FR': 'Programmation modifiée pour {title}.' },
+	  'temp_dashboard_planer_update_error': { 'en-US': 'Planification update failed for {title}!', 'fr-FR': 'Programmation pour {title} échouée!' },
 	  'multiple_scenario_switch': { 'en-US': '{title} mode switched.', 'fr-FR': 'Mode basculé pour {title}.' },
 	  'multiple_scenario_switch_error': { 'en-US': 'A scenario did not switch properly!', 'fr-FR': 'Un scénario n\'a pas basculé correctement!' },
 	  '': { 'en-US': '', 'fr-FR': '' }
