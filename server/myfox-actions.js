@@ -285,7 +285,6 @@ const actions = function (api, reply, page, component, action = null, payload = 
           reply(err).code(500)
         })
       } else if (actionKey === 'update_planer') {
-        // TODO !0: NE MARCHE PAS ! SEMBLE ECRASER TOUT LE PLANER !
         db.updateComponent(page.slug, component.id, {configuration: payload}, (err, page, updatedComponent) => {
           if (err) {
             console.log(err)

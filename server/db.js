@@ -42,11 +42,11 @@ if (!exists) {
 // Tools
 db.typeFixer = function (data, attributePath, transformer) {
   let matches
-  if (attributePath.match(/\[\*\]/)) {
+  if (attributePath.match(/(^.*?\[\*\])(.+$)/)) {
     // Adding [*] wildcard support for arrays
-    matches = attributePath.match(/(^.*?\[\*\])(.*$)/)
+    matches = attributePath.match(/(^.*?\[\*\])(.+$)/)
     let idx = 0
-    while (_.has(data, matches[1].replace('*', idx))) {
+    while (data instanceof Object && _.has(data, matches[1].replace('*', idx))) {
       data = db.typeFixer(data, matches[1].replace('*', idx) + matches[2], transformer)
       idx++
     }
@@ -71,6 +71,13 @@ db.fixPayload = function (data, attributesToNumber = defaultAttributesToNumber, 
   attributesToBoolean.forEach((attributePath) => {
     data = db.typeFixer(data, attributePath, (n) => { return (n === 'true') })
   })
+
+  // TODO !6: fix pour type==6 seulement, a deporter dans le composant isolé
+  // TODO !6: il faudra un middleware pour chaque component, pour pouvoir a terme supprimer db.fixPayload()
+  if (data.planer && data.planer.length > 0) {
+    data.planer = data.planer.map(Number)
+  }
+
   return data
 }
 db.stringify = function (data, attributesToNumber = defaultAttributesToNumber, attributesToBoolean = defaultAttributesToBoolean) {
