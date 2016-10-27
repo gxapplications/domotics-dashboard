@@ -35,7 +35,7 @@ if (!exists) {
   db.serialize(() => {
     db.run('CREATE TABLE accounts (password TEXT)')
     db.run('CREATE TABLE pages (slug TEXT, name TEXT, last_access INTEGER, positions TEXT, layout INTEGER)')
-    db.run('CREATE TABLE components (id INTEGER PRIMARY KEY, type INTEGER, configuration TEXT, extra_component TEXT)')
+    db.run('CREATE TABLE components (id INTEGER PRIMARY KEY, type INTEGER, configuration TEXT)')
   })
 }
 
@@ -193,12 +193,12 @@ db.createComponent = function (slug, payload, callback) {
       return callback(err, null, null)
     }
 
-    let component = {type: 1, configuration: {}, extra_component: {}}
+    let component = {type: 1, configuration: {}}
     Object.assign(component, payload)
-    db.run('INSERT INTO components (id, type, configuration, extra_component) VALUES (NULL, ?, ?, ?)',
+    db.run('INSERT INTO components (id, type, configuration) VALUES (NULL, ?, ?, ?)',
       component.type,
       db.stringify(component.configuration),
-      db.stringify(component.extra_component, [], []), function (err) {
+      function (err) {
         return callback(err, pageRow, Object.assign({id: this.lastID}, component))
       })
   })
@@ -218,13 +218,12 @@ db.updateComponent = function (slug, id, payload, callback) {
         return callback(err, pageRow, null)
       }
 
-      let component = {type: 1, configuration: {}, extra_component: {}}
+      let component = {type: 1, configuration: {}}
       Object.assign(component, componentRow, payload)
       db.run(
-        'UPDATE components SET type=?, configuration=?, extra_component=? WHERE id=?',
+        'UPDATE components SET type=?, configuration=? WHERE id=?',
         component.type,
         db.stringify(component.configuration),
-        db.stringify(component.extra_component, [], []),
         id,
         (err) => {
           return callback(err, pageRow, component)

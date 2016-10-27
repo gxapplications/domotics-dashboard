@@ -285,7 +285,8 @@ const actions = function (api, reply, page, component, action = null, payload = 
           reply(err).code(500)
         })
       } else if (actionKey === 'update_planer') {
-        db.updateComponent(page.slug, component.id, {configuration: payload}, (err, page, updatedComponent) => {
+        const newConfiguration = Object.assign({}, configuration, db.fixPayload(payload))
+        db.updateComponent(page.slug, component.id, {configuration: newConfiguration}, (err, page, updatedComponent) => {
           if (err) {
             console.log(err)
             return reply(err).code(500)

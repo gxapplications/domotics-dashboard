@@ -418,12 +418,8 @@
     $scope.preSaveConfig = function () {
       $.post('/{{page.slug}}/component/{{component.id}}/action/fix_temperatures', $scope.component.configuration)
       .done(function(data) {
-
-        // FIXME !0: ne sauvegarde plus correctement !!!!
-        console.log('&&&&&', $scope.component.configuration, data)
-
         $scope.component.configuration = data // override config: changes may occurred.
-
+// FIXME !0: les checkboxes des 3 conditions sous les scenarios ne sont pas sauvegardées !
         // Remove temperature values, used only when scenario change occurred.
         for (let scKey in $scope.component.configuration.scenarii) {
           let sc = $scope.component.configuration.scenarii[scKey]
