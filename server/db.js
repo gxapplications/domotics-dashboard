@@ -69,7 +69,7 @@ db.fixPayload = function (data, attributesToNumber = defaultAttributesToNumber, 
     data = db.typeFixer(data, attributePath, (n) => { return Number(n) })
   })
   attributesToBoolean.forEach((attributePath) => {
-    data = db.typeFixer(data, attributePath, (n) => { return (n === 'true') })
+    data = db.typeFixer(data, attributePath, (n) => { return (n === 'true' || n === true) })
   })
 
   // TODO !6: fix pour type==6 seulement, a deporter dans le composant isolé
@@ -195,7 +195,7 @@ db.createComponent = function (slug, payload, callback) {
 
     let component = {type: 1, configuration: {}}
     Object.assign(component, payload)
-    db.run('INSERT INTO components (id, type, configuration) VALUES (NULL, ?, ?, ?)',
+    db.run('INSERT INTO components (id, type, configuration) VALUES (NULL, ?, ?)',
       component.type,
       db.stringify(component.configuration),
       function (err) {
@@ -230,6 +230,14 @@ db.updateComponent = function (slug, id, payload, callback) {
         }
       )
     })
+  })
+}
+db.getComponentsByType = function (type, callback) {
+  db.each('SELECT * FROM components WHERE type=?', type, (err, componentRow) => {
+    if (err || !componentRow) {
+      return callback(err, null)
+    }
+    return callback(err, componentRow)
   })
 }
 

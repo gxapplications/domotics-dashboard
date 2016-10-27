@@ -18,6 +18,8 @@ import myfoxActions from './myfox-actions'
 import parserActions from './parser-actions'
 import context from '../lib/middlewares/context'
 
+import Component6Planer from '../lib/component-6-planer'
+
 // Stateful instance
 let api = null
 
@@ -160,11 +162,26 @@ server.route({
           return reply(err.toString()).code(401)
         }
 
+        // instantiate with credentials, stateful
         api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
+        // Call home once, this will schedule automated reloadings
         api.callHome(afterHomeCalled(401))
 
         // TODO !6: modulariser ci-dessous quand il faudra isoler les components
-        // TODO !1: monter en memoire les pendules des components de type 6 de facon stateFUL, et les lancer pour piloter les heures creuses...
+        // Components type 6: comfort/eco planer: pilots to launch, stateful
+        api.component6Planers = []
+        db.getComponentsByType(6, (err, component) => {
+          if (err) {
+            return reply(err.toString()).code(500)
+          }
+
+          const planer = JSON.parse(component.configuration).planer || []
+          if (planer.length === 0) {
+            return // component not configured.
+          }
+          // planer is self launched at construction.
+          api.component6Planers.push(new Component6Planer(component.id, planer, api))
+        })
       })
     } else {
       return reply({}).code(412) // Malformed request: stops here

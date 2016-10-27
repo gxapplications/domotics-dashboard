@@ -4,6 +4,8 @@ import _ from 'lodash'
 import db from './db'
 import CryptoJS from 'crypto-js'
 
+import Component6Planer from '../lib/component-6-planer'
+
 const actions = function (api, reply, page, component, action = null, payload = {}) {
   let macroId = `c_${component.id}`
   const configuration = JSON.parse(component.configuration)
@@ -291,7 +293,14 @@ const actions = function (api, reply, page, component, action = null, payload = 
             console.log(err)
             return reply(err).code(500)
           }
-          // TODO !2: puis appeler une methode pour mettre a jour le pendule en statefull (qui reste à créer)...
+
+          const planer = api.component6Planers.find((planer) => { return planer.id === component.id })
+          if (planer) {
+            planer.updateData(newConfiguration.planer)
+          } else {
+            api.component6Planers.push(new Component6Planer(component.id, newConfiguration.planer, api))
+          }
+
           reply({'status': 'ok'})
         })
       } else {
