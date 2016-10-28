@@ -175,17 +175,26 @@ db.updatePageBySlug = function (slug, payload, callback) {
 
 // Components
 db.getComponentById = function (slug, id, callback) {
-  db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
-    if (err || !pageRow) {
-      return callback(err, null, null)
-    }
+  if (slug) {
+    db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {
+      if (err || !pageRow) {
+        return callback(err, null, null)
+      }
+      db.get('SELECT * FROM components WHERE id=? LIMIT 1', id, (err, componentRow) => {
+        if (err || !componentRow) {
+          return callback(err, pageRow, null)
+        }
+        return callback(err, pageRow, componentRow)
+      })
+    })
+  } else {
     db.get('SELECT * FROM components WHERE id=? LIMIT 1', id, (err, componentRow) => {
       if (err || !componentRow) {
-        return callback(err, pageRow, null)
+        return callback(err, null)
       }
-      return callback(err, pageRow, componentRow)
+      return callback(err, componentRow)
     })
-  })
+  }
 }
 db.createComponent = function (slug, payload, callback) {
   db.get('SELECT * FROM pages WHERE slug=? LIMIT 1', slug, (err, pageRow) => {

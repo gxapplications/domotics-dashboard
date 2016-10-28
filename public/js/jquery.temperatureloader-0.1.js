@@ -779,6 +779,7 @@ see the file license.txt that was included with the plugin bundle.
                 },
                 onLedUpdate : function(old, value) {
                     settings.onPlanerUpdate(old, value);
+                    settings.planer = value;
                 }
     	    });
         }

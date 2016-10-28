@@ -22,7 +22,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
       api.callScenarioAction(firstAction, (err, data) => {
         if (err) {
           console.log(err)
-          reply(err).code(500)
+          return reply(err).code(500)
         }
         reply(data)
       }, macroId, ...actions)
@@ -46,7 +46,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
       api.callScenarioAction(firstAction, (err, data) => {
         if (err) {
           console.log(err)
-          reply(err).code(500)
+          return reply(err).code(500)
         }
         reply(data)
       }, macroId, ...actions)
@@ -70,7 +70,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
       api.callDomoticAction(firstAction, (err, data) => {
         if (err) {
           console.log(err)
-          reply(err).code(500)
+          return reply(err).code(500)
         }
         reply(data)
       }, macroId, ...actions)
@@ -93,7 +93,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
       api.callHeatingAction(firstAction, (err, data) => {
         if (err) {
           console.log(err)
-          reply(err).code(500)
+          return reply(err).code(500)
         }
         reply(data)
       }, macroId, ...actions)
@@ -146,7 +146,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
         api.callAlarmLevelAction(firstAction, (err, data) => {
           if (err) {
             console.log(err)
-            reply(err).code(500)
+            return reply(err).code(500)
           }
           reply(data)
         })
@@ -178,7 +178,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
       api.callScenarioAction(firstAction, (err, data) => {
         if (err) {
           console.log(err)
-          reply(err).code(500)
+          return reply(err).code(500)
         }
         reply(data)
       }, macroId, ...steps)
@@ -211,7 +211,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
         api.inspectScenarioTemperatureSettings(actionData, (err, data) => {
           if (err) {
             console.log(err)
-            reply(err).code(500)
+            return reply(err).code(500)
           }
           reply(data)
         })
