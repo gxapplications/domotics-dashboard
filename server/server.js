@@ -128,6 +128,23 @@ server.route({
         // Login successful, store /home result, then reply with new location.
         request.context.subscribeToApiEvents(api)
         request.context.updateManyStates(data)
+
+        // TODO !6: modulariser ci-dessous quand il faudra isoler les components
+        // Components type 6: comfort/eco planer: pilots to launch, stateful
+        api.component6Planers = []
+        db.getComponentsByType(6, (err, component) => {
+          if (err) {
+            return reply(err.toString()).code(500)
+          }
+
+          const planer = JSON.parse(component.configuration).planer || []
+          if (planer.length === 0) {
+            return // component not configured.
+          }
+          // planer is self launched at construction.
+          api.component6Planers.push(new Component6Planer(component.id, planer, api))
+        })
+
         db.getLastAccessedPageSlug((err, slug) => {
           if (err) {
             return reply(err.toString()).code(500)
@@ -166,22 +183,6 @@ server.route({
         api = myfoxWrapperApi(options, {'username': config.get('server.myfox.username'), 'password': password})
         // Call home once, this will schedule automated reloadings
         api.callHome(afterHomeCalled(401))
-
-        // TODO !6: modulariser ci-dessous quand il faudra isoler les components
-        // Components type 6: comfort/eco planer: pilots to launch, stateful
-        api.component6Planers = []
-        db.getComponentsByType(6, (err, component) => {
-          if (err) {
-            return reply(err.toString()).code(500)
-          }
-
-          const planer = JSON.parse(component.configuration).planer || []
-          if (planer.length === 0) {
-            return // component not configured.
-          }
-          // planer is self launched at construction.
-          api.component6Planers.push(new Component6Planer(component.id, planer, api))
-        })
       })
     } else {
       return reply({}).code(412) // Malformed request: stops here

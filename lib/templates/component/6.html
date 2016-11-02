@@ -246,6 +246,11 @@
     }, $scope.component)
 
     $scope.processingState = 'waiting' // or 'processing', 'error'
+    $scope.forceMode = false
+    if ($scope.states.data.value['domotic_heating_dashboard_{{component.id}}']) {
+      $scope.forceMode = $scope.states.data.value['domotic_heating_dashboard_{{component.id}}'].force_mode || false
+    }
+    // TODO !0: $scope.forceMode s'en servir pour l'etat initial du knob.
 
     ///////////////////////////////////////
     // MIN MAX temperature pilot and planer
@@ -335,9 +340,11 @@
       onPlanerUpdate: function (old, value) {
         $scope.component.configuration.planer = value
       },
-      suffix: 'Force<br/>COMFORT<br/>for 2hrs',
+      centerTitle: $scope.forceMode ? 'Back to<br/>PROG.<br/>mode' : 'Force<br/>COMFORT<br/>for 2hrs',
+      centerState: $scope.forceMode,
       onCenterClick: function () {
-        // TODO !1: check force state in persistent state macro if ON or OFF: aller voir dans les macros, ID=`domotic_heating_dashboard_${this.id}`
+        const newState = !$scope.states.data.value['domotic_heating_dashboard_{{component.id}}'].force_mode
+        $scope.doubleKnob.setCenter(newState ? 'Back to<br/>PROG.<br/>mode' : 'Force<br/>COMFORT<br/>for 2hrs', newState)
         // TODO !2: force 2hrs button: launch action (!state)
         // TODO !2: speak if success or fail.
       }

@@ -26,9 +26,10 @@ see the file license.txt that was included with the plugin bundle.
      */
     $.fn.percentageLoader = function (params) {
         var settings, canvas, percentageText, valueText, items, item, selectors, s, ctx, progress, degress,
-            value, cX, cY, lingrad, innerGrad, tubeGrad, innerRadius, innerBarRadius, outerBarRadius, knobRadius,
+            value, cX, cY, lingrad, innerGrad, innerGradOn, tubeGrad, innerRadius, innerBarRadius, outerBarRadius, knobRadius,
             radius, startAngle, endAngle, completeAngle1, completeAngle2, setProgress, setDegress, setValue,
-            applyAngle, drawLoader, clipValue, outerDiv, innerBarRadius2, outerBarRadius2, ledOnGrad, ledOffGrad, startAngleLed,
+            applyAngle, drawLoader, clipValue, outerDiv, innerBarRadius2, outerBarRadius2, ledOnGrad, ledOffGrad,
+            startAngleLed, setCenter,
             endAngleLed, progressLabel, degressLabel, mouseDown1, mouseDown2, mouseDown3;
         var ledModifyingStart = false;
         var ledModifyingState = false;
@@ -44,6 +45,7 @@ see the file license.txt that was included with the plugin bundle.
             scaleAmplitude: 100.0,
             value: 'Progress',
             suffix: '',
+            centerState: false,
             precision: 0,
             controllable: false,
             ledCount: 24,
@@ -138,6 +140,9 @@ see the file license.txt that was included with the plugin bundle.
         innerGrad = ctx.createLinearGradient(cX, cX * 0.133333, cX, canvas.height - cX * 0.133333);
         innerGrad.addColorStop(0, '#616161'); // 700
         innerGrad.addColorStop(1, '#323232'); // 850 ?
+        innerGradOn = ctx.createLinearGradient(cX, cX * 0.133333, cX, canvas.height - cX * 0.133333);
+        innerGradOn.addColorStop(0, '#1DE9B6'); // A400
+        innerGradOn.addColorStop(1, '#00897B'); // 600
 
         /* Tube gradient (background, not the spiral gradient) */
         tubeGrad = ctx.createLinearGradient(cX, 0, cX, canvas.height);
@@ -207,7 +212,7 @@ see the file license.txt that was included with the plugin bundle.
             ctx.stroke();
 
             /* draw inner circle */
-            ctx.fillStyle = innerGrad;
+            ctx.fillStyle = settings.centerState ? innerGradOn : innerGrad;
             ctx.beginPath();
             ctx.arc(cX, cY, innerRadius, 0, Math.PI * 2, false);
             ctx.fill();
@@ -458,7 +463,6 @@ see the file license.txt that was included with the plugin bundle.
             clipValue(true);
             drawLoader();
         };
-
         this.setProgress = setProgress;
         this.setDegress = setDegress;
 
@@ -466,9 +470,15 @@ see the file license.txt that was included with the plugin bundle.
             value = val;
             valueText.innerHTML = value;
         };
-
         this.setValue = setValue;
         this.setValue(settings.value);
+
+        setCenter = function (title, state) {
+            settings.suffix = title;
+            settings.centerState = state;
+            drawLoader();
+        };
+        this.setCenter = setCenter;
 
         progress = settings.progress;
         degress = settings.degress;
@@ -679,7 +689,8 @@ see the file license.txt that was included with the plugin bundle.
      * @param	params	Specify options in {}.
      */
     $.fn.temperatureLoader = function (params) {
-    	var settings, loader, thermostat, setMinValue, setMaxValue, setSize, setTitle, minChanged = false, maxChanged = false, oldMinValue, oldMaxValue;
+    	var settings, loader, thermostat, setMinValue, setMaxValue, setSize, setTitle, minChanged = false,
+            maxChanged = false, oldMinValue, oldMaxValue, setCenter;
     	thermostat = $(this);
 
 	    /* Specify default settings */
@@ -689,7 +700,8 @@ see the file license.txt that was included with the plugin bundle.
 		    scaleOffset: 14.0,
             scaleAmplitude: 18.0,
 		    title: 'Temperature',
-		    suffix: '°C',
+            centerTitle: '°C',
+            centerState: false,
             precision: 1,
             onMinUpdate: function(oldValue, newValue, componentData) {},
             onMaxUpdate: function(oldValue, newValue, componentData) {},
@@ -729,6 +741,13 @@ see the file license.txt that was included with the plugin bundle.
         };
         thermostat.setTitle = setTitle;
 
+        setCenter = function(title, state = false) {
+            settings.centerTitle = title;
+            settings.centerState = state;
+            loader.setCenter(title, state);
+        };
+        thermostat.setCenter = setCenter;
+
         setSize = function(size) {
         	if (thermostat.children().length > 0) {
         		thermostat.html('');
@@ -741,7 +760,8 @@ see the file license.txt that was included with the plugin bundle.
                 scaleOffset: settings.scaleOffset,
                 scaleAmplitude: settings.scaleAmplitude,
                 value: settings.title,
-                suffix: settings.suffix,
+                suffix: settings.centerTitle,
+                centerState: settings.centerState,
                 precision: settings.precision,
                 controllable: true,
                 ledCount: 24 / settings.planerPrecision,
@@ -792,6 +812,7 @@ see the file license.txt that was included with the plugin bundle.
         };
 
         this.setTitle = thermostat.setTitle;
+        this.setCenter = thermostat.setCenter;
 
         $( window ).resize(this.resizer);
         thermostat.resize(this.resizer);
