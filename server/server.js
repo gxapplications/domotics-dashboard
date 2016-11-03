@@ -292,6 +292,15 @@ server.route({
 
     db.deleteComponent(request.params.id, (err) => {
       Hoek.assert(!err, err)
+
+      // TODO !6: modulariser ci-dessous quand il faudra isoler les components
+      // Components type 6: remove planers
+      const id = Number(request.params.id)
+      api.component6Planers.filter((planer) => { return planer.id === id }).forEach((planer) => {
+        planer.remove()
+      })
+      api.component6Planers = api.component6Planers.filter((planer) => { return planer.id !== id })
+
       return reply({status: 'ok'})
     })
   }

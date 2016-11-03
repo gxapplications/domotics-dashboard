@@ -428,6 +428,12 @@
     /////////////////////
     if ($scope.component.configuration && $scope.component.configuration.data > 0) {
       $scope.updateForceMode = function (data) {
+        if (data.error) {
+            $rootScope.speech.speakLang(data.error, {title: $scope.component.configuration.title}, 'error')
+            $scope.processingState = 'error'
+            $('div#component-{{component.id}}').parent('md-card').addClass('error')
+            $rootScope.events.errorEvent('Planer background action failure!')
+        }
         if ($scope.forceMode === data.force_mode) {
             return
         }
