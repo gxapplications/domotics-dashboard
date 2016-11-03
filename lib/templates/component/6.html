@@ -246,7 +246,7 @@
     }, $scope.component)
 
     $scope.processingState = 'waiting' // or 'processing', 'error'
-    $scope.forceMode = false
+    $scope.forceMode = undefined // init to undefined to avoid speech during first set
 
     ///////////////////////////////////////
     // MIN MAX temperature pilot and planer
@@ -339,8 +339,16 @@
       centerTitle: $scope.forceMode ? 'Back to<br/>PROG.<br/>mode' : 'Force<br/>COMFORT<br/>for 2hrs',
       centerState: $scope.forceMode,
       onCenterClick: function () {
-        // TODO !1: force 2hrs button: launch action (!$scope.forceMode)
-        // TODO !2: speak if success or fail.
+        $.post('/{{page.slug}}/component/{{component.id}}/action/force', {
+          activation: !$scope.forceMode
+        })
+        // .done(function() { /* No speech here, see in the persistent state watcher */ })
+        .fail(function() {
+          $rootScope.speech.speakLang('temp_dashboard_force_mode_error', {title: $scope.component.configuration.title}, 'error')
+          $scope.processingState = 'error'
+          $('div#component-{{component.id}}').parent('md-card').addClass('error')
+          $rootScope.events.errorEvent('Force mode activation error!')
+        })
       }
 	});
     $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
@@ -419,14 +427,19 @@
     // Force mode updater
     /////////////////////
     if ($scope.component.configuration && $scope.component.configuration.data > 0) {
-      if ($scope.states.data.value['domotic_heating_dashboard_{{component.id}}']) {
-        $scope.forceMode = $scope.states.data.value['domotic_heating_dashboard_{{component.id}}'].force_mode || false
+      $scope.updateForceMode = function (data) {
+        if ($scope.forceMode === data.force_mode) {
+            return
+        }
+
+        const newMode = $scope.states.data.value['domotic_heating_dashboard_{{component.id}}'].force_mode
+        if ($scope.forceMode !== undefined) { // do not speak at init
+          $rootScope.speech.speakLang(`temp_dashboard_force_mode_${newMode ? 'on' : 'off'}`, {title: $scope.component.configuration.title})
+        }
+        $scope.doubleKnob.setCenter(newMode ? 'Back to<br/>PROG.<br/>mode' : 'Force<br/>COMFORT<br/>for 2hrs', newMode)
+        $scope.forceMode = newMode
       }
-      $scope.updateForceMode = function () {
-        $scope.forceMode = = $scope.states.data.value['domotic_heating_dashboard_{{component.id}}'].force_mode
-        $scope.doubleKnob.setCenter($scope.forceMode ? 'Back to<br/>PROG.<br/>mode' : 'Force<br/>COMFORT<br/>for 2hrs', $scope.forceMode)
-      }
-      this.addCleaner($scope.$watch('states.data.value.domotic_heating_dashboard_{{component.id}}', $scope.updateForceMode))
+      this.addCleaner($scope.$watch('states.data.value.domotic_heating_dashboard_{{component.id}}', $scope.updateForceMode.bind(null)))
     }
 
   {{/extend}}

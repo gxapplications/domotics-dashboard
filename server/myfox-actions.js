@@ -303,8 +303,15 @@ const actions = function (api, reply, page, component, action = null, payload = 
 
           reply({'status': 'ok'})
         })
-      } else {
-        // TODO !3: actions bouton "Force 2hrs": force ON et force OFF, comme une bascule bistable
+      } else if (actionKey === 'force') {
+        const planer = api.component6Planers.find((planer) => { return planer.id === component.id })
+        const activation = payload.activation
+
+        if (planer) {
+          planer.forceComfortMode(activation === 'true')
+        }
+
+        reply({'status': 'ok'})
       }
       break
 
