@@ -94,13 +94,12 @@
   {{#extend "controllerScript"}}
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
-      configuration:
-        {
-            title: 'RATP ~ RER',
-            icon: 'train',
-            url: 'http://www.ratp.fr/horaires/fr/ratp/rer/prochains_passages/RA/Bussy+St-Georges/A',
-            refresh: 10
-        }
+      configuration: {
+        title: 'RATP ~ RER',
+        icon: 'train',
+        url: 'http://www.ratp.fr/horaires/fr/ratp/rer/prochains_passages/RA/Bussy+St-Georges/A',
+        refresh: 10
+      }
     }, $scope.component)
 
     // to control state

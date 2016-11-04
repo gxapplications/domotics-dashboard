@@ -34,7 +34,7 @@ server.register(Vision, (err) => {
   server.views({
     engines: { html: ExtendBlock(Handlebars) },
     relativeTo: Path.join(__dirname, '..', 'lib'),
-    path: './templates',
+    path: './',
     layout: true,
     layoutPath: './templates/layout',
     helpersPath: './templates/helpers',
@@ -95,7 +95,7 @@ server.route({
   handler: function (request, reply) {
     db.getPassword((err, row) => {
       const opened = (err || !row || !row.password)
-      reply.view('login', {'md-primary': 'teal', 'auto-open-password': opened})
+      reply.view(Path.join('templates', 'login'), {'md-primary': 'teal', 'auto-open-password': opened})
     })
   }
 })
@@ -204,7 +204,7 @@ server.route({
       if (!page) {
         return reply.redirect('/')
       }
-      reply.view('page', {'page': page, 'md-primary': 'teal', 'states': request.context.states})
+      reply.view(Path.join('templates', 'page'), {'page': page, 'md-primary': 'teal', 'states': request.context.states})
     })
   }
 })
@@ -242,7 +242,7 @@ server.route({
         if (!page || !component) {
           return reply({}).code(404)
         }
-        return reply.view('component/' + component.type, {
+        return reply.view(Path.join('components', `${component.type}`, 'template'), {
           'page': page,
           'component': component
         }, {'layout': 'component'})
@@ -323,6 +323,7 @@ server.route({
       }
 
       // Call actions switch
+      // TODO !1: refacto, aller chercher dans le component/##/actions.js directement.
       if (component.type < 100) {
         return myfoxActions(api, reply, page, component, request.params.action, request.payload || {})
       }

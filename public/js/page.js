@@ -341,7 +341,7 @@
 	    $scope.states.init();
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 1100);
-	    $rootScope.speech.init('fr-FR'); // TODO !6: langue depending on the user/keyword ?
+	    $rootScope.speech.init('fr-FR'); // TODO !8: langue depending on the user/keyword ?
 	  });
 	});
 
@@ -19272,15 +19272,13 @@
 
 	      switch (intonation) {
 	        case 'error':
-	          ut.pitch = 1.3;
+	          ut.pitch = 1.2;
 	          ut.rate = 1.0;
-	          // TODO !0: erreur: pitch 1.3, rate 1.0
 	          break;
 	        // case 'normal':
 	        default:
 	          ut.pitch = 1.0;
 	          ut.rate = 1.2;
-	        // TODO !0: normal: pitch 1.0, rate 1.2.
 	      }
 
 	      ut.voice = scope.speech.voice;
@@ -19305,7 +19303,7 @@
 	      scope.speech.speak(text, intonation);
 	    },
 	    listen: function listen(grammar) {
-	      // TODO !7: commandes vocales ? ou plus tard...
+	      // TODO !8: commandes vocales
 	      /*
 	       var grammar = '#JSGF V1.0; grammar colors; public <color> = rouge | bleu | rose | jaune | vert | blanc | marron | violet | mauve | noir ;'
 	       var recognition = new webkitSpeechRecognition();
@@ -19327,11 +19325,13 @@
 
 	      scope.speech.lang = lang;
 	      if ('speechSynthesis' in window && window.speechSynthesis.getVoices()) {
+	        console.log('######## TODO 1, under Android OS & chrome', window.speechSynthesis.getVoices());
+	        // TODO !0: on Android, what voices are available ? what is the native OS one ? (Electra :))
+
 	        scope.speech.voice = window.speechSynthesis.getVoices().filter(function (v) {
 	          // available on Mint: de-DE en-US (x2! M/F) en-GB es-ES es-US fr-FR
 	          // hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
 	          return v.lang === lang;
-	          // TODO !1: on Android, what voices are available ? what is the native OS one ? (Electra :))
 	        })[0];
 	      }
 	    }

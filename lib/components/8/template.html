@@ -4,20 +4,20 @@
 </h3>
 <div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
     <md-button class="md-raised md-primary component-button grouped"
-            ng-repeat="scenario in component.configuration.scenarii track by $index"
-            ng-disabled="isDisabled(component.configuration.scenarii, states.macro.c_{{component.id}}.state, processingState)"
-            ng-classes="{
-                'first': $first,
-                'middle': $middle,
-                'last': $last,
-                'md-warn': processingState === 'error',
-                'md-hue-1': activationState === $index && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
-            }" flex
-            ng-click="play($index)">
+        ng-repeat="scenario in component.configuration.scenarii track by $index"
+        ng-disabled="isDisabled(component.configuration.scenarii, states.macro.c_{{component.id}}.state, processingState)"
+        ng-classes="{
+            'first': $first,
+            'middle': $middle,
+            'last': $last,
+            'md-warn': processingState === 'error',
+            'md-hue-1': activationState === $index && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+        }" flex
+        ng-click="play($index)">
         <md-icon aria-label="state" style="color: {{ng-open}}realStates.includes($index) ? '#00C853' : '#2E7D32'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}realStates.includes($index) ? 'star' : 'star_border'{{ng-close}}</md-icon>
+            class="material-icons button-icon-48">{{ng-open}}realStates.includes($index) ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="scenario icon" ng-if="scenario.icon.length > 0"
-                 class="material-icons button-icon-48">{{ng-open}}scenario.icon{{ng-close}}</md-icon>
+            class="material-icons button-icon-48">{{ng-open}}scenario.icon{{ng-close}}</md-icon>
         {{ng-open}}scenario.title{{ng-close}}
     </md-button>
 </div>

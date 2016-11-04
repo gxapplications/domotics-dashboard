@@ -3,52 +3,26 @@
     {{parsejson component.configuration 'title' 'Settings needed'}}
 </h3>
 <div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
-    <md-button class="md-raised md-primary component-button grouped first"
-               ng-disabled="isDisabled(component.configuration.heat, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{
-                   'md-warn': processingState === 'error',
-                   'md-hue-1': activationState === 'on' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
-               }"
-               flex id="component-button-{{component.id}}-on" ng-click="play('on')">
-        <md-icon aria-label="state" style="color: {{ng-open}}realState === 'on' ? '#00C853' : '#2E7D32'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}realState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
-        <md-icon aria-label="mode" class="material-icons button-icon-48">brightness_high</md-icon>
+    <md-button class="md-raised md-primary component-button"
+        style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
+        ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
+        ng-class="{'md-hue-1': (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed') && activationState == 'on'}"
+        flex id="component-button-{{component.id}}-on" ng-click="play(true)">
+        <md-icon aria-label="state" style="zoom: 60%; color: {{ng-open}}supposedState === 'on' ? '#00C853' : '#2E7D32'{{ng-close}}"
+            class="material-icons button-icon-36">{{ng-open}}supposedState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        ON
     </md-button>
-    <md-button class="md-raised md-primary component-button grouped middle"
-               ng-disabled="isDisabled(component.configuration.heat, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{
-                   'md-warn': processingState === 'error',
-                   'md-hue-1': activationState === 'eco' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
-               }"
-               flex id="component-button-{{component.id}}-eco" ng-click="play('eco')">
-        <md-icon aria-label="state" style="color: {{ng-open}}realState === 'eco' ? '#FFAB00' : '#FF6F00'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}realState === 'eco' ? 'star' : 'star_border'{{ng-close}}</md-icon>
-        <md-icon aria-label="mode" class="material-icons button-icon-48">brightness_medium</md-icon>
-    </md-button>
-    <md-button class="md-raised md-primary component-button grouped middle"
-               ng-disabled="isDisabled(component.configuration.heat, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{
-                   'md-warn': processingState === 'error',
-                   'md-hue-1': activationState === 'frost' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
-               }"
-               flex id="component-button-{{component.id}}-frost" ng-click="play('frost')">
-        <md-icon aria-label="state" style="color: {{ng-open}}realState === 'frost' ? '#D50000' : '#B71C1C'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}realState === 'frost' ? 'star' : 'star_border'{{ng-close}}</md-icon>
-        <md-icon aria-label="mode" class="material-icons button-icon-48">ac_unit</md-icon>
-    </md-button>
-    <md-button class="md-raised md-primary component-button grouped last"
-               ng-disabled="isDisabled(component.configuration.heat, states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{
-                   'md-warn': processingState === 'error',
-                   'md-hue-1': activationState === 'off' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
-               }"
-               flex id="component-button-{{component.id}}-off" ng-click="play('off')">
-        <md-icon aria-label="state" class="material-icons button-icon-48"
-                 style="color: #212121;">{{ng-open}}realState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
-        <md-icon aria-label="mode" class="material-icons button-icon-48">power_settings_new</md-icon>
+    <md-button class="md-raised md-primary component-button"
+        style="border-top-left-radius: 0; border-bottom-left-radius: 0;"
+        ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
+        ng-class="{'md-hue-1': (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed') && activationState == 'off'}"
+        flex id="component-button-{{component.id}}-off" ng-click="play(false)">
+        <md-icon aria-label="state" style="zoom: 60%; color: {{ng-open}}supposedState === 'off' ? '#D50000' : '#B71C1C'{{ng-close}}"
+            class="material-icons button-icon-36">{{ng-open}}supposedState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+        OFF
     </md-button>
 </div>
-<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0;">
+<div style="text-transform: none;text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0;">
     {{parsejson component.configuration 'description'}}
 </div>
 <div class="step"></div>
@@ -58,7 +32,7 @@
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
       <form name="componentForm" layout="column" flex layout-fill>
           <section>
-              <md-subheader class="md-accent">Heat mode</md-subheader>
+              <md-subheader class="md-accent">Domotic switch</md-subheader>
               <md-list layout="column" layout-padding>
                   <md-list-item layout="row" layout-align="space-between stretch">
                       <md-input-container flex="80">
@@ -68,7 +42,7 @@
                       <md-select placeholder="Icon" ng-model="component.configuration.icon" style="margin-left: 1rem;" flex="20">
                           <md-option ng-value="">None</md-option>
                           <md-option ng-value="icon" ng-repeat="icon in edition.tools.icons">
-                              <md-icon class="material-icons" aria-label="{{ng-open}}icon{{ng-close}}" style="color: #64DD17;">{{ng-open}}icon{{ng-close}}</md-icon>
+                            <md-icon class="material-icons" aria-label="{{ng-open}}icon{{ng-close}}" style="color: #64DD17;">{{ng-open}}icon{{ng-close}}</md-icon>
                           </md-option>
                       </md-select>
                   </md-list-item>
@@ -79,8 +53,8 @@
                       </md-input-container>
                   </md-list-item>
                   <md-list-item layout="row" layout-align="space-between stretch">
-                      <md-select placeholder="Heat mode linked" ng-model="component.configuration.heat" flex="60">
-                          <md-option ng-value="id" ng-repeat="(id, heat) in states.heat.value">{{ng-open}}heat.name{{ng-close}}</md-option>
+                      <md-select placeholder="Domotic switch linked" ng-model="component.configuration.domotic" flex="60">
+                          <md-option ng-value="id" ng-repeat="(id, domotic) in states.domotic.value">{{ng-open}}domotic.name{{ng-close}}</md-option>
                       </md-select>
                       <md-input-container flex="40" style="margin-left: 1rem;">
                           <label>Delayed action (in minutes)</label>
@@ -104,8 +78,6 @@
                       </md-input-container>
                       <md-select placeholder="Reset action" ng-model="component.configuration.reset_action" flex="30">
                           <md-option value="on">ON</md-option>
-                          <md-option value="eco">ECONOMIC</md-option>
-                          <md-option value="frost">FROST</md-option>
                           <md-option value="off">OFF</md-option>
                       </md-select>
                   </md-list-item>
@@ -126,7 +98,7 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration:
-        {title: 'Heat mode', icon: '', description: 'ON/ECO/FROST/OFF', heat: '', delay: 0, reset_delay: 0, reset_action: 'eco'}
+        {title: 'Domotic switch', icon: '', description: 'ON/OFF', domotic: '', delay: 0, reset_delay: 0, reset_action: 'off'}
     }, $scope.component)
     if (!$rootScope.states.macro.c_{{component.id}}) {
       $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}
@@ -134,28 +106,28 @@
 
     // to control state
     $scope.processingState = 'waiting' // or 'processing', 'error'
-    $scope.activationState = false // or 'on', 'eco', 'frost' or 'off', is the last command sent by component: the last button pressed.
-    $scope.realState = false // or 'on', 'eco', 'frost' or 'off', is the real state came from API.
-    $scope.isDisabled = function (heat, remoteState, processingState) {
-      return (!heat || remoteState === 1 || processingState === 'processing')
+    $scope.activationState = false // or 'on' or 'off', is the last command sent by component: the last button pressed.
+    $scope.supposedState = false // or 'on' or 'off', is the supposed state of the domotic switch. Lifetime: 1 minute
+    $scope.isDisabled = function (domotic, remoteState, processingState) {
+      return (!domotic || remoteState === 1 || processingState === 'processing')
     }
     $scope.delayTimer = {progress: 0}
-    $scope.play = function(action) {
+    $scope.play = function(toActivate) {
       $scope.processingState = 'processing'
-      $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {})
+      $.post('/{{page.slug}}/component/{{component.id}}/action/' + (toActivate ? 'on' : 'off'), {})
         .done(function(data) {
-          $rootScope.speech.speakLang('heat_mode', {title: $scope.component.configuration.title, mode: action})
+          $rootScope.speech.speakLang(toActivate ? 'domotic_turned_on' : 'domotic_turned_off', {title: $scope.component.configuration.title})
           $scope.processingState = 'waiting'
           $rootScope.states.macro[data.id] = {remaining: data.remaining, state: data.state, timestamp: Date.now()}
           $scope.updateStepCounter()
-          $scope.updateSwitch(action)
+          $scope.updateSwitch(toActivate)
         })
         .fail(function() {
-          $rootScope.speech.speakLang('heat_mode_error', {title: $scope.component.configuration.title, mode: action}, 'error')
+          $rootScope.speech.speakLang(toActivate ? 'domotic_turned_on_error' : 'domotic_turned_off_error', {title: $scope.component.configuration.title}, 'error')
           $scope.processingState = 'error'
           $('div#component-{{component.id}}').parent('md-card').addClass('error')
           $scope.updateStepCounter()
-          $rootScope.events.errorEvent('Error during Heat mode action!')
+          $rootScope.events.errorEvent('Error during Domotic switch action!')
         })
     }
 
@@ -188,14 +160,28 @@
     }
     this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateStepCounter))
 
-    if ($scope.component.configuration && $scope.component.configuration.heat > 0) {
-      $scope.updateSwitch = function (action) {
-        if (action !== undefined) {
-            $scope.activationState = action
+    if ($scope.component.configuration && $scope.component.configuration.domotic > 0) {
+      $scope.updateSwitch = function (activation) {
+        if (activation === undefined) {
+          const state = $scope.states.domotic.value[$scope.component.configuration.domotic]
+          if (!state || state.supposedState === undefined) {
+              $scope.supposedState = false
+              $scope.activationState = false
+              return
+          }
+          $scope.activationState = (state.supposedState === "1") ? 'on' : ((state.supposedState === "0") ? 'off' : false)
+          $scope.supposedState = (state.supposedState === "1") ? 'on' : ((state.supposedState === "0") ? 'off' : false)
+        } else {
+          $scope.activationState = activation ? 'on' : 'off'
+          if ($rootScope.states.macro.c_{{component.id}}.state === 'finished') {
+            $scope.supposedState = activation ? 'on' : 'off'
+          }
         }
-        $scope.realState = $scope.states.heat.value[$scope.component.configuration.heat].state
+        setTimeout(() => {
+          $scope.supposedState = false
+        }, 60000)
       }
-      this.addCleaner($scope.$watch('states.heat.value[' + $scope.component.configuration.heat + ']', $scope.updateSwitch.bind(null, undefined)))
+      this.addCleaner($scope.$watch('states.domotic.value[' + $scope.component.configuration.domotic + ']', $scope.updateSwitch.bind(null, undefined)))
       //this.addCleaner($scope.$watch('states.macro.c_{{component.id}}', $scope.updateSwitch.bind(null, undefined)))
     }
   {{/extend}}

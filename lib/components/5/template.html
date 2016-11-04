@@ -4,36 +4,36 @@
 </h3>
 <div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
     <md-button class="md-raised md-primary component-button grouped first"
-               ng-disabled="isDisabled(states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{
-                   'md-warn': processingState === 'error',
-                   'md-hue-1': activationState === 'off' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
-               }"
-               flex id="component-button-{{component.id}}-on" ng-click="play('off', $event)">
+        ng-disabled="isDisabled(states.macro.c_{{component.id}}.state, processingState)"
+        ng-class="{
+          'md-warn': processingState === 'error',
+          'md-hue-1': activationState === 'off' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+        }"
+        flex id="component-button-{{component.id}}-on" ng-click="play('off', $event)">
         <md-icon aria-label="state" style="color: {{ng-open}}realState === 'off' ? '#00C853' : '#2E7D32'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}realState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+            class="material-icons button-icon-48">{{ng-open}}realState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="mode" class="material-icons button-icon-48">notifications_off</md-icon>
     </md-button>
     <md-button class="md-raised md-primary component-button grouped middle"
-               ng-disabled="isDisabled(states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{
-                   'md-warn': processingState === 'error',
-                   'md-hue-1': activationState === 'half' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
-               }"
-               flex id="component-button-{{component.id}}-eco" ng-click="play('half', $event)">
+        ng-disabled="isDisabled(states.macro.c_{{component.id}}.state, processingState)"
+        ng-class="{
+          'md-warn': processingState === 'error',
+          'md-hue-1': activationState === 'half' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+        }"
+        flex id="component-button-{{component.id}}-eco" ng-click="play('half', $event)">
         <md-icon aria-label="state" style="color: {{ng-open}}realState === 'half' ? '#FFAB00' : '#FF6F00'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}realState === 'half' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+            class="material-icons button-icon-48">{{ng-open}}realState === 'half' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="mode" class="material-icons button-icon-48">notifications_none</md-icon>
     </md-button>
     <md-button class="md-raised md-primary component-button grouped last"
-               ng-disabled="isDisabled(states.macro.c_{{component.id}}.state, processingState)"
-               ng-class="{
-                   'md-warn': processingState === 'error',
-                   'md-hue-1': activationState === 'on' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
-               }"
-               flex id="component-button-{{component.id}}-off" ng-click="play('on', $event)">
+        ng-disabled="isDisabled(states.macro.c_{{component.id}}.state, processingState)"
+        ng-class="{
+          'md-warn': processingState === 'error',
+          'md-hue-1': activationState === 'on' && (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed')
+        }"
+        flex id="component-button-{{component.id}}-off" ng-click="play('on', $event)">
         <md-icon aria-label="state" style="color: {{ng-open}}realState === 'on' ? '#D50000' : '#B71C1C'{{ng-close}}"
-                 class="material-icons button-icon-48">{{ng-open}}realState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
+            class="material-icons button-icon-48">{{ng-open}}realState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         <md-icon aria-label="mode" class="material-icons button-icon-48">notifications_active</md-icon>
     </md-button>
 </div>
@@ -119,21 +119,21 @@
         $.post('/{{page.slug}}/component/{{component.id}}/action/' + action, {
           pattern: pattern || undefined
         }).done(function (data) {
-            $rootScope.speech.speakLang('alarm_level', {title: $scope.component.configuration.title, level: action})
-            $scope.processingState = 'waiting'
-            $rootScope.states.macro[data.id] = {
-              remaining: data.remaining,
-              state: data.state,
-              timestamp: Date.now()
-            }
-            $scope.updateSwitch(action)
-          })
-          .fail(function () {
-            $rootScope.speech.speakLang('alarm_level_error', {title: $scope.component.configuration.title}, 'error')
-            $scope.processingState = 'error'
-            $('div#component-{{component.id}}').parent('md-card').addClass('error')
-            $rootScope.events.errorEvent('Error during Alarm level action!')
-          })
+          $rootScope.speech.speakLang('alarm_level', {title: $scope.component.configuration.title, level: action})
+          $scope.processingState = 'waiting'
+          $rootScope.states.macro[data.id] = {
+            remaining: data.remaining,
+            state: data.state,
+            timestamp: Date.now()
+          }
+          $scope.updateSwitch(action)
+        })
+        .fail(function () {
+          $rootScope.speech.speakLang('alarm_level_error', {title: $scope.component.configuration.title}, 'error')
+          $scope.processingState = 'error'
+          $('div#component-{{component.id}}').parent('md-card').addClass('error')
+          $rootScope.events.errorEvent('Error during Alarm level action!')
+        })
       }
 
       if (action !== 'on') {
