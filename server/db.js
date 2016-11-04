@@ -72,8 +72,8 @@ db.fixPayload = function (data, attributesToNumber = defaultAttributesToNumber, 
     data = db.typeFixer(data, attributePath, (n) => { return (n === 'true' || n === true) })
   })
 
-  // TODO !6: fix pour type==6 seulement, a deporter dans le composant isolé
-  // TODO !6: il faudra un middleware pour chaque component, pour pouvoir a terme supprimer db.fixPayload()
+  // TODO !5: fix pour type==6 seulement, a deporter dans le composant isolé
+  // TODO !5: il faudra un middleware pour chaque component, pour pouvoir a terme supprimer db.fixPayload()
   if (data.planer && data.planer.length > 0) {
     data.planer = data.planer.map(Number)
   }

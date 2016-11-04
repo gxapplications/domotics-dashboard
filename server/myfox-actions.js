@@ -188,7 +188,7 @@ const actions = function (api, reply, page, component, action = null, payload = 
       // 6: Heating dashboard - Scenarii piloted
       const [actionKey, actionData] = action.split('-')
 
-      // TODO !6: after modularization, the following method should be static
+      // TODO !5: after modularization, the following method should be static
       // loop over scenarii to fix and chain promises sequentially to fix each
       const chainUpdateScenarioTemperatureSettings = function (scenarioFixes, api) {
         return _.reduce(scenarioFixes, (prom, fixData, scenarioId) => {

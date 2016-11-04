@@ -19245,14 +19245,15 @@
 	    'en-US': { _: '{who} temperature updated to {value} degrees for {title}.', who: { min: 'economic', max: 'comfort' } },
 	    'fr-FR': { _: 'Température {who} modifiée à {value} degrés pour {title}.', who: { min: 'en mode économique', max: 'de comfort' } }
 	  },
-	  'temp_dashboard_temp_update_error': { 'en-US': 'Temperature update failed for {title}!', 'fr-FR': 'Modification de la température pour {title} échouée!' },
+	  'temp_dashboard_temp_update_error': { 'en-US': 'Temperature update failed for {title}!', 'fr-FR': 'Modification de la température pour {title} échouée !' },
 	  'temp_dashboard_planer_update': { 'en-US': 'Planification updated for {title}.', 'fr-FR': 'Programmation modifiée pour {title}.' },
-	  'temp_dashboard_planer_update_error': { 'en-US': 'Planification update failed for {title}!', 'fr-FR': 'Programmation pour {title} échouée!' },
+	  'temp_dashboard_planer_update_error': { 'en-US': 'Planification update failed for {title}!', 'fr-FR': 'Programmation pour {title} échouée !' },
 	  'temp_dashboard_force_mode_on': { 'en-US': 'Comfort mode activated for {title}.', 'fr-FR': 'Mode confort forcé pour {title}.' },
 	  'temp_dashboard_force_mode_off': { 'en-US': 'Programmed mode reactivated for {title}.', 'fr-FR': 'Mode programmé réactivé pour {title}.' },
 	  'temp_dashboard_force_mode_error': { 'en-US': 'Forcing mode failed for {title}!', 'fr-FR': 'Le forçage de mode a échoué pour {title}!' },
+	  'temp_dashboard_db_not_found_error': { 'en-US': 'Error on heating dashboard {title}: component not found!', 'fr-FR': 'Erreur sur le composant {title}. Rechargez la page !' },
 	  'multiple_scenario_switch': { 'en-US': '{title} mode switched.', 'fr-FR': 'Mode basculé pour {title}.' },
-	  'multiple_scenario_switch_error': { 'en-US': 'A scenario did not switch properly!', 'fr-FR': 'Un scénario n\'a pas basculé correctement!' },
+	  'multiple_scenario_switch_error': { 'en-US': 'A scenario did not switch properly!', 'fr-FR': 'Un scénario n\'a pas basculé correctement !' },
 	  '': { 'en-US': '', 'fr-FR': '' }
 	};
 
@@ -19267,8 +19268,21 @@
 	        scope.speech.init(scope.speech.lang);
 	      }
 
-	      // TODO !5: use intonation (== (normal|error)). normal: pitch 1.0, rate 1.2. erreur: pitch 1.3, rate 1.0
 	      var ut = new SpeechSynthesisUtterance(text);
+
+	      switch (intonation) {
+	        case 'error':
+	          ut.pitch = 1.3;
+	          ut.rate = 1.0;
+	          // TODO !0: erreur: pitch 1.3, rate 1.0
+	          break;
+	        // case 'normal':
+	        default:
+	          ut.pitch = 1.0;
+	          ut.rate = 1.2;
+	        // TODO !0: normal: pitch 1.0, rate 1.2.
+	      }
+
 	      ut.voice = scope.speech.voice;
 	      window.speechSynthesis.speak(ut);
 	    },
@@ -19291,7 +19305,7 @@
 	      scope.speech.speak(text, intonation);
 	    },
 	    listen: function listen(grammar) {
-	      // TODO !6: commandes vocales ? ou plus tard...
+	      // TODO !7: commandes vocales ? ou plus tard...
 	      /*
 	       var grammar = '#JSGF V1.0; grammar colors; public <color> = rouge | bleu | rose | jaune | vert | blanc | marron | violet | mauve | noir ;'
 	       var recognition = new webkitSpeechRecognition();
@@ -19317,7 +19331,7 @@
 	          // available on Mint: de-DE en-US (x2! M/F) en-GB es-ES es-US fr-FR
 	          // hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
 	          return v.lang === lang;
-	          // FIXME !5: on Android, what voices are available ? what is the native OS one ? (Electra :))
+	          // TODO !1: on Android, what voices are available ? what is the native OS one ? (Electra :))
 	        })[0];
 	      }
 	    }

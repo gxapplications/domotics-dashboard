@@ -129,7 +129,7 @@ server.route({
         request.context.subscribeToApiEvents(api)
         request.context.updateManyStates(data)
 
-        // TODO !6: modulariser ci-dessous quand il faudra isoler les components
+        // TODO !5: modulariser ci-dessous quand il faudra isoler les components
         // Components type 6: comfort/eco planer: pilots to launch, stateful
         api.component6Planers = []
         db.getComponentsByType(6, (err, component) => {
@@ -293,7 +293,7 @@ server.route({
     db.deleteComponent(request.params.id, (err) => {
       Hoek.assert(!err, err)
 
-      // TODO !6: modulariser ci-dessous quand il faudra isoler les components
+      // TODO !5: modulariser ci-dessous quand il faudra isoler les components
       // Components type 6: remove planers
       const id = Number(request.params.id)
       api.component6Planers.filter((planer) => { return planer.id === id }).forEach((planer) => {
