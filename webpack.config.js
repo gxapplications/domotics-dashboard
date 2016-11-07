@@ -1,7 +1,18 @@
+const fs = require('fs')
 const Path = require('path')
 
+const entries = ['./lib/page.js']
+const dirs = fs.readdirSync(Path.join(__dirname, 'lib', 'components'), {})
+dirs.forEach((dir) => {
+  const path = `./lib/components/${dir}/speech.js`
+  if (fs.existsSync(path)) {
+    entries.unshift(path)
+  }
+})
+console.log('Webpacking these files: ', entries)
+
 module.exports = {
-  entry: './lib/page.js',
+  entry: entries,
   output: {
     path: Path.join(__dirname, 'public', 'js'),
     filename: 'page.js'

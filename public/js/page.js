@@ -44,28 +44,119 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	__webpack_require__(1);
+	__webpack_require__(2);
+	__webpack_require__(3);
+	__webpack_require__(4);
+	__webpack_require__(5);
+	__webpack_require__(6);
+	__webpack_require__(7);
+	__webpack_require__(8);
+	__webpack_require__(9);
+	module.exports = __webpack_require__(10);
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	// TODO !1: move components speech texts and rules into modulary sub-folders
+	"use strict";
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	// TODO !1: move components speech texts and rules into modulary sub-folders
+	"use strict";
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	// TODO !2: speech texts for Meteo: speak when meteo danger ? Should speak only when wake up!
+	"use strict";
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	// TODO !2: speech texts for RATP: speak when incident messages are not void !
+	"use strict";
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	// TODO !1: move components speech texts and rules into modulary sub-folders
+	"use strict";
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	// TODO !1: move components speech texts and rules into modulary sub-folders
+	"use strict";
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	// TODO !1: move components speech texts and rules into modulary sub-folders
+	"use strict";
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	// TODO !1: move components speech texts and rules into modulary sub-folders
+	"use strict";
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/* global SpeechSynthesisUtterance */
+	'use strict';
+
+	var textReferences = {
+	    'scenario_played': { 'en-US': '{title} played.', 'fr-FR': '{title} exécuté.' },
+	    'scenario_played_error': {
+	        'en-US': '{title} not played properly!',
+	        'fr-FR': '{title} n\'a pas été exécuté correctement !'
+	    }
+	};
+
+	global.speechComponents = global.speechComponents || {};
+	Object.assign(global.speechComponents, textReferences);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* global $, angular */
 	'use strict';
 
-	var _lodash = __webpack_require__(1);
+	var _lodash = __webpack_require__(11);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _resizerDialog = __webpack_require__(3);
+	var _resizerDialog = __webpack_require__(13);
 
-	var _states = __webpack_require__(4);
+	var _states = __webpack_require__(14);
 
 	var _states2 = _interopRequireDefault(_states);
 
-	var _icons = __webpack_require__(6);
+	var _icons = __webpack_require__(16);
 
 	var _icons2 = _interopRequireDefault(_icons);
 
-	var _events = __webpack_require__(7);
+	var _events = __webpack_require__(17);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _speech = __webpack_require__(8);
+	var _speech = __webpack_require__(18);
 
 	var _speech2 = _interopRequireDefault(_speech);
 
@@ -263,7 +354,7 @@
 	      });
 	    },
 	    tools: {
-	      assignDeep: __webpack_require__(9),
+	      assignDeep: __webpack_require__(19),
 	      icons: Object.keys(_icons2.default),
 	      addAutoRescaler: function addAutoRescaler(listener) {
 	        $scope.edition.tools.addAutoRescaler.listeners.push(listener);
@@ -346,7 +437,7 @@
 	});
 
 /***/ },
-/* 1 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -17368,10 +17459,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(2)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(12)(module)))
 
 /***/ },
-/* 2 */
+/* 12 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -17387,7 +17478,7 @@
 
 
 /***/ },
-/* 3 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17416,7 +17507,7 @@
 	};
 
 /***/ },
-/* 4 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* eslint-disable no-undef */
@@ -17426,7 +17517,7 @@
 	  value: true
 	});
 
-	var _nes = __webpack_require__(5);
+	var _nes = __webpack_require__(15);
 
 	var _nes2 = _interopRequireDefault(_nes);
 
@@ -17511,7 +17602,7 @@
 	exports.default = states;
 
 /***/ },
-/* 5 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
@@ -18240,10 +18331,10 @@
 	    return { Client: Client };
 	});
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(2)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(12)(module)))
 
 /***/ },
-/* 6 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19189,7 +19280,7 @@
 	exports.default = icons;
 
 /***/ },
-/* 7 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19244,10 +19335,10 @@
 	exports.default = Events;
 
 /***/ },
-/* 8 */
+/* 18 */
 /***/ function(module, exports) {
 
-	/* global SpeechSynthesisUtterance */
+	/* WEBPACK VAR INJECTION */(function(global) {/* global SpeechSynthesisUtterance */
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -19255,9 +19346,10 @@
 	});
 	exports.default = plugSpeech;
 	var textReferences = {
+	  '_merged': false,
 	  'welcome': { 'en-US': 'Welcome!', 'fr-FR': 'Bienvenue !' },
-	  'scenario_played': { 'en-US': '{title} played.', 'fr-FR': '{title} exécuté.' },
-	  'scenario_played_error': { 'en-US': '{title} not played properly!', 'fr-FR': '{title} n\'a pas été exécuté correctement !' },
+	  //'scenario_played': {'en-US': '{title} played.', 'fr-FR': '{title} exécuté.'},
+	  //'scenario_played_error': {'en-US': '{title} not played properly!', 'fr-FR': '{title} n\'a pas été exécuté correctement !'},
 	  'scenario_turned_on': { 'en-US': '{title} turned on.', 'fr-FR': '{title} allumé.' },
 	  'scenario_turned_off': { 'en-US': '{title} tunred off.', 'fr-FR': '{title} éteint.' },
 	  'scenario_turned_on_error': { 'en-US': '{title} not turned on properly!', 'fr-FR': '{title} n\'a pas été allumé correctement !' },
@@ -19370,12 +19462,16 @@
 	          return v.lang === lang;
 	        })[0];
 	      }
+	      if (!textReferences._merged) {
+	        console.log('do what? ######', global.speechComponents);
+	      }
 	    }
 	  };
 	}
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 9 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -19387,9 +19483,9 @@
 
 	'use strict';
 
-	var isPrimitive = __webpack_require__(10);
-	var assignSymbols = __webpack_require__(11);
-	var typeOf = __webpack_require__(12);
+	var isPrimitive = __webpack_require__(20);
+	var assignSymbols = __webpack_require__(21);
+	var typeOf = __webpack_require__(22);
 
 	function assign(target/*, objects*/) {
 	  target = target || {};
@@ -19456,7 +19552,7 @@
 
 
 /***/ },
-/* 10 */
+/* 20 */
 /***/ function(module, exports) {
 
 	/*!
@@ -19475,7 +19571,7 @@
 
 
 /***/ },
-/* 11 */
+/* 21 */
 /***/ function(module, exports) {
 
 	/*!
@@ -19521,10 +19617,10 @@
 
 
 /***/ },
-/* 12 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var isBuffer = __webpack_require__(17);
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var isBuffer = __webpack_require__(27);
 	var toString = Object.prototype.toString;
 
 	/**
@@ -19638,10 +19734,10 @@
 	  return 'object';
 	};
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23).Buffer))
 
 /***/ },
-/* 13 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -19654,9 +19750,9 @@
 
 	'use strict'
 
-	var base64 = __webpack_require__(14)
-	var ieee754 = __webpack_require__(15)
-	var isArray = __webpack_require__(16)
+	var base64 = __webpack_require__(24)
+	var ieee754 = __webpack_require__(25)
+	var isArray = __webpack_require__(26)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -21434,10 +21530,10 @@
 	  return val !== val // eslint-disable-line no-self-compare
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 14 */
+/* 24 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -21557,7 +21653,7 @@
 
 
 /***/ },
-/* 15 */
+/* 25 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -21647,7 +21743,7 @@
 
 
 /***/ },
-/* 16 */
+/* 26 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -21658,25 +21754,29 @@
 
 
 /***/ },
-/* 17 */
+/* 27 */
 /***/ function(module, exports) {
 
-	/**
-	 * Determine if an object is Buffer
+	/*!
+	 * Determine if an object is a Buffer
 	 *
-	 * Author:   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
-	 * License:  MIT
-	 *
-	 * `npm install is-buffer`
+	 * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+	 * @license  MIT
 	 */
 
+	// The _isBuffer check is for Safari 5-7 support, because it's missing
+	// Object.prototype.constructor. Remove this eventually
 	module.exports = function (obj) {
-	  return !!(obj != null &&
-	    (obj._isBuffer || // For Safari 5-7 (missing Object.prototype.constructor)
-	      (obj.constructor &&
-	      typeof obj.constructor.isBuffer === 'function' &&
-	      obj.constructor.isBuffer(obj))
-	    ))
+	  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
+	}
+
+	function isBuffer (obj) {
+	  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+	}
+
+	// For Node v0.10 support. Remove this eventually.
+	function isSlowBuffer (obj) {
+	  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 	}
 
 
