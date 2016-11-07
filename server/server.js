@@ -14,8 +14,6 @@ import Nes from 'nes'
 
 import myfoxWrapperApi from 'myfox-wrapper-api'
 import db from './db'
-import myfoxActions from './myfox-actions'
-import parserActions from './parser-actions'
 import context from '../lib/middlewares/context'
 
 import Component6Planer from '../lib/component-6-planer'
@@ -275,7 +273,7 @@ server.route({
       if (!page || !component) {
         return reply({}).code(404)
       }
-      return reply.view('component/' + component.type, {
+      return reply.view(Path.join('components', `${component.type}`, 'template'), {
         'page': page,
         'component': component
       }, {'layout': 'component'})
@@ -322,14 +320,10 @@ server.route({
         return reply({}).code(404)
       }
 
-      // Call actions switch
-      // TODO !1: refacto, aller chercher dans le component/##/actions.js directement.
-      if (component.type < 100) {
-        return myfoxActions(api, reply, page, component, request.params.action, request.payload || {})
-      }
-      if (component.type >= 500) {
-        return parserActions(api, reply, page, component, request.params.action, request.payload || {})
-      }
+      // Call actions switch. Stateless required files
+      const actionsFile = Path.join(__dirname, '..', 'lib', 'components', `${component.type}`, 'actions')
+      const actionsToCall = require(actionsFile).default
+      return actionsToCall(api, reply, page, component, request.params.action, request.payload || {})
     })
   }
 })
