@@ -115,6 +115,8 @@
           $scope.trains = data.lines
           $scope.trains.refresh = data.refresh
           $scope.trains.messages = data.messages
+          $scope.trains.messagesToSpeak = data.messages
+          $scope.speakMessages() // TODO !0: retirer, c'est juste un test...
         })
         .fail(function() {
           $scope.reschedule()
@@ -143,6 +145,17 @@
         window.clearTimeout($scope.reschedule.timer)
       }
     })
+
+    // TODO !0: appeler cette fonction lors du reveil de l'interface ? tester d'abord...
+    $scope.speakMessages = function () {
+      if (Array.isArray($scope.trains.messagesToSpeak) && $scope.trains.messagesToSpeak.length > 0) {
+        const messages = $scope.trains.messagesToSpeak.join('. ')
+        $rootScope.speech.speakLang('ratp_incident', {msg: messages}, 'error')
+        $scope.trains.messagesToSpeak = []
+        return true
+      }
+      return false
+    }
 
     $document.ready(() => {
       $scope.loadContent()

@@ -52,79 +52,18 @@
 	__webpack_require__(6);
 	__webpack_require__(7);
 	__webpack_require__(8);
-	__webpack_require__(9);
-	module.exports = __webpack_require__(10);
+	module.exports = __webpack_require__(9);
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
-	// TODO !1: move components speech texts and rules into modulary sub-folders
-	"use strict";
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	// TODO !1: move components speech texts and rules into modulary sub-folders
-	"use strict";
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	// TODO !2: speech texts for Meteo: speak when meteo danger ? Should speak only when wake up!
-	"use strict";
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	// TODO !2: speech texts for RATP: speak when incident messages are not void !
-	"use strict";
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	// TODO !1: move components speech texts and rules into modulary sub-folders
-	"use strict";
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	// TODO !1: move components speech texts and rules into modulary sub-folders
-	"use strict";
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	// TODO !1: move components speech texts and rules into modulary sub-folders
-	"use strict";
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	// TODO !1: move components speech texts and rules into modulary sub-folders
-	"use strict";
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {/* global SpeechSynthesisUtterance */
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
 	var textReferences = {
-	    'scenario_played': { 'en-US': '{title} played.', 'fr-FR': '{title} exécuté.' },
-	    'scenario_played_error': {
-	        'en-US': '{title} not played properly!',
-	        'fr-FR': '{title} n\'a pas été exécuté correctement !'
-	    }
+	  'multiple_scenario_switch': { 'en-US': '{title} mode switched.', 'fr-FR': 'Mode basculé pour {title}.' },
+	  'multiple_scenario_switch_error': { 'en-US': 'A scenario did not switch properly!', 'fr-FR': 'Un scénario n\'a pas basculé correctement !' }
 	};
 
 	global.speechComponents = global.speechComponents || {};
@@ -132,31 +71,158 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 10 */
+/* 2 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var textReferences = {
+	  'temp_dashboard_temp_update': {
+	    'en-US': { _: '{who} temperature updated to {value} degrees for {title}.', who: { min: 'economic', max: 'comfort' } },
+	    'fr-FR': { _: 'Température {who} modifiée à {value} degrés pour {title}.', who: { min: 'en mode économique', max: 'de comfort' } }
+	  },
+	  'temp_dashboard_temp_update_error': { 'en-US': 'Temperature update failed for {title}!', 'fr-FR': 'Modification de la température pour {title} échouée !' },
+	  'temp_dashboard_planer_update': { 'en-US': 'Planification updated for {title}.', 'fr-FR': 'Programmation modifiée pour {title}.' },
+	  'temp_dashboard_planer_update_error': { 'en-US': 'Planification update failed for {title}!', 'fr-FR': 'Programmation pour {title} échouée !' },
+	  'temp_dashboard_force_mode_on': { 'en-US': 'Comfort mode activated for {title}.', 'fr-FR': 'Mode confort forcé pour {title}.' },
+	  'temp_dashboard_force_mode_off': { 'en-US': 'Programmed mode reactivated for {title}.', 'fr-FR': 'Mode programmé réactivé pour {title}.' },
+	  'temp_dashboard_force_mode_error': { 'en-US': 'Forcing mode failed for {title}!', 'fr-FR': 'Le forçage de mode a échoué pour {title}!' },
+	  'temp_dashboard_db_not_found_error': { 'en-US': 'Error on heating dashboard {title}: component not found!', 'fr-FR': 'Erreur sur le composant {title}. Rechargez la page !' }
+	};
+
+	global.speechComponents = global.speechComponents || {};
+	Object.assign(global.speechComponents, textReferences);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var textReferences = {
+	    'ratp_incident': { 'en-US': 'R A T P message received. {msg}', 'fr-FR': 'Message reçu de la R A T P. {msg}' }
+	};
+
+	global.speechComponents = global.speechComponents || {};
+	Object.assign(global.speechComponents, textReferences);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var textReferences = {
+	  'alarm_level': {
+	    'en-US': '{title} changed to {level} level.',
+	    'fr-FR': { _: '{title} {level}.', level: { off: 'désarmée', half: 'partiellement armée', on: 'armée' } }
+	  },
+	  'alarm_level_error': { 'en-US': '{title} level change failed!', 'fr-FR': 'Le changement de niveau a échoué pour {title} !' },
+	  'alarm_pattern_ask': { 'en-US': 'Please draw your pattern.', 'fr-FR': 'Veuillez dessiner votre schéma.' }
+	};
+
+	global.speechComponents = global.speechComponents || {};
+	Object.assign(global.speechComponents, textReferences);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var textReferences = {
+	  'heat_mode': {
+	    'en-US': { _: '{title} turned in {mode} mode.', mode: { eco: 'economic', frost: 'frost', on: 'comfort', off: 'off' } },
+	    'fr-FR': { _: '{title} est passé en mode {mode}.', mode: { eco: 'économique', frost: 'hors gel', on: 'confort', off: 'éteint' } }
+	  },
+	  'heat_mode_error': { 'en-US': '{title} mode not turned properly!', 'fr-FR': 'Le mode pour {title} n\'a pas été modifié correctement !' }
+	};
+
+	global.speechComponents = global.speechComponents || {};
+	Object.assign(global.speechComponents, textReferences);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var textReferences = {
+	  'domotic_turned_on': { 'en-US': '{title} turned on.', 'fr-FR': '{title} allumé.' },
+	  'domotic_turned_off': { 'en-US': '{title} tunred off.', 'fr-FR': '{title} éteint.' },
+	  'domotic_turned_on_error': { 'en-US': '{title} not turned on properly!', 'fr-FR': '{title} n\'a pas été allumé correctement !' },
+	  'domotic_turned_off_error': { 'en-US': '{title} not turned off properly!', 'fr-FR': '{title} n\'a pas été éteint correctement !' }
+	};
+
+	global.speechComponents = global.speechComponents || {};
+	Object.assign(global.speechComponents, textReferences);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var textReferences = {
+	  'scenario_turned_on': { 'en-US': '{title} turned on.', 'fr-FR': '{title} allumé.' },
+	  'scenario_turned_off': { 'en-US': '{title} tunred off.', 'fr-FR': '{title} éteint.' },
+	  'scenario_turned_on_error': { 'en-US': '{title} not turned on properly!', 'fr-FR': '{title} n\'a pas été allumé correctement !' },
+	  'scenario_turned_off_error': { 'en-US': '{title} not turned off properly!', 'fr-FR': '{title} n\'a pas été éteint correctement !' }
+	};
+
+	global.speechComponents = global.speechComponents || {};
+	Object.assign(global.speechComponents, textReferences);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var textReferences = {
+	  'scenario_played': { 'en-US': '{title} played.', 'fr-FR': '{title} exécuté.' },
+	  'scenario_played_error': {
+	    'en-US': '{title} not played properly!',
+	    'fr-FR': '{title} n\'a pas été exécuté correctement !'
+	  }
+	};
+
+	global.speechComponents = global.speechComponents || {};
+	Object.assign(global.speechComponents, textReferences);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* global $, angular */
 	'use strict';
 
-	var _lodash = __webpack_require__(11);
+	var _lodash = __webpack_require__(10);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _resizerDialog = __webpack_require__(13);
+	var _resizerDialog = __webpack_require__(12);
 
-	var _states = __webpack_require__(14);
+	var _states = __webpack_require__(13);
 
 	var _states2 = _interopRequireDefault(_states);
 
-	var _icons = __webpack_require__(16);
+	var _icons = __webpack_require__(15);
 
 	var _icons2 = _interopRequireDefault(_icons);
 
-	var _events = __webpack_require__(17);
+	var _events = __webpack_require__(16);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _speech = __webpack_require__(18);
+	var _speech = __webpack_require__(17);
 
 	var _speech2 = _interopRequireDefault(_speech);
 
@@ -354,7 +420,7 @@
 	      });
 	    },
 	    tools: {
-	      assignDeep: __webpack_require__(19),
+	      assignDeep: __webpack_require__(18),
 	      icons: Object.keys(_icons2.default),
 	      addAutoRescaler: function addAutoRescaler(listener) {
 	        $scope.edition.tools.addAutoRescaler.listeners.push(listener);
@@ -437,7 +503,7 @@
 	});
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -17459,10 +17525,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(12)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(11)(module)))
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -17478,7 +17544,7 @@
 
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17507,7 +17573,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* eslint-disable no-undef */
@@ -17517,7 +17583,7 @@
 	  value: true
 	});
 
-	var _nes = __webpack_require__(15);
+	var _nes = __webpack_require__(14);
 
 	var _nes2 = _interopRequireDefault(_nes);
 
@@ -17602,7 +17668,7 @@
 	exports.default = states;
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
@@ -18331,10 +18397,10 @@
 	    return { Client: Client };
 	});
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(12)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(11)(module)))
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19280,7 +19346,7 @@
 	exports.default = icons;
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19335,10 +19401,10 @@
 	exports.default = Events;
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {/* global SpeechSynthesisUtterance */
+	/* WEBPACK VAR INJECTION */(function(global) {/* global SpeechSynthesisUtterance, alert */
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -19347,42 +19413,7 @@
 	exports.default = plugSpeech;
 	var textReferences = {
 	  '_merged': false,
-	  'welcome': { 'en-US': 'Welcome!', 'fr-FR': 'Bienvenue !' },
-	  //'scenario_played': {'en-US': '{title} played.', 'fr-FR': '{title} exécuté.'},
-	  //'scenario_played_error': {'en-US': '{title} not played properly!', 'fr-FR': '{title} n\'a pas été exécuté correctement !'},
-	  'scenario_turned_on': { 'en-US': '{title} turned on.', 'fr-FR': '{title} allumé.' },
-	  'scenario_turned_off': { 'en-US': '{title} tunred off.', 'fr-FR': '{title} éteint.' },
-	  'scenario_turned_on_error': { 'en-US': '{title} not turned on properly!', 'fr-FR': '{title} n\'a pas été allumé correctement !' },
-	  'scenario_turned_off_error': { 'en-US': '{title} not turned off properly!', 'fr-FR': '{title} n\'a pas été éteint correctement !' },
-	  'domotic_turned_on': { 'en-US': '{title} turned on.', 'fr-FR': '{title} allumé.' },
-	  'domotic_turned_off': { 'en-US': '{title} tunred off.', 'fr-FR': '{title} éteint.' },
-	  'domotic_turned_on_error': { 'en-US': '{title} not turned on properly!', 'fr-FR': '{title} n\'a pas été allumé correctement !' },
-	  'domotic_turned_off_error': { 'en-US': '{title} not turned off properly!', 'fr-FR': '{title} n\'a pas été éteint correctement !' },
-	  'heat_mode': {
-	    'en-US': { _: '{title} turned in {mode} mode.', mode: { eco: 'economic', frost: 'frost', on: 'comfort', off: 'off' } },
-	    'fr-FR': { _: '{title} est passé en mode {mode}.', mode: { eco: 'économique', frost: 'hors gel', on: 'confort', off: 'éteint' } }
-	  },
-	  'heat_mode_error': { 'en-US': '{title} mode not turned properly!', 'fr-FR': 'Le mode pour {title} n\'a pas été modifié correctement !' },
-	  'alarm_level': {
-	    'en-US': '{title} changed to {level} level.',
-	    'fr-FR': { _: '{title} {level}.', level: { off: 'désarmée', half: 'partiellement armée', on: 'armée' } }
-	  },
-	  'alarm_level_error': { 'en-US': '{title} level change failed!', 'fr-FR': 'Le changement de niveau a échoué pour {title} !' },
-	  'alarm_pattern_ask': { 'en-US': 'Please draw your pattern.', 'fr-FR': 'Veuillez dessiner votre schéma.' },
-	  'temp_dashboard_temp_update': {
-	    'en-US': { _: '{who} temperature updated to {value} degrees for {title}.', who: { min: 'economic', max: 'comfort' } },
-	    'fr-FR': { _: 'Température {who} modifiée à {value} degrés pour {title}.', who: { min: 'en mode économique', max: 'de comfort' } }
-	  },
-	  'temp_dashboard_temp_update_error': { 'en-US': 'Temperature update failed for {title}!', 'fr-FR': 'Modification de la température pour {title} échouée !' },
-	  'temp_dashboard_planer_update': { 'en-US': 'Planification updated for {title}.', 'fr-FR': 'Programmation modifiée pour {title}.' },
-	  'temp_dashboard_planer_update_error': { 'en-US': 'Planification update failed for {title}!', 'fr-FR': 'Programmation pour {title} échouée !' },
-	  'temp_dashboard_force_mode_on': { 'en-US': 'Comfort mode activated for {title}.', 'fr-FR': 'Mode confort forcé pour {title}.' },
-	  'temp_dashboard_force_mode_off': { 'en-US': 'Programmed mode reactivated for {title}.', 'fr-FR': 'Mode programmé réactivé pour {title}.' },
-	  'temp_dashboard_force_mode_error': { 'en-US': 'Forcing mode failed for {title}!', 'fr-FR': 'Le forçage de mode a échoué pour {title}!' },
-	  'temp_dashboard_db_not_found_error': { 'en-US': 'Error on heating dashboard {title}: component not found!', 'fr-FR': 'Erreur sur le composant {title}. Rechargez la page !' },
-	  'multiple_scenario_switch': { 'en-US': '{title} mode switched.', 'fr-FR': 'Mode basculé pour {title}.' },
-	  'multiple_scenario_switch_error': { 'en-US': 'A scenario did not switch properly!', 'fr-FR': 'Un scénario n\'a pas basculé correctement !' },
-	  '': { 'en-US': '', 'fr-FR': '' }
+	  'welcome': { 'en-US': 'Welcome!', 'fr-FR': 'Bienvenue !' }
 	};
 
 	function plugSpeech(scope) {
@@ -19453,17 +19484,25 @@
 
 	      scope.speech.lang = lang;
 	      if ('speechSynthesis' in window && window.speechSynthesis.getVoices()) {
-	        console.log('######## TODO 1, under Android OS & chrome', window.speechSynthesis.getVoices());
+	        console.log('######## TODO 0, under Android OS & chrome', window.speechSynthesis.getVoices());
+	        alert('Voices under android ? ' + window.speechSynthesis.getVoices().length);
+	        if (window.speechSynthesis.getVoices()[0]) {
+	          alert(window.speechSynthesis.getVoices()[0].name);
+	          alert(window.speechSynthesis.getVoices()[0].lang);
+	        }
 	        // TODO !0: on Android, what voices are available ? what is the native OS one ? (Electra :))
 
-	        scope.speech.voice = window.speechSynthesis.getVoices().filter(function (v) {
+	        scope.speech.voice = window.speechSynthesis.getVoices().find(function (v) {
 	          // available on Mint: de-DE en-US (x2! M/F) en-GB es-ES es-US fr-FR
 	          // hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
 	          return v.lang === lang;
-	        })[0];
+	        });
 	      }
 	      if (!textReferences._merged) {
-	        console.log('do what? ######', global.speechComponents);
+	        console.log('######## TODO 0, Test speech refs available... Test scenario play action!');
+	        // TODO !0: tester
+	        textReferences = Object.assign(global.speechComponents, textReferences);
+	        textReferences._merged = true;
 	      }
 	    }
 	  };
@@ -19471,7 +19510,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -19483,9 +19522,9 @@
 
 	'use strict';
 
-	var isPrimitive = __webpack_require__(20);
-	var assignSymbols = __webpack_require__(21);
-	var typeOf = __webpack_require__(22);
+	var isPrimitive = __webpack_require__(19);
+	var assignSymbols = __webpack_require__(20);
+	var typeOf = __webpack_require__(21);
 
 	function assign(target/*, objects*/) {
 	  target = target || {};
@@ -19552,7 +19591,7 @@
 
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports) {
 
 	/*!
@@ -19571,7 +19610,7 @@
 
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports) {
 
 	/*!
@@ -19617,10 +19656,10 @@
 
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var isBuffer = __webpack_require__(27);
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var isBuffer = __webpack_require__(26);
 	var toString = Object.prototype.toString;
 
 	/**
@@ -19734,10 +19773,10 @@
 	  return 'object';
 	};
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22).Buffer))
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -19750,9 +19789,9 @@
 
 	'use strict'
 
-	var base64 = __webpack_require__(24)
-	var ieee754 = __webpack_require__(25)
-	var isArray = __webpack_require__(26)
+	var base64 = __webpack_require__(23)
+	var ieee754 = __webpack_require__(24)
+	var isArray = __webpack_require__(25)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -21530,10 +21569,10 @@
 	  return val !== val // eslint-disable-line no-self-compare
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -21653,7 +21692,7 @@
 
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -21743,7 +21782,7 @@
 
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -21754,7 +21793,7 @@
 
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports) {
 
 	/*!
