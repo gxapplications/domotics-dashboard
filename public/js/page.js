@@ -101,7 +101,7 @@
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
 	var textReferences = {
-	    'ratp_incident': { 'en-US': 'R A T P message received. {msg}', 'fr-FR': 'Message reçu de la R A T P. {msg}' }
+	  'ratp_incident': { 'en-US': 'R A T P message received. {msg}', 'fr-FR': 'Message reçu de la R A T P. {msg}' }
 	};
 
 	global.speechComponents = global.speechComponents || {};
@@ -19499,8 +19499,6 @@
 	        });
 	      }
 	      if (!textReferences._merged) {
-	        console.log('######## TODO 0, Test speech refs available... Test scenario play action!');
-	        // TODO !0: tester
 	        textReferences = Object.assign(global.speechComponents, textReferences);
 	        textReferences._merged = true;
 	      }
