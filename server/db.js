@@ -72,8 +72,8 @@ db.fixPayload = function (data, attributesToNumber = defaultAttributesToNumber, 
     data = db.typeFixer(data, attributePath, (n) => { return (n === 'true' || n === true) })
   })
 
-  // TODO !5: fix pour type==6 seulement, a deporter dans le composant isolé
-  // TODO !5: il faudra un middleware pour chaque component, pour pouvoir a terme supprimer db.fixPayload()
+  // TODO !2: fix pour type==6 seulement, a deporter dans le composant isolé
+  // TODO !2: il faudra un middleware pour chaque component, pour pouvoir a terme supprimer db.fixPayload()
   if (data.planer && data.planer.length > 0) {
     data.planer = data.planer.map(Number)
   }
@@ -243,6 +243,14 @@ db.updateComponent = function (slug, id, payload, callback) {
 }
 db.getComponentsByType = function (type, callback) {
   db.each('SELECT * FROM components WHERE type=?', type, (err, componentRow) => {
+    if (err || !componentRow) {
+      return callback(err, null)
+    }
+    return callback(err, componentRow)
+  })
+}
+db.getComponents = function (callback) {
+  db.each('SELECT * FROM components', (err, componentRow) => {
     if (err || !componentRow) {
       return callback(err, null)
     }

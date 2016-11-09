@@ -8,6 +8,7 @@ import Handlebars from 'handlebars'
 import ExtendBlock from 'handlebars-extend-block'
 import Hoek from 'hoek'
 import Inert from 'inert'
+import fs from 'fs'
 import Path from 'path'
 import CryptoJS from 'crypto-js'
 import Nes from 'nes'
@@ -15,8 +16,6 @@ import Nes from 'nes'
 import myfoxWrapperApi from 'myfox-wrapper-api'
 import db from './db'
 import context from '../lib/middlewares/context'
-
-import Component6Planer from '../lib/component-6-planer'
 
 // Stateful instance
 let api = null
@@ -127,27 +126,25 @@ server.route({
         request.context.subscribeToApiEvents(api)
         request.context.updateManyStates(data)
 
-        // TODO !4: modulariser ci-dessous quand il faudra isoler les components
-        // Components type 6: comfort/eco planer: pilots to launch, stateful
-        api.component6Planers = []
-        db.getComponentsByType(6, (err, component) => {
+        // initializeComponent listener calls
+        db.getComponents((err, component) => {
           if (err) {
             return reply(err.toString()).code(500)
           }
 
-          const planer = JSON.parse(component.configuration).planer || []
-          if (planer.length === 0) {
-            return // component not configured.
+          const actionListenersFile = Path.join(__dirname, '..', 'lib', 'components', `${component.type}`, 'action-listeners.js')
+          if (fs.existsSync(actionListenersFile)) {
+            const listener = require(actionListenersFile).initializeComponent
+            if (listener !== undefined) {
+              listener(component, api)
+            }
           }
-          // planer is self launched at construction.
-          api.component6Planers.push(new Component6Planer(component.id, planer, api))
         })
 
         db.getLastAccessedPageSlug((err, slug) => {
           if (err) {
             return reply(err.toString()).code(500)
           }
-          // TODO !0: garder l'IP de l'URL plutot que le nom de serveur ! Tester chez moi aussi
           reply({rdt: `${server.info.protocol}://${request.info.host}/${slug}`})
         }, true)
       }
@@ -289,18 +286,28 @@ server.route({
       return reply.redirect('/') // User is not connected yet!
     }
 
-    db.deleteComponent(request.params.id, (err) => {
+    db.getComponentById(request.params.slug, request.params.id, (err, page, component) => {
       Hoek.assert(!err, err)
+      if (!page) {
+        return reply({}).code(404)
+      }
 
-      // TODO !4: modulariser ci-dessous quand il faudra isoler les components
-      // Components type 6: remove planers
-      const id = Number(request.params.id)
-      api.component6Planers.filter((planer) => { return planer.id === id }).forEach((planer) => {
-        planer.remove()
+      db.deleteComponent(request.params.id, (err) => {
+        Hoek.assert(!err, err)
+
+        // removeComponent listener call
+        if (component) {
+          const actionListenersFile = Path.join(__dirname, '..', 'lib', 'components', `${component.type}`, 'action-listeners.js')
+          if (fs.existsSync(actionListenersFile)) {
+            const listener = require(actionListenersFile).removeComponent
+            if (listener !== undefined) {
+              listener(component.id, api)
+            }
+          }
+        }
+
+        return reply({status: 'ok'})
       })
-      api.component6Planers = api.component6Planers.filter((planer) => { return planer.id !== id })
-
-      return reply({status: 'ok'})
     })
   }
 })
