@@ -64,7 +64,22 @@ db.typeFixer = function (data, attributePath, transformer) {
   }
   return data
 }
-db.fixPayload = function (data, attributesToNumber = defaultAttributesToNumber, attributesToBoolean = defaultAttributesToBoolean) {
+db.fixPayload = function (data, componentType = undefined) {
+  if (componentType) {
+    const middlewareFile = Path.join(__dirname, '..', 'lib', 'components', `${componentType}`, 'model-middleware.js')
+    if (fs.existsSync(middlewareFile)) {
+      const fixer = require(middlewareFile).fixPayload
+      if (fixer !== undefined) {
+        return fixer(data)
+      }
+    }
+    throw new Error('The requested component type does not have payload fixer in its middleware layer.')
+  }
+
+  // else, classical structure
+  const attributesToNumber = defaultAttributesToNumber
+  const attributesToBoolean = defaultAttributesToBoolean
+
   attributesToNumber.forEach((attributePath) => {
     data = db.typeFixer(data, attributePath, (n) => { return Number(n) })
   })
@@ -72,11 +87,12 @@ db.fixPayload = function (data, attributesToNumber = defaultAttributesToNumber, 
     data = db.typeFixer(data, attributePath, (n) => { return (n === 'true' || n === true) })
   })
 
-  // TODO !2: fix pour type==6 seulement, a deporter dans le composant isolé
-  // TODO !2: il faudra un middleware pour chaque component, pour pouvoir a terme supprimer db.fixPayload()
+  // TODO !4: a supprimer
   if (data.planer && data.planer.length > 0) {
     data.planer = data.planer.map(Number)
   }
+
+  // TODO !4: a terme, componentType devient obligatoire, on va pouvoir alors supprimer le code inutile ici, et aussi la fonction typeFixeret les 2 tableaux de defaultXXX !
 
   return data
 }
