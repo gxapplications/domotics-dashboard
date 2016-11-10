@@ -19484,19 +19484,21 @@
 
 	      scope.speech.lang = lang;
 	      if ('speechSynthesis' in window && window.speechSynthesis.getVoices()) {
-	        console.log('######## TODO 0, under Android OS & chrome', window.speechSynthesis.getVoices());
-	        alert('Voices under android ? ' + window.speechSynthesis.getVoices().length);
+	        alert('#### TODO 0, under Android' + window.speechSynthesis.getVoices().length);
 	        if (window.speechSynthesis.getVoices()[0]) {
 	          alert(window.speechSynthesis.getVoices()[0].name);
 	          alert(window.speechSynthesis.getVoices()[0].lang);
 	        }
-	        // TODO !0: on Android, what voices are available ? what is the native OS one ? (Electra :))
 
 	        scope.speech.voice = window.speechSynthesis.getVoices().find(function (v) {
-	          // available on Mint: de-DE en-US (x2! M/F) en-GB es-ES es-US fr-FR
+	          // Available on Mint, Google Chrome official version:
+	          // de-DE en-US (x2! M/F) en-GB es-ES es-US fr-FR
 	          // hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
-	          return v.lang === lang;
+	          // Fom android, '-' is replaced by '_' !
+	          // TODO !0: test fr_FR ET fr-FR !
+	          return v.lang.replace('-', '_') === lang.replace('-', '_');
 	        });
+	        if (scope.speech.voice) alert('#### TODO 0, found voice: ' + scope.speech.voice.name + scope.speech.voice.lang);
 	      }
 	      if (!textReferences._merged) {
 	        textReferences = Object.assign(global.speechComponents, textReferences);
