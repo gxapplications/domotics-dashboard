@@ -92,7 +92,7 @@ db.fixPayload = function (data, componentType = undefined) {
     data.planer = data.planer.map(Number)
   }
 
-  // TODO !4: a terme, componentType devient obligatoire, on va pouvoir alors supprimer le code inutile ici, et aussi la fonction typeFixeret les 2 tableaux de defaultXXX !
+  // TODO !4: a terme, componentType devient obligatoire, on va pouvoir alors supprimer le code inutile ici, et aussi les 2 tableaux de defaultXXX !
 
   return data
 }
