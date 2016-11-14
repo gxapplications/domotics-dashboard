@@ -87,17 +87,11 @@ db.fixPayload = function (data, componentType = undefined) {
     data = db.typeFixer(data, attributePath, (n) => { return (n === 'true' || n === true) })
   })
 
-  // TODO !4: a supprimer
-  if (data.planer && data.planer.length > 0) {
-    data.planer = data.planer.map(Number)
-  }
-
-  // TODO !4: a terme, componentType devient obligatoire, on va pouvoir alors supprimer le code inutile ici, et aussi les 2 tableaux de defaultXXX !
-
-  return data
+  // TODO !2: a supprimer dans quelques temps...
+  throw new Error('TODO !2: TEMP, You should not be there anymore!')
 }
-db.stringify = function (data, attributesToNumber = defaultAttributesToNumber, attributesToBoolean = defaultAttributesToBoolean) {
-  return JSON.stringify(db.fixPayload(data))
+db.stringify = function (data, componentType) {
+  return JSON.stringify(db.fixPayload(data, componentType))
 }
 
 db.findNewSlug = function (prefix, query, callback, suffix = 0) {
@@ -222,7 +216,7 @@ db.createComponent = function (slug, payload, callback) {
     Object.assign(component, payload)
     db.run('INSERT INTO components (id, type, configuration) VALUES (NULL, ?, ?)',
       component.type,
-      db.stringify(component.configuration),
+      db.stringify(component.configuration, component.type),
       function (err) {
         return callback(err, pageRow, Object.assign({id: this.lastID}, component))
       })
@@ -248,7 +242,7 @@ db.updateComponent = function (slug, id, payload, callback) {
       db.run(
         'UPDATE components SET type=?, configuration=? WHERE id=?',
         component.type,
-        db.stringify(component.configuration),
+        db.stringify(component.configuration, component.type),
         id,
         (err) => {
           return callback(err, pageRow, component)
