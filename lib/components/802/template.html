@@ -1,9 +1,27 @@
-TODO !3: image de camera auto-refreshed (URL + credentials ?)
-- login, password (encrypter)
-- URL construction (http://magellan-home.hd.free.fr:54110/videostream.cgi, que l'on va couper pour y insérer login/password si besoin)
-- cadrer et redimensionner... mettre le titre et l'icone
-
-<img id="motionjpeg" src="http://user:pass@magellan-home.hd.free.fr:54110/videostream.cgi" />
+<div style="height: 0; overflow: visible; z-index: 1;">
+    <h3 style="text-overflow: ellipsis; white-space: normal;">
+        <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration 'icon' 'videocam'}}</md-icon>
+        {{parsejson component.configuration 'title' 'Settings needed'}}
+    </h3>
+    <md-divider></md-divider>
+</div>
+<div flex layout="column" layout-fill layout-align="center center">
+    <object ng-attr-data="{{ng-open}}imageUrl{{ng-close}}" type="image/jpg"
+            layout="column" flex layout-fill layout-align="center stretch"
+            style="object-fit: cover; height: 100%; border-radius: 3px;">
+        <div layout="column">
+            <div flex layout="row" layout-align="center center">
+                <md-progress-circular md-diameter="64" md-mode="indeterminate" class="md-warn"></md-progress-circular>
+            </div>
+            <div style="position: relative; bottom: 3.6rem; height: 0px; overflow: visible;">
+                <md-button class="md-warn md-fab md-mini"
+                           aria-label="Reload" ng-click="loadContent()">
+                    <md-icon class="material-icons" aria-label="Reload">sync</md-icon>
+                </md-button>
+            </div>
+        </div>
+    </object>
+</div>
 
 {{#extend "settingsForm"}}
   <md-dialog-content style="min-width:700px;max-width:800px;max-height:810px;">
@@ -36,7 +54,7 @@ TODO !3: image de camera auto-refreshed (URL + credentials ?)
                           <input ng-model="component.configuration.user" name="component_user" md-maxlength="256" />
                       </md-input-container>
                       <md-input-container flex="50">
-                          <label>Password</label>
+                          <label>Password (leave blank if unchanged)</label>
                           <input ng-model="component.configuration.clear_password"
                                  type="password" name="component_password" md-maxlength="256" />
                       </md-input-container>
@@ -55,6 +73,7 @@ TODO !3: image de camera auto-refreshed (URL + credentials ?)
 
 <script>
   {{#extend "controllerScript"}}
+    const simpleSalt = 'gab98zcgvb_237hldeABY34dcby842dfb-DCHY'
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration: {
@@ -67,16 +86,32 @@ TODO !3: image de camera auto-refreshed (URL + credentials ?)
       }
     }, $scope.component)
 
-    // decrypt configuration.encrypted_password and store in configuration.clear_password
-    // TODO !3: decrypt encrypted_password then -> in clear_password
-    // $scope.edition.tools.crypto.AES.decrypt(cryptedPassword, 'azerty')
+    if ($scope.component.configuration.encrypted_password.length > 0) {
+        const conf = $scope.component.configuration
+        // decrypt password for img tag only, not for config form
+        const clearPassword = $scope.edition.tools.crypto.AES.decrypt(
+            conf.encrypted_password,
+            simpleSalt).toString($scope.edition.tools.crypto.enc.Utf8)
+        const urlParts = conf.url.split(/(https?:\/\/)/).slice(1)
+        $scope.imageUrl = `${urlParts[0]}${conf.user}:${clearPassword}@${urlParts[1]}`
+    } else {
+      $scope.imageUrl = $scope.component.configuration.url
+    }
 
+    $scope.loadContent = function() {
+        alert('to do !') // TODO !1
+    }
   {{/extend}}
 
   {{#extend "settingsScript"}}
+
     $scope.preSaveConfig = function () {
-      // TODO !3: encrypt password, if modified and if there is a user !== '', AND THEN PURGE CLEAR PASSWORD FROM POST SEND
-      // $scope.edition.tools.crypto.AES.encrypt(password, 'azerty').toString()
+      const conf = $scope.component.configuration
+      if (conf.user.length > 0 && conf.clear_password.length > 0) {
+        conf.encrypted_password = $scope.edition.tools.crypto.AES.encrypt(conf.clear_password, simpleSalt).toString()
+      }
+      conf.clear_password = ''
+      $scope.saveConfig()
     }
   {{/extend}}
 </script>

@@ -1,4 +1,5 @@
 <div layout="column" layout-align="center center" flex>
+    <div id="temp-dashboard-title-{{component.id}}">Mon test qui dechire</div>
     <div id="double-knob-{{component.id}}" flex layout-fill
          class="ratio-content double-knob" title="{{component.title}}"></div>
 </div>
@@ -217,7 +218,6 @@
     $scope.component = $scope.edition.tools.assignDeep({
       configuration: {
           title: 'Heating dashboard', icon: '', data: '', // data sensor ID, optional
-          // TODO !5: display the icon on the template rendering (where ? :))
           temp_min_min: 15,
           temp_max_max: 30,
           temp_min_value: 18,
@@ -449,6 +449,11 @@
       this.addCleaner($scope.$watch('states.data.value.domotic_heating_dashboard_{{component.id}}', $scope.updateForceMode.bind(null)))
     }
 
+    ///////////////////////////
+    // Title and icon Arctexted
+    ///////////////////////////
+    $('#temp-dashboard-title-{{component.id}}').arctext({radius: 100, dir: 1});
+    // TODO !0: title and icon rendering: center double-knob, then finetune radius, add ellipsis ? And add icon
   {{/extend}}
 
   {{#extend "settingsScript"}}

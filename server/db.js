@@ -87,7 +87,7 @@ db.fixPayload = function (data, componentType = undefined) {
     data = db.typeFixer(data, attributePath, (n) => { return (n === 'true' || n === true) })
   })
 
-  // TODO !2: a supprimer dans quelques temps...
+  // FIXME !1: a supprimer dans quelques temps...
   throw new Error('TODO !2: TEMP, You should not be there anymore!')
 }
 db.stringify = function (data, componentType) {
