@@ -1,5 +1,5 @@
 <div layout="column" layout-align="center center" flex>
-    <div id="temp-dashboard-title-{{component.id}}">Mon test qui dechire</div>
+    <div id="temp-dashboard-title-{{component.id}}">{{parsejson component.configuration 'title'}}</div>
     <div id="double-knob-{{component.id}}" flex layout-fill
          class="ratio-content double-knob" title="{{component.title}}"></div>
 </div>
@@ -217,7 +217,7 @@
 
     $scope.component = $scope.edition.tools.assignDeep({
       configuration: {
-          title: 'Heating dashboard', icon: '', data: '', // data sensor ID, optional
+          title: 'Heating dashboard', data: '', // data sensor ID, optional
           temp_min_min: 15,
           temp_max_max: 30,
           temp_min_value: 18,
@@ -352,7 +352,17 @@
         })
       }
 	});
-    $scope.edition.tools.addAutoRescaler($scope.doubleKnob.resizer)
+    $scope.doubleKnobResizer = function () {
+      if ($('div#double-knob-{{component.id}}').width() > 100) {
+        $('#temp-dashboard-title-{{component.id}}').arctext({
+          radius: 20 + $('div#double-knob-{{component.id}}').width() * 0.5,
+          dir: 1
+        })
+      }
+      return $scope.doubleKnob.resizer()
+      // TODO !0: add ellipsis to title depending on the width... ? case when no title: no CSS padding-top !
+    }
+    $scope.edition.tools.addAutoRescaler($scope.doubleKnobResizer)
 
     // listeners to call API temperature updates
     $scope.updateMinMaxTemperatureScenario = function (who, newValue, oldValue) {
@@ -448,12 +458,6 @@
       }
       this.addCleaner($scope.$watch('states.data.value.domotic_heating_dashboard_{{component.id}}', $scope.updateForceMode.bind(null)))
     }
-
-    ///////////////////////////
-    // Title and icon Arctexted
-    ///////////////////////////
-    $('#temp-dashboard-title-{{component.id}}').arctext({radius: 100, dir: 1});
-    // TODO !0: title and icon rendering: center double-knob, then finetune radius, add ellipsis ? And add icon
   {{/extend}}
 
   {{#extend "settingsScript"}}

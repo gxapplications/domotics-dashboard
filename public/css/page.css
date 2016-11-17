@@ -260,9 +260,7 @@ md-progress-circular.step svg {
 }
 
 div.double-knob {
-    padding-top: 2em;
-    position: relative;
-    left: 10%;
+    padding-top: 1em;
 }
 div.double-knob .temperatureShadow {
     font-size: inherit;

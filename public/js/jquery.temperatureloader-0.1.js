@@ -72,6 +72,7 @@ see the file license.txt that was included with the plugin bundle.
         outerDiv.style.width = settings.width + 'px';
         outerDiv.style.height = settings.height + 'px';
         outerDiv.style.position = 'relative';
+        outerDiv.style.left = (($(this).width() - settings.width) / 2) + 'px';
         outerDiv.style.cursor = 'default';
         $(outerDiv).addClass('temperatureShadow');
         $(this).append(outerDiv);
