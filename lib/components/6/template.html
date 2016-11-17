@@ -353,14 +353,15 @@
       }
 	});
     $scope.doubleKnobResizer = function () {
-      if ($('div#double-knob-{{component.id}}').width() > 100) {
+      if ($('div#double-knob-{{component.id}}').width() > 100 &&
+          $scope.component.configuration.title.length > 0) {
         $('#temp-dashboard-title-{{component.id}}').arctext({
           radius: 20 + $('div#double-knob-{{component.id}}').width() * 0.5,
           dir: 1
         })
+        $('div#double-knob-{{component.id}}').addClass('withTitle')
       }
       return $scope.doubleKnob.resizer()
-      // TODO !0: add ellipsis to title depending on the width... ? case when no title: no CSS padding-top !
     }
     $scope.edition.tools.addAutoRescaler($scope.doubleKnobResizer)
 

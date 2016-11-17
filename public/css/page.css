@@ -259,7 +259,7 @@ md-progress-circular.step svg {
     border-radius: 50%;
 }
 
-div.double-knob {
+div.double-knob.withTitle {
     padding-top: 1em;
 }
 div.double-knob .temperatureShadow {

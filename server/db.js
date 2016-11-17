@@ -9,19 +9,6 @@ import slugify from 'slug'
 const file = Path.join(__dirname, '..', 'var', 'data.db')
 const exists = fs.existsSync(file)
 
-const defaultAttributesToNumber = [
-  '[*].delay', 'delay', 'reset_delay', 'refresh',
-  'temp_min_min', 'temp_min_value', 'temp_max_max',
-  'temp_max_value']
-const defaultAttributesToBoolean = [
-  'allow_none',
-  'scenarii.min_temp_control_{1,4}.controls.trigger_4.checked',
-  'scenarii.max_temp_control_{1,4}.controls.trigger_4.checked',
-  'scenarii.min_temp_control_{1,4}.controls.condition_4_1.checked',
-  'scenarii.max_temp_control_{1,4}.controls.condition_4_1.checked',
-  'scenarii.min_temp_control_{1,4}.controls.condition_4_2.checked',
-  'scenarii.max_temp_control_{1,4}.controls.condition_4_2.checked']
-
 if (!exists) {
   console.log('Creating DB file.')
   fs.openSync(file, 'w')
@@ -75,20 +62,6 @@ db.fixPayload = function (data, componentType = undefined) {
     }
     throw new Error('The requested component type does not have payload fixer in its middleware layer.')
   }
-
-  // else, classical structure
-  const attributesToNumber = defaultAttributesToNumber
-  const attributesToBoolean = defaultAttributesToBoolean
-
-  attributesToNumber.forEach((attributePath) => {
-    data = db.typeFixer(data, attributePath, (n) => { return Number(n) })
-  })
-  attributesToBoolean.forEach((attributePath) => {
-    data = db.typeFixer(data, attributePath, (n) => { return (n === 'true' || n === true) })
-  })
-
-  // FIXME !1: a supprimer dans quelques temps...
-  throw new Error('TODO !2: TEMP, You should not be there anymore!')
 }
 db.stringify = function (data, componentType) {
   return JSON.stringify(db.fixPayload(data, componentType))

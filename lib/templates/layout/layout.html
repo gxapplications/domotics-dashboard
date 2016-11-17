@@ -26,15 +26,8 @@
 
     <div id="loading-board" ng-controller="myLoadingController">
       <div class="loading board">
-        <div class="left">
-        </div>
-        <div class="right">
-        </div>
-        <div class="ball">
-        </div>
-        <div class="ballhit">
-        </div>
-       </div>
+        Loading...
+      </div>
     </div>
   </div>
   <script src="/assets/module/jquery/dist/jquery.min.js"></script>
@@ -77,7 +70,7 @@
         }
         $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
       })
-      // TODO !6: change loader for a static one... much simpler
+      // TODO !0: change loader for a static one... much simpler
       app.controller('myLoadingController', [function() {
         angular.element(document).ready(function () {
           window.setTimeout(function() {
