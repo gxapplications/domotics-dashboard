@@ -521,7 +521,7 @@
 	  var undefined;
 
 	  /** Used as the semantic version number. */
-	  var VERSION = '4.17.1';
+	  var VERSION = '4.17.2';
 
 	  /** Used as the size to enable large array optimizations. */
 	  var LARGE_ARRAY_SIZE = 200;
@@ -4314,7 +4314,7 @@
 	            value = baseGet(object, path);
 
 	        if (predicate(value, path)) {
-	          baseSet(result, path, value);
+	          baseSet(result, castPath(path, object), value);
 	        }
 	      }
 	      return result;
@@ -4390,14 +4390,8 @@
 	          var previous = index;
 	          if (isIndex(index)) {
 	            splice.call(array, index, 1);
-	          }
-	          else {
-	            var path = castPath(index, array),
-	                object = parent(array, path);
-
-	            if (object != null) {
-	              delete object[toKey(last(path))];
-	            }
+	          } else {
+	            baseUnset(array, index);
 	          }
 	        }
 	      }
@@ -4861,8 +4855,7 @@
 	    function baseUnset(object, path) {
 	      path = castPath(path, object);
 	      object = parent(object, path);
-	      var key = toKey(last(path));
-	      return !(object != null && hasOwnProperty.call(object, key)) || delete object[key];
+	      return object == null || delete object[toKey(last(path))];
 	    }
 
 	    /**
@@ -11356,14 +11349,10 @@
 	      start = start === undefined ? 0 : nativeMax(toInteger(start), 0);
 	      return baseRest(function(args) {
 	        var array = args[start],
-	            lastIndex = args.length - 1,
 	            otherArgs = castSlice(args, 0, start);
 
 	        if (array) {
 	          arrayPush(otherArgs, array);
-	        }
-	        if (start != lastIndex) {
-	          arrayPush(otherArgs, castSlice(args, start + 1));
 	        }
 	        return apply(func, this, otherArgs);
 	      });
@@ -13979,16 +13968,16 @@
 	      if (object == null) {
 	        return result;
 	      }
-	      var bitmask = CLONE_FLAT_FLAG | CLONE_SYMBOLS_FLAG;
+	      var isDeep = false;
 	      paths = arrayMap(paths, function(path) {
 	        path = castPath(path, object);
-	        bitmask |= (path.length > 1 ? CLONE_DEEP_FLAG : 0);
+	        isDeep || (isDeep = path.length > 1);
 	        return path;
 	      });
-
 	      copyObject(object, getAllKeysIn(object), result);
-	      result = baseClone(result, bitmask);
-
+	      if (isDeep) {
+	        result = baseClone(result, CLONE_DEEP_FLAG | CLONE_FLAT_FLAG | CLONE_SYMBOLS_FLAG);
+	      }
 	      var length = paths.length;
 	      while (length--) {
 	        baseUnset(result, paths[length]);
@@ -14109,8 +14098,8 @@
 
 	      // Ensure the loop is entered when path is empty.
 	      if (!length) {
-	        object = undefined;
 	        length = 1;
+	        object = undefined;
 	      }
 	      while (++index < length) {
 	        var value = object == null ? undefined : object[toKey(path[index])];
