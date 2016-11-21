@@ -37,7 +37,7 @@
       distance: 50,
       snap: true,
       addClasses: false,
-      opacity: 0.0001 // FIXME !9: for now, hide element while dragging because zoom does not move the element properly
+      opacity: 0.0001 // FIXME: hide element while dragging because zoom does not move the element properly
     },
 
     destroy: function() {

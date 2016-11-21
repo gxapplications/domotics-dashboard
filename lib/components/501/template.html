@@ -145,7 +145,7 @@
       }
     })
 
-    // TODO !8: Stack this function on an event list in the top toolbar... To speak if "there is a message for you"
+    // TODO !2: Stack this function on an event list in the top toolbar... To speak if "there is a message for you"
     $scope.speakMessages = function () {
       if (Array.isArray($scope.trains.messagesToSpeak) && $scope.trains.messagesToSpeak.length > 0) {
         const messages = $scope.trains.messagesToSpeak.join('. ')

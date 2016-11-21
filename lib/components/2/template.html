@@ -6,11 +6,13 @@
     }"
     ng-click="play()">
     <div layout="column" flex>
-        <h3 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.9em;">
-            <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration 'icon'}}</md-icon>
-            {{parsejson component.configuration 'title' 'Settings needed'}}
+        <h3 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.9em;" ng-if="component.configuration.title.length">
+            <md-icon aria-label="custom"
+                     class="material-icons button-icon-48"
+                     ng-if="component.configuration.icon.length">{{parsejson component.configuration 'icon'}}</md-icon>
+            {{parsejson component.configuration 'title'}}
         </h3>
-        <div style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
+        <div style="text-transform: none;text-overflow: ellipsis; white-space: normal;" ng-if="component.configuration.description.length">
             {{parsejson component.configuration 'description'}}
         </div>
     </div>
@@ -33,7 +35,7 @@
                   <md-list-item layout="row" layout-align="space-between stretch">
                       <md-input-container flex="80">
                           <label>Title</label>
-                          <input ng-model="component.configuration.title" required name="component_title" md-maxlength="64" />
+                          <input ng-model="component.configuration.title" name="component_title" md-maxlength="64" />
                       </md-input-container>
                       <md-select placeholder="Icon" ng-model="component.configuration.icon" style="margin-left: 1rem;" flex="20">
                           <md-option ng-value="">None</md-option>
@@ -94,7 +96,7 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration:
-        {title: 'Scenario', icon: '', description: 'ON/OFF', scenario: '', delay: 0, reset_delay: 0, reset_action: 'off'}
+        {title: '', icon: '', description: 'ON/OFF', scenario: '', delay: 0, reset_delay: 0, reset_action: 'off'}
     }, $scope.component)
     if (!$rootScope.states.macro.c_{{component.id}}) {
       $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}
