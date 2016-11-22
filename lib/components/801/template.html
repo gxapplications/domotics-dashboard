@@ -1,6 +1,6 @@
 <div flex layout-fill layout="column" layout-align="center center">
     <h1 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.7rem; margin-bottom: 0.3rem;" >
-        <md-icon aria-label="title icon" ng-if="component.configuration.icon.length > 0"
+        <md-icon aria-label="title icon" ng-if="component.configuration.icon.length"
              class="material-icons button-icon-48">{{ng-open}}component.configuration.icon{{ng-close}}</md-icon>
         {{parsejson component.configuration 'title' 'Settings needed'}}
     </h1>

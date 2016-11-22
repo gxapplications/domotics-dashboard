@@ -499,7 +499,7 @@
 	    $scope.states.init();
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 1100);
-	    $rootScope.speech.init('fr-FR'); // TODO !8: langue depending on the user/keyword ?
+	    $rootScope.speech.init('fr-FR'); // TODO !3: language depending on the user or a spoken keyword ?
 	  });
 	});
 
@@ -19510,7 +19510,7 @@
 	      scope.speech.speak(text, intonation);
 	    },
 	    listen: function listen(grammar) {
-	      // TODO !9: speech recognition: spoken commands system!
+	      // TODO !1: speech recognition: spoken commands system!
 	      /*
 	       var grammar = '#JSGF V1.0; grammar colors; public <color> = rouge | bleu | rose | jaune | vert | blanc | marron | violet | mauve | noir ;'
 	       var recognition = new webkitSpeechRecognition();
