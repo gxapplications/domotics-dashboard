@@ -46,7 +46,8 @@
                       </md-input-container>
                       <md-select placeholder="Icon" ng-model="component.configuration.icon" style="margin-left: 1rem;" flex="20">
                           <md-option ng-value="">None</md-option>
-                          <md-option ng-value="icon" ng-repeat="icon in edition.tools.icons">
+                          <md-option ng-value="icon" ng-repeat="icon in edition.tools.icons"
+                                     ng-class="{'lefted': $index % 3 !== 2}">
                             <md-icon class="material-icons" aria-label="{{ng-open}}icon{{ng-close}}" style="color: #64DD17;">{{ng-open}}icon{{ng-close}}</md-icon>
                           </md-option>
                       </md-select>

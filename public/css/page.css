@@ -1,5 +1,5 @@
 body {
-    font-size: 0.85em;
+    font-size: 0.85em; /* TODO !0 ? */
 }
 .md-button {
     font-size: 0.9em;
@@ -267,4 +267,9 @@ div.double-knob .temperatureShadow {
     background-color: rgba(0, 0, 0, 0.3);
     box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 6px 0px;
     border-radius: 50%;
+}
+
+/* For icon dropdown, in 3 columns */
+md-option.lefted {
+    float: left;
 }

@@ -815,7 +815,7 @@ see the file license.txt that was included with the plugin bundle.
         this.setTitle = thermostat.setTitle;
         this.setCenter = thermostat.setCenter;
 
-        $( window ).resize(this.resizer);
+        $( window ).resize(this.resizer); // FIXME: Not debounced, can cause perfs problems
         thermostat.resize(this.resizer);
 
 	    /* init */

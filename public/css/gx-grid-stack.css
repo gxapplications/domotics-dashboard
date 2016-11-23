@@ -1,14 +1,15 @@
 /* GridList */
 .grid {
+    /* TODO !0 ? */
     position: relative;
     margin-left: 0.8em;
     height: 100%;
     list-style: none;
     /* Will be modified by the grid jquery lib, depending on the items */
     -webkit-transition: width 0.2s,
-    height 0.2s;
+        height 0.2s;
     transition: width 0.2s,
-    height 0.2s;
+        height 0.2s;
 }
 .grid li {
     position: absolute;
@@ -17,17 +18,17 @@
     line-height: 1em;
     text-align: center;
     -webkit-transition: top 0.3s,
-    left 0.3s,
-    width 0.3s,
-    height 0.3s,
-    font-size 0.3s,
-    line-height 0.3s;
+        left 0.3s,
+        width 0.3s,
+        height 0.3s,
+        font-size 0.3s,
+        line-height 0.3s;
     transition: top 0.3s,
-    left 0.3s,
-    width 0.3s,
-    height 0.3s,
-    font-size 0.3s,
-    line-height 0.3s;
+        left 0.3s,
+        width 0.3s,
+        height 0.3s,
+        font-size 0.3s,
+        line-height 0.3s;
 }
 
 .grid li .inner {

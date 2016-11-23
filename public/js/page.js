@@ -425,7 +425,24 @@
 	      addAutoRescaler: function addAutoRescaler(listener) {
 	        $scope.edition.tools.addAutoRescaler.listeners.push(listener);
 	      },
-	      crypto: __webpack_require__(27)
+	      crypto: __webpack_require__(27),
+	      debounce: function debounce(func, wait, immediate) {
+	        var timeout;
+	        return function () {
+	          var context = this;
+	          var args = arguments;
+	          var later = function later() {
+	            timeout = null;
+	            if (!immediate) func.apply(context, args);
+	          };
+	          var callNow = immediate && !timeout;
+	          clearTimeout(timeout);
+	          timeout = setTimeout(later, wait);
+	          if (callNow) {
+	            func.apply(context, args);
+	          }
+	        };
+	      }
 	    }
 	  };
 	  $scope.edition.tools.addAutoRescaler.listeners = [];
@@ -483,12 +500,17 @@
 	          return $scope.edition.active ? 1 / 0.84 : 1;
 	        }
 	      });
+	    },
+	    fontScaler: function fontScaler() {
+	      console.log('resize font now !');
 	    }
 	  };
 	  $scope.edition.tools.addAutoRescaler(function () {
 	    $scope.grid.gridStack.gridList('reflow');
+	    $scope.grid.fontScaler();
 	    return true;
 	  });
+	  $(window).resize($scope.edition.tools.debounce($scope.grid.fontScaler, 250));
 
 	  // Speech service
 	  (0, _speech2.default)($rootScope);
