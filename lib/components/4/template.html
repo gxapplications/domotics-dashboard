@@ -132,7 +132,7 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration:
-        {title: 'Heat mode', icon: '', description: 'ON/ECO/FROST/OFF', heat: '', delay: 0, reset_delay: 0, reset_action: 'eco'}
+        {title: 'Heat mode', icon: 'brightness_4', description: '', heat: '', delay: 0, reset_delay: 0, reset_action: 'eco'}
     }, $scope.component)
     if (!$rootScope.states.macro.c_{{component.id}}) {
       $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}

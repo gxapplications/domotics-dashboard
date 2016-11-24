@@ -445,16 +445,23 @@
 	      }
 	    }
 	  };
-	  $scope.edition.tools.addAutoRescaler.listeners = [];
-	  $scope.edition.tools.addAutoRescaler.trigger = function () {
-	    $scope.edition.tools.addAutoRescaler.listeners = $scope.edition.tools.addAutoRescaler.listeners.filter(function (listener) {
-	      try {
-	        return listener();
-	      } catch (e) {
-	        return false;
-	      }
-	    });
-	  };
+	  {
+	    (function () {
+	      // tools setup
+	      var tools = $scope.edition.tools;
+	      tools.addAutoRescaler.listeners = [];
+	      tools.addAutoRescaler.triggerNow = function () {
+	        tools.addAutoRescaler.listeners = tools.addAutoRescaler.listeners.filter(function (listener) {
+	          try {
+	            return listener();
+	          } catch (e) {
+	            return false;
+	          }
+	        });
+	      };
+	      tools.addAutoRescaler.trigger = tools.debounce(tools.addAutoRescaler.triggerNow, 300);
+	    })();
+	  }
 	  $scope.edition = $rootScope.edition;
 
 	  // Grid object
@@ -500,17 +507,12 @@
 	          return $scope.edition.active ? 1 / 0.84 : 1;
 	        }
 	      });
-	    },
-	    fontScaler: function fontScaler() {
-	      console.log('resize font now !');
 	    }
 	  };
 	  $scope.edition.tools.addAutoRescaler(function () {
 	    $scope.grid.gridStack.gridList('reflow');
-	    $scope.grid.fontScaler();
 	    return true;
 	  });
-	  $(window).resize($scope.edition.tools.debounce($scope.grid.fontScaler, 250));
 
 	  // Speech service
 	  (0, _speech2.default)($rootScope);
@@ -520,7 +522,9 @@
 	    $($scope.grid.init());
 	    $scope.states.init();
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
-	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 1100);
+	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 1000);
+	    //window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 2500) // TODO !0: encore necessaire sur ma tablette ?
+	    $(window).resize($scope.edition.tools.addAutoRescaler.trigger);
 	    $rootScope.speech.init('fr-FR'); // TODO !3: language depending on the user or a spoken keyword ?
 	  });
 	});
@@ -19568,6 +19572,7 @@
 	      }
 	    }
 	  };
+	  scope.states.speechEngine = {};
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 

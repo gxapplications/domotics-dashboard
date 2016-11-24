@@ -1,6 +1,5 @@
 /* GridList */
 .grid {
-    /* TODO !0 ? */
     position: relative;
     margin-left: 0.8em;
     height: 100%;
@@ -32,6 +31,7 @@
 }
 
 .grid li .inner {
+    font-size: 0.12em; /* TODO !0: fine tune ICI ! Probleme: les icones ne scalent pas en meme temps (fixees a 48px ?) <hx> !*/
     position: absolute;
     top: 0;
     bottom: 10px;
@@ -42,6 +42,9 @@
     -webkit-user-select: none;
     user-select: none;
     box-shadow: none;
+}
+.grid li .inner > div {
+    line-height: normal;
 }
 
 .grid li.position-highlight .inner {

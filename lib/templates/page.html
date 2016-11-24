@@ -57,10 +57,15 @@
                     <span>{{page.name}}</span>
                 </h3>
                 <span flex></span>
+                <md-icon class="material-icons" aria-label="Speech engine OK" ng-hide="states.speechEngine.error">mic</md-icon>
+                <md-button class="md-warn" aria-label="Reload page" ng-show="states.speechEngine.error" onclick="window.location.reload()">
+                    <md-icon class="material-icons" aria-label="Speech engine problem">mic_off</md-icon>
+                    No Speech | Reload
+                </md-button>
                 <md-icon class="material-icons" aria-label="Web socket OK" ng-hide="states.socketClient.error">sync</md-icon>
                 <md-button class="md-warn" aria-label="Reload page" ng-show="states.socketClient.error" onclick="window.location.reload()">
                     <md-icon class="material-icons" aria-label="Web socket problem">sync_problem</md-icon>
-                    Sync error | Reload
+                    No sync | Reload
                 </md-button>
                 <md-button class="md-fab md-hue-2" aria-label="Open edit mode" ng-click="edition.open()">
 		            <md-icon class="material-icons" aria-label="Edit">mode_edit</md-icon>

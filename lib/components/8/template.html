@@ -2,7 +2,7 @@
     <md-icon aria-label="custom"
              class="material-icons button-icon-48"
              ng-if="component.configuration.icon.length">{{parsejson component.configuration 'icon'}}</md-icon>
-    {{parsejson component.configuration 'title' 'Settings needed'}}
+    {{parsejson component.configuration 'title'}}
 </h3>
 <div layout="row" flex>
     <md-button class="md-raised md-primary component-button grouped"
@@ -98,9 +98,9 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration: {
-        title: 'Scenarii switch',
-        icon: '',
-        description: 'multiple switch',
+        title: 'Multiple scenarii switch',
+        icon: 'tune',
+        description: '',
         scenarii: [{id: '', title: '', icon: ''}],
         allow_none: false
       }

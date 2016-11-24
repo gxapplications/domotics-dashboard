@@ -7,7 +7,7 @@
        ng-click="play()">
   <div layout="column" flex>
     <h3 style="text-overflow: ellipsis; white-space: normal;">
-      <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration '0.icon'}}</md-icon>
+      <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration '0.icon' 'play_circle_outline'}}</md-icon>
       {{parsejson component.configuration '0.title' 'Settings needed'}}
     </h3>
     <div style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
@@ -86,7 +86,7 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration: [
-        {title: 'Scenario', icon: '', description: 'Play', scenario: '', delay: 0}
+        {title: 'Play scenario', icon: 'play_circle_outline', description: '', scenario: '', delay: 0}
       ]
     }, $scope.component)
     if (!$rootScope.states.macro.c_{{component.id}}) {

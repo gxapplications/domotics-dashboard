@@ -101,10 +101,10 @@
         gridStack.findFreeSpaceXY = findFreeSpaceXY;
 
         /* browser resized event */
-        $( window ).resize(function() {
+        /* $( window ).resize(function() {
             gridStack.gridList('reflow');
             grid = gridStack.data('_gridList').gridList.grid;
-        });
+        });*/
 
         /* init */
         $(params.elementPrototype + ':not(:first)', gridStack).remove(); // remove existing li (re-init case)
@@ -142,7 +142,7 @@
             direction: 'vertical',
             lanes: params.lanes,
             widthHeightRatio: params.widthHeightRatio,
-            heightToFontSizeRatio: false,  // TODO !0 ?
+            heightToFontSizeRatio: true,
             onChange: function(changedItems) {
                 grid = gridStack.data('_gridList').gridList.grid;
                 var j, k;

@@ -60,6 +60,10 @@
   position: relative;
   top: -4.5rem;
 }
+
+.fabSpeedDialCircle md-fab-speed-dial {
+  line-height: normal;
+}
 .fabSpeedDialCircle md-fab-trigger {
   z-index: 100;
 }

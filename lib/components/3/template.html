@@ -104,7 +104,7 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration:
-        {title: '', icon: '', description: 'ON/OFF', domotic: '', delay: 0, reset_delay: 0, reset_action: 'off'}
+        {title: 'Domotic switch', icon: 'settings_power', description: '', domotic: '', delay: 0, reset_delay: 0, reset_action: 'off'}
     }, $scope.component)
     if (!$rootScope.states.macro.c_{{component.id}}) {
       $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}

@@ -807,15 +807,19 @@ see the file license.txt that was included with the plugin bundle.
         thermostat.setSize = setSize;
 
         this.resizer = function() {
-            var size = Math.max(180, Math.min(thermostat.width(), thermostat.height()));
-            thermostat.setSize(size);
+            var doNow = function() {
+                var size = Math.max(180, Math.min(thermostat.width(), thermostat.height()));
+                thermostat.setSize(size);
+                return true;
+            };
+            setTimeout(doNow, 150);
+            setTimeout(doNow, 400);
             return true;
         };
 
         this.setTitle = thermostat.setTitle;
         this.setCenter = thermostat.setCenter;
 
-        $( window ).resize(this.resizer); // FIXME: Not debounced, can cause perfs problems
         thermostat.resize(this.resizer);
 
 	    /* init */

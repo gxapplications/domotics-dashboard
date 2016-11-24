@@ -4,7 +4,7 @@
              class="material-icons button-icon-48">{{ng-open}}component.configuration.icon{{ng-close}}</md-icon>
         {{parsejson component.configuration 'title' 'Settings needed'}}
     </h1>
-    <div ng-if="component.configuration.description.length > 0" style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
+    <div ng-if="component.configuration.description.length" style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
         {{parsejson component.configuration 'description'}}
     </div>
 </div>

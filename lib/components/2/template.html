@@ -97,7 +97,7 @@
     // Default values assignment
     $scope.component = $scope.edition.tools.assignDeep({
       configuration:
-        {title: '', icon: '', description: 'ON/OFF', scenario: '', delay: 0, reset_delay: 0, reset_action: 'off'}
+        {title: 'Scenario activation', icon: 'tune', description: '', scenario: '', delay: 0, reset_delay: 0, reset_action: 'off'}
     }, $scope.component)
     if (!$rootScope.states.macro.c_{{component.id}}) {
       $rootScope.states.macro.c_{{component.id}} = {state: 'finished'}

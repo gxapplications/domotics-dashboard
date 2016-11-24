@@ -12,7 +12,7 @@
         <md-list-item layout="row" style="min-height: 2rem;">
             <md-button class="md-icon-button" aria-label="Refresh" ng-click="loadContent()">
                 <md-icon aria-label="Refresh"
-                         class="material-icons button-icon-48">{{parsejson component.configuration 'icon'}}</md-icon>
+                         class="material-icons button-icon-48">{{parsejson component.configuration 'icon' 'train'}}</md-icon>
             </md-button>
             {{parsejson component.configuration 'title' 'Settings needed'}}
             <small style="color: rgba(255,255,255,0.5);">
@@ -35,11 +35,9 @@
     </md-list>
 </div>
 
-<div class="sub-content" ng-show="processingState === 'error'">
-    <div flex layout="row" layout-align="center center">
-        <md-progress-circular md-diameter="64" md-mode="indeterminate" class="md-warn"></md-progress-circular>
-    </div>
-    <div style="position: relative; bottom: 3.6rem; height: 0px; overflow: visible;">
+<div flex class="sub-content" ng-show="processingState === 'error'" layout="row" layout-align="center center">
+    <md-progress-circular md-diameter="64" md-mode="indeterminate" class="md-warn"></md-progress-circular>
+    <div style="position: relative; right: 3.75rem; bottom: 0.15rem; width: 0px; overflow: visible;">
         <md-button class="md-warn md-fab md-mini"
                    aria-label="Reload" ng-click="loadContent()">
             <md-icon class="material-icons" aria-label="Reload">sync</md-icon>
