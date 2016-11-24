@@ -523,7 +523,7 @@
 	    $scope.states.init();
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 1000);
-	    //window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 2500) // TODO !0: encore necessaire sur ma tablette ?
+	    // window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 2500) // TODO !0: encore necessaire sur ma tablette ?
 	    $(window).resize($scope.edition.tools.addAutoRescaler.trigger);
 	    $rootScope.speech.init('fr-FR'); // TODO !3: language depending on the user or a spoken keyword ?
 	  });

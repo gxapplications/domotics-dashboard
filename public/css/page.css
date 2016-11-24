@@ -5,6 +5,16 @@ body {
     font-size: 0.9em;
 }
 
+md-icon.button-icon-48, md-icon.button-icon-36 {
+    font-size: 1.2em;
+    line-height: normal;
+    width: inherit;
+    height: inherit;
+    min-width: inherit;
+    min-height: inherit;
+    vertical-align: text-top;
+}
+
 .hidden {
     display: none;
 }

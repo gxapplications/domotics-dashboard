@@ -31,7 +31,7 @@
 }
 
 .grid li .inner {
-    font-size: 0.12em; /* TODO !0: fine tune ICI ! Probleme: les icones ne scalent pas en meme temps (fixees a 48px ?) <hx> !*/
+    font-size: 0.12em; /* TODO !0: fine tune ICI ! */
     position: absolute;
     top: 0;
     bottom: 10px;

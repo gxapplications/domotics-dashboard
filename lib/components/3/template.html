@@ -10,7 +10,7 @@
         ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
         ng-class="{'md-hue-1': (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed') && activationState == 'on'}"
         flex id="component-button-{{component.id}}-on" ng-click="play(true)">
-        <md-icon aria-label="state" style="zoom: 60%; color: {{ng-open}}supposedState === 'on' ? '#00C853' : '#2E7D32'{{ng-close}}"
+        <md-icon aria-label="state" style="color: {{ng-open}}supposedState === 'on' ? '#00C853' : '#2E7D32'{{ng-close}}"
             class="material-icons button-icon-36">{{ng-open}}supposedState === 'on' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         ON
     </md-button>
@@ -19,7 +19,7 @@
         ng-disabled="isDisabled(component.configuration.domotic, states.macro.c_{{component.id}}.state, processingState)"
         ng-class="{'md-hue-1': (states.macro.c_{{component.id}}.state === 'progress' || states.macro.c_{{component.id}}.state === 'delayed') && activationState == 'off'}"
         flex id="component-button-{{component.id}}-off" ng-click="play(false)">
-        <md-icon aria-label="state" style="zoom: 60%; color: {{ng-open}}supposedState === 'off' ? '#D50000' : '#B71C1C'{{ng-close}}"
+        <md-icon aria-label="state" style="color: {{ng-open}}supposedState === 'off' ? '#D50000' : '#B71C1C'{{ng-close}}"
             class="material-icons button-icon-36">{{ng-open}}supposedState === 'off' ? 'star' : 'star_border'{{ng-close}}</md-icon>
         OFF
     </md-button>
