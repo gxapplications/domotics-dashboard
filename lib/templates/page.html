@@ -57,17 +57,34 @@
                     <span>{{page.name}}</span>
                 </h3>
                 <span flex></span>
-                <md-icon class="material-icons" aria-label="Speech engine OK" ng-hide="states.speechEngine.error">mic</md-icon>
-                <md-button class="md-warn" aria-label="Reload page" ng-show="states.speechEngine.error" onclick="window.location.reload()">
+
+                <md-icon class="material-icons" style="color: #B71C1C" aria-label="Speech engine not ready"
+                         ng-hide="states.speechEngine.error || states.speechEngine.lang">mic_off</md-icon>
+                <md-button class="md-raised md-primary" aria-label="Speech recognition"
+                           ng-show="!states.speechEngine.error && states.speechEngine.lang"
+                           ng-click="speech.listen()">
+                    <md-icon class="material-icons" aria-label="Speech engine on {{ng-open}}states.speechEngine.lang{{ng-close}}">mic</md-icon>
+                </md-button>
+                <md-button class="md-warn" aria-label="Reload page"
+                           ng-show="states.speechEngine.error"
+                           onclick="window.location.reload()">
                     <md-icon class="material-icons" aria-label="Speech engine problem">mic_off</md-icon>
                     No Speech | Reload
                 </md-button>
+
+                <span style="margin: 0 0.4em;">&nbsp;</span>
+
                 <md-icon class="material-icons" aria-label="Web socket OK" ng-hide="states.socketClient.error">sync</md-icon>
-                <md-button class="md-warn" aria-label="Reload page" ng-show="states.socketClient.error" onclick="window.location.reload()">
+                <md-button class="md-warn" aria-label="Reload page"
+                           ng-show="states.socketClient.error"
+                           onclick="window.location.reload()">
                     <md-icon class="material-icons" aria-label="Web socket problem">sync_problem</md-icon>
                     No sync | Reload
                 </md-button>
-                <md-button class="md-fab md-hue-2" aria-label="Open edit mode" ng-click="edition.open()">
+
+                <span style="margin: 0 1em;">|</span>
+
+                <md-button class="md-fab md-mini md-hue-2" aria-label="Open edit mode" ng-click="edition.open()">
 		            <md-icon class="material-icons" aria-label="Edit">mode_edit</md-icon>
                 </md-button>
             </div>

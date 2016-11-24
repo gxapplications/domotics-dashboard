@@ -523,7 +523,7 @@
 	    $scope.states.init();
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 1000);
-	    // window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 2500) // TODO !0: encore necessaire sur ma tablette ?
+	    // window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 2500) // TODO !0: still needed on slow browser?
 	    $(window).resize($scope.edition.tools.addAutoRescaler.trigger);
 	    $rootScope.speech.init('fr-FR'); // TODO !3: language depending on the user or a spoken keyword ?
 	  });
@@ -19493,8 +19493,75 @@
 	function plugSpeech(scope) {
 	  scope.speech = {
 	    voice: undefined,
+	    voices: undefined,
 	    lang: undefined,
-	    speak: function speak(text) {
+	    speakLang: function speakLang(textRef) {
+	      var replacements = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	      var intonation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'normal';
+
+	      var text = textReferences[textRef] && (textReferences[textRef][scope.speech.lang] || textReferences[textRef]['en-US']);
+	      if (text instanceof Object) {
+	        for (var replacement in replacements) {
+	          if (text[replacement] && text[replacement][replacements[replacement]]) {
+	            replacements[replacement] = text[replacement][replacements[replacement]];
+	          }
+	        }
+	        text = text._;
+	      }
+	      for (var _replacement in replacements) {
+	        text = text.replace('{' + _replacement + '}', replacements[_replacement]);
+	      }
+	      scope.speech._speak(text, intonation);
+	    },
+	    listen: function listen() {
+	      var grammar = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+	      // TODO !1: speech recognition: spoken commands system!
+	      /*
+	       var grammar = '#JSGF V1.0; grammar colors; public <color> = rouge | bleu | rose | jaune | vert | blanc | marron | violet | mauve | noir ;'
+	       var recognition = new webkitSpeechRecognition();
+	       var speechRecognitionList = new webkitSpeechGrammarList();
+	       speechRecognitionList.addFromString(grammar, 1);
+	       recognition.grammars = speechRecognitionList;
+	       //recognition.continuous = false;
+	       recognition.lang = 'fr-FR';
+	       recognition.interimResults = false;
+	       recognition.maxAlternatives = 1;
+	       recognition.onresult = function(event) {
+	       var color = event.results[0][0].transcript;
+	       console.log("RESULT:" + color);
+	       }
+	       */
+	      scope.speech._speak('Je ne peux pas encore vous entendre. Demandez à mon Dieu de m\'ajouter cette fonctionnalité !', 'error');
+	    },
+	    init: function init() {
+	      var lang = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'en-US';
+
+	      scope.speech.lang = lang;
+	      if (!('speechSynthesis' in window)) {
+	        scope.states.speechEngine.error = 'SpeechEngine not available on this browser.';
+	        return;
+	      }
+
+	      // texts are merged dynamically... Once!
+	      if (!textReferences._merged) {
+	        textReferences = Object.assign(global.speechComponents, textReferences);
+	        textReferences._merged = true;
+	      }
+
+	      // Async call: getVoices() is a start of an async loading process. onvoiceschanged is the resulting event.
+	      if (!scope.speech.voices) {
+	        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+	          window.speechSynthesis.onvoiceschanged = function () {
+	            scope.speech.voices = window.speechSynthesis.getVoices();
+	            scope.speech._selectVoice(lang);
+	          };
+	        }
+	      }
+
+	      scope.speech._selectVoice(lang);
+	    },
+	    _speak: function _speak(text) {
 	      var intonation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'normal';
 
 	      if (!scope.speech.voice) {
@@ -19517,62 +19584,25 @@
 	      ut.voice = scope.speech.voice;
 	      window.speechSynthesis.speak(ut);
 	    },
-	    speakLang: function speakLang(textRef) {
-	      var replacements = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-	      var intonation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'normal';
-
-	      var text = textReferences[textRef] && (textReferences[textRef][scope.speech.lang] || textReferences[textRef]['en-US']);
-	      if (text instanceof Object) {
-	        for (var replacement in replacements) {
-	          if (text[replacement] && text[replacement][replacements[replacement]]) {
-	            replacements[replacement] = text[replacement][replacements[replacement]];
-	          }
-	        }
-	        text = text._;
-	      }
-	      for (var _replacement in replacements) {
-	        text = text.replace('{' + _replacement + '}', replacements[_replacement]);
-	      }
-	      scope.speech.speak(text, intonation);
-	    },
-	    listen: function listen(grammar) {
-	      // TODO !1: speech recognition: spoken commands system!
-	      /*
-	       var grammar = '#JSGF V1.0; grammar colors; public <color> = rouge | bleu | rose | jaune | vert | blanc | marron | violet | mauve | noir ;'
-	       var recognition = new webkitSpeechRecognition();
-	       var speechRecognitionList = new webkitSpeechGrammarList();
-	       speechRecognitionList.addFromString(grammar, 1);
-	       recognition.grammars = speechRecognitionList;
-	       //recognition.continuous = false;
-	       recognition.lang = 'fr-FR';
-	       recognition.interimResults = false;
-	       recognition.maxAlternatives = 1;
-	       recognition.onresult = function(event) {
-	       var color = event.results[0][0].transcript;
-	       console.log("RESULT:" + color);
-	       }
-	       */
-	    },
-	    init: function init() {
-	      var lang = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'en-US';
-
-	      scope.speech.lang = lang;
-	      if ('speechSynthesis' in window && window.speechSynthesis.getVoices()) {
-	        scope.speech.voice = window.speechSynthesis.getVoices().find(function (v) {
+	    _selectVoice: function _selectVoice(lang) {
+	      if (scope.speech.voices) {
+	        scope.speech.voice = scope.speech.voices.find(function (v) {
 	          // Available on Mint, Google Chrome official version:
 	          // de-DE en-US (x2! M/F) en-GB es-ES es-US fr-FR
 	          // hi-IN id-ID it-IT ja-JP ko-KR nl-NL pl-PL pt-BR ru-RU zh-CN zh-HK zh-TW
 	          // Fom android, '-' is replaced by '_' !
 	          return v.lang.replace('-', '_') === lang.replace('-', '_');
 	        });
-	      }
-	      if (!textReferences._merged) {
-	        textReferences = Object.assign(global.speechComponents, textReferences);
-	        textReferences._merged = true;
+	        if (scope.speech.voice) {
+	          scope.states.speechEngine.lang = lang;
+	        }
 	      }
 	    }
 	  };
-	  scope.states.speechEngine = {};
+	  scope.states.speechEngine = {
+	    lang: undefined,
+	    error: false
+	  };
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
