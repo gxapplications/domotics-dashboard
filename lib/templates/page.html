@@ -115,14 +115,27 @@
     </div>
 
     <md-content layout="column" layout-align="left center" class="page-editor left-bar" ng-class="{'editing': (edition.active)}">
+
         <div flex="nogrow">
-            Trucs pas hauts ici...
+            <md-button aria-label="New page" class="md-grid-item-content text75pct" ng-click="">
+                <md-icon class="material-icons" aria-label="New page">note_add</md-icon>
+                New
+            </md-button>
         </div>
-        <md-slider-container flex="40">
+
+        <hr style="width:100%;" />
+        <div flex="nogrow">Current Page</div>
+        <md-slider-container flex="50">
             <md-slider md-discrete ng-model="page.layout" min="2" max="8" step="1"
                        aria-label="Column count" md-vertical></md-slider>
             <h5>Column count</h5>
         </md-slider-container>
+        <div flex="nogrow">
+            <md-button aria-label="Delete page" class="md-grid-item-content text75pct md-warn" ng-click="">
+                <md-icon class="material-icons" aria-label="Delete page">delete_forever</md-icon>
+            </md-button>
+        </div>
+
     </md-content>
     <md-content layout="column" layout-align="right center" class="page-editor right-bar" ng-class="{'editing': (edition.active)}">
         <md-list layout="column" layout-align="stretch top" flex="noshrink">
