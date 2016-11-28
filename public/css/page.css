@@ -27,24 +27,34 @@ button > img {
 .text75pct {
     font-size: 0.75rem;
 }
+.right-bar button.text75pct, .left-bar button.text75pct {
+    min-width: 3.8em;
+    /* TODO !0: should be flexible (max-width of available space, but ok for small screens too... */
+}
+
 
 /* Main layout with shrinkable header */
 @keyframes page-content-div-closing {
     from {
+        padding-top: 0;
         transform: scale(1);
     }
     to {
-        transform: scale(0.84);
+        padding-top: 4em;
+        transform: scale(0.78);
     }
 }
 @keyframes page-content-div-opening {
     0% {
-        transform: scale(0.84);
+        padding-top: 4em;
+        transform: scale(0.78);
     }
     30% {
-        transform: scale(0.84);
+        padding-top: 4em;
+        transform: scale(0.78);
     }
     100% {
+        padding-top: 0;
         transform: scale(1);
     }
 }
@@ -70,13 +80,15 @@ button > img {
     animation-name: page-content-div-closing;
     animation-duration: 0.6s;
     animation-timing-function: ease;
-    transform: scale(0.84);
+    transform: scale(0.78);
+    padding-top: 4em;
 }
 .page-controller:not(.editing) .page-content > div {
     animation-name: page-content-div-opening;
     animation-duration: 0.9s;
     animation-timing-function: ease;
     transform: scale(1);
+    padding-top: 0;
 }
 
 /* Editor toolbars */
@@ -129,10 +141,9 @@ button > img {
     top: 0;
     bottom: 0;
     padding-top: 5rem;
-    width: 7%;
+    width: 10%;
 }
-.page-editor.right-bar {
-    margin-right: 8px;
+.page-editor.right-bar, .page-editor.left-bar {
     overflow-x: hidden;
 }
 .page-editor.left-bar.editing {
