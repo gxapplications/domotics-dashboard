@@ -125,10 +125,10 @@
 
         <hr style="width:100%;" />
         <div hide show-gt-sm flex="nogrow">Current Page</div>
-        <md-slider-container flex="50">
-            <md-slider md-discrete ng-model="page.layout" min="2" max="8" step="1"
-                       aria-label="Column count" md-vertical></md-slider>
+        <md-slider-container flex="noshrink">
             <h5 hide show-gt-sm>Column count</h5>
+            <md-slider flex md-discrete ng-model="page.layout" min="2" max="8" step="1"
+                       aria-label="Column count" md-vertical></md-slider>
         </md-slider-container>
         <div flex="nogrow">
             <md-button aria-label="Delete page" class="md-grid-item-content text75pct md-warn" ng-click="">

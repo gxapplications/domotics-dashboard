@@ -29,7 +29,13 @@ button > img {
 }
 .right-bar button.text75pct, .left-bar button.text75pct {
     min-width: 3.8em;
-    /* TODO !0: should be flexible (max-width of available space, but ok for small screens too... */
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+.right-bar md-menu, .left-bar md-menu {
+    width: 100%;
+    text-align: center;
 }
 
 
