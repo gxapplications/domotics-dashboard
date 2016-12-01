@@ -1,10 +1,12 @@
 <div flex layout-fill layout="column" layout-align="center center">
-    <h1 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.7rem; margin-bottom: 0.3rem;" >
+    <h1 style="margin-top: 0.7rem; margin-bottom: 0.3rem;" class="ellipsized">
         <md-icon aria-label="title icon" ng-if="component.configuration.icon.length"
              class="material-icons button-icon-48">{{ng-open}}component.configuration.icon{{ng-close}}</md-icon>
         {{parsejson component.configuration 'title' 'Settings needed'}}
     </h1>
-    <div ng-if="component.configuration.description.length" style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
+    <div ng-if="component.configuration.description.length"
+         hide show-gt-xs
+         style="text-transform: none;text-overflow: ellipsis; white-space: normal; line-height: normal;">
         {{parsejson component.configuration 'description'}}
     </div>
 </div>

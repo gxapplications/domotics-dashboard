@@ -6,11 +6,11 @@
        }"
        ng-click="play()">
   <div layout="column" flex>
-    <h3 style="text-overflow: ellipsis; white-space: normal;">
-      <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration '0.icon' 'play_circle_outline'}}</md-icon>
+    <h3 class="ellipsized">
+      <md-icon aria-label="custom" class="material-icons button-icon-48">{{parsejson component.configuration '0.icon'}}</md-icon>
       {{parsejson component.configuration '0.title' 'Settings needed'}}
     </h3>
-    <div style="text-transform: none;text-overflow: ellipsis; white-space: normal;">
+    <div hide show-gt-xs style="text-transform: none;text-overflow: ellipsis; white-space: normal; line-height: normal;">
       {{parsejson component.configuration '0.description'}}
     </div>
   </div>

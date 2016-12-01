@@ -26,7 +26,8 @@
       itemSelector: 'li[data-w]',
       widthHeightRatio: 1,
       dragAndDrop: true,
-      getSizingCoefficient: function() { return 1; }
+      getSizingCoefficient: function() { return 1; },
+      minHeight: 0
     },
 
     draggableDefaults: {
@@ -224,11 +225,11 @@
     _calculateCellSize: function() {
       var coefficient = this.options.getSizingCoefficient();
       if (this.options.direction === "horizontal") {
-        this._cellHeight = Math.floor(coefficient * this.$element.height() / this.options.lanes);
+        this._cellHeight = Math.max(this.options.minHeight, Math.floor(coefficient * this.$element.height() / this.options.lanes));
         this._cellWidth = this._cellHeight * this.options.widthHeightRatio;
       } else {
         this._cellWidth = Math.floor(coefficient * this.$element.width() / this.options.lanes);
-        this._cellHeight = this._cellWidth / this.options.widthHeightRatio;
+        this._cellHeight = Math.max(this.options.minHeight, this._cellWidth / this.options.widthHeightRatio);
       }
       if (this.options.heightToFontSizeRatio) {
         this._fontSize = this._cellHeight * this.options.heightToFontSizeRatio;

@@ -198,6 +198,13 @@ button.component-button {
     margin: 0;
     position: relative;
 }
+md-card .ellipsized {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+    overflow: hidden;
+}
 button.component-button h3 {
     margin-top: 0.3rem;
     margin-bottom: 0.3rem;

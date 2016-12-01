@@ -20,6 +20,7 @@
                 {id: 6, w: 1, h: 1, x: 3, y: 0}
             ],
             widthHeightRatio: 264 / 120,
+            minHeight: 100, // TODO !0: finetune OR parameterized?
             lanes: 3,
             elementPrototype: 'li.position-card',
             elementLoaderUrl: false,
@@ -142,6 +143,7 @@
             direction: 'vertical',
             lanes: params.lanes,
             widthHeightRatio: params.widthHeightRatio,
+            minHeight: params.minHeight,
             heightToFontSizeRatio: true,
             onChange: function(changedItems) {
                 grid = gridStack.data('_gridList').gridList.grid;

@@ -6,13 +6,15 @@
     }"
     ng-click="play()">
     <div layout="column" flex>
-        <h3 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.9em;" ng-if="component.configuration.title.length">
+        <h3 style="margin-top: 0.9em;" class="ellipsized" ng-if="component.configuration.title.length">
             <md-icon aria-label="custom"
                      class="material-icons button-icon-48"
                      ng-if="component.configuration.icon.length">{{parsejson component.configuration 'icon'}}</md-icon>
             {{parsejson component.configuration 'title'}}
         </h3>
-        <div style="text-transform: none;text-overflow: ellipsis; white-space: normal;" ng-if="component.configuration.description.length">
+        <div style="text-transform: none;text-overflow: ellipsis; white-space: normal; line-height: normal;"
+             hide show-gt-xs
+             ng-if="component.configuration.description.length">
             {{parsejson component.configuration 'description'}}
         </div>
     </div>

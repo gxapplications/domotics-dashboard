@@ -1,4 +1,4 @@
-<h3 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.7rem; margin-bottom: 0.3rem;" ng-if="component.configuration.title.length">
+<h3 style="margin-top: 0.7rem; margin-bottom: 0.3rem;" class="ellipsized" ng-if="component.configuration.title.length">
     <md-icon aria-label="custom"
              class="material-icons button-icon-48"
              ng-if="component.configuration.icon.length">{{parsejson component.configuration 'icon'}}</md-icon>
@@ -50,7 +50,8 @@
         <md-icon aria-label="mode" class="material-icons button-icon-48">power_settings_new</md-icon>
     </md-button>
 </div>
-<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin: 0.5rem 0; min-height: 0;"
+<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin: 0.5rem 0; min-height: 0; line-height: normal;"
+     hide show-gt-xs
      ng-if="component.configuration.description.length">
     {{parsejson component.configuration 'description'}}
 </div>

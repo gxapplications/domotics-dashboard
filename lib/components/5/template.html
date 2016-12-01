@@ -1,7 +1,7 @@
-<h3 style="text-overflow: ellipsis; white-space: normal; margin-top: 0.7rem; margin-bottom: 0.3rem;">
+<h3 style="margin-top: 0.7rem; margin-bottom: 0.3rem;" class="ellipsized">
     <md-icon aria-label="custom"
              class="material-icons button-icon-48"
-             ng-if="component.configuration.icon.length">{{parsejson component.configuration 'icon' 'notifications_active'}}</md-icon>
+             ng-if="component.configuration.icon.length">{{parsejson component.configuration 'icon'}}</md-icon>
     {{parsejson component.configuration 'title' 'Settings needed'}}
 </h3>
 <div layout="row" style="margin: 0 0.5rem 0.3rem 0.5rem;" flex>
@@ -39,7 +39,8 @@
         <md-icon aria-label="mode" class="material-icons button-icon-48">notifications_active</md-icon>
     </md-button>
 </div>
-<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0;"
+<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0; line-height: normal;"
+     hide show-gt-xs
      ng-if="component.configuration.description.length">
     {{parsejson component.configuration 'description'}}
 </div>
