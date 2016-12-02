@@ -20,7 +20,7 @@
                 {id: 6, w: 1, h: 1, x: 3, y: 0}
             ],
             widthHeightRatio: 264 / 120,
-            minHeight: 100, // TODO !0: finetune OR parameterized?
+            minHeight: 80,
             lanes: 3,
             elementPrototype: 'li.position-card',
             elementLoaderUrl: false,

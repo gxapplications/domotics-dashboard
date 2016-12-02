@@ -209,6 +209,17 @@ button.component-button h3 {
     margin-top: 0.3rem;
     margin-bottom: 0.3rem;
 }
+md-card .ellipsized-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    text-transform: none;
+    line-height: normal;
+}
+
 div[ng-controller] div.step, div[ng-controller] md-progress-circular.step {
     position: absolute;
     top: 0.6rem;

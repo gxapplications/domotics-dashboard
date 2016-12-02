@@ -12,8 +12,7 @@
                      ng-if="component.configuration.icon.length">{{parsejson component.configuration 'icon'}}</md-icon>
             {{parsejson component.configuration 'title'}}
         </h3>
-        <div style="text-transform: none;text-overflow: ellipsis; white-space: normal; line-height: normal;"
-             hide show-gt-xs
+        <div hide show-gt-xs class="ellipsized-description"
              ng-if="component.configuration.description.length">
             {{parsejson component.configuration 'description'}}
         </div>

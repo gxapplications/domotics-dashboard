@@ -18,13 +18,14 @@
         ng-click="play($index)">
         <md-icon aria-label="state" style="color: {{ng-open}}realStates.includes($index) ? '#00C853' : '#2E7D32'{{ng-close}}"
             class="material-icons button-icon-48">{{ng-open}}realStates.includes($index) ? 'star' : 'star_border'{{ng-close}}</md-icon>
-        <md-icon aria-label="scenario icon" ng-if="scenario.icon.length > 0"
+        <md-icon aria-label="scenario icon" ng-if="scenario.icon.length"
             class="material-icons button-icon-48">{{ng-open}}scenario.icon{{ng-close}}</md-icon>
-        <span class="ellipsized">{{ng-open}}scenario.title{{ng-close}}</span>
+        {{ng-open}}scenario.title{{ng-close}}
     </md-button>
 </div>
-<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin: 0.5rem 0; min-height: 0; line-height: normal;"
+<div style="text-transform: none; margin: 0.5rem 0; min-height: 0; line-height: normal;"
      hide show-gt-xs
+     class="ellipsized"
      ng-if="component.configuration.description.length">
     {{parsejson component.configuration 'description'}}
 </div>

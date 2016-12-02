@@ -39,8 +39,8 @@
         <md-icon aria-label="mode" class="material-icons button-icon-48">notifications_active</md-icon>
     </md-button>
 </div>
-<div style="text-transform: none; text-overflow: ellipsis; white-space: normal; margin-bottom: 0.5rem; min-height: 0; line-height: normal;"
-     hide show-gt-xs
+<div style="text-transform: none; margin: 0.5rem 0; min-height: 0; line-height: normal;"
+     hide show-gt-xs class="ellipsized"
      ng-if="component.configuration.description.length">
     {{parsejson component.configuration 'description'}}
 </div>
