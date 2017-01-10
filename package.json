@@ -95,6 +95,7 @@
     "nes": "^6.2.1",
     "node-schedule": "^1.2.0",
     "path": "^0.12.7",
+    "screenfull": "^3.0.2",
     "slug": "^0.9.1",
     "sqlite3": "^3.1.4",
     "trumpet": "^1.7.2",
