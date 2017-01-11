@@ -242,7 +242,7 @@
 	  $scope.states = $rootScope.states;
 	  $scope.$watch('states.socketClient.errorCount', function (newValue, oldValue) {
 	    if (newValue >= 6) {
-	      $scope.events.errorEvent('Web socket connection error!', 'RECONNECT', $scope.states.socketClient.connectNow);
+	      $scope.events.errorEvent('Web socket connection error!', 'RECONNECT', $scope.states.socketClient.reconnectNow);
 	    }
 	  });
 
@@ -17906,15 +17906,20 @@
 	  states.socketClient.subscribe('/socket/heat', states.socketClient.updater('heat'), states.socketClient.onSubscriptionError('heat'));
 	  states.socketClient.subscribe('/socket/macro', states.socketClient.updater('macro'), states.socketClient.onSubscriptionError('macro'));
 	};
-	states.socketClient.connectNow = function () {
-	  states.socketClient.connect({ retries: 8, delay: 2000, maxDelay: 8000 }, states.socketClient.connectedCallback);
+
+	states.socketClient.reconnectNow = function () {
+	  states.socketClient.errorCount = 0;
+	  states.socketClient.disconnect(function () {
+	    console.log('pouet');
+	    states.socketClient.connect({ retries: 8, delay: 2000, maxDelay: 8000 }, states.socketClient.connectedCallback);
+	  });
 	};
 
 	// Init step
 	states.init = function () {
 	  states.onDemandScenarii.load();
 	  states.activableScenarii.load();
-	  states.socketClient.connectNow();
+	  states.socketClient.connect({ retries: 8, delay: 2000, maxDelay: 8000 }, states.socketClient.connectedCallback);
 	};
 
 	exports.default = states;

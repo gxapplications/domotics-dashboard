@@ -90,7 +90,7 @@
                 <md-icon class="material-icons" aria-label="Web socket OK" ng-hide="states.socketClient.error">sync</md-icon>
                 <md-button class="md-warn" aria-label="Reconnect"
                            ng-show="states.socketClient.error"
-                           ng-click="states.socketClient.connectNow()">
+                           ng-click="states.socketClient.reconnectNow()">
                     <md-icon class="material-icons" aria-label="Web socket problem">sync_problem</md-icon>
                     No sync | Reconnect
                 </md-button>
