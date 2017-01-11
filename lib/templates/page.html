@@ -88,11 +88,11 @@
                 <span style="margin: 0 0.4em;">&nbsp;</span>
 
                 <md-icon class="material-icons" aria-label="Web socket OK" ng-hide="states.socketClient.error">sync</md-icon>
-                <md-button class="md-warn" aria-label="Reload page"
+                <md-button class="md-warn" aria-label="Reconnect"
                            ng-show="states.socketClient.error"
-                           onclick="window.location.reload()">
+                           ng-click="states.socketClient.connectNow()">
                     <md-icon class="material-icons" aria-label="Web socket problem">sync_problem</md-icon>
-                    No sync | Reload
+                    No sync | Reconnect
                 </md-button>
 
                 <span hide show-gt-xs style="margin: 0 1em;">|</span>

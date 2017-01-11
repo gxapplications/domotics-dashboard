@@ -307,6 +307,9 @@ md-progress-circular.step svg {
 div.double-knob.withTitle {
     padding-top: 1em;
 }
+div.double-knob-title {
+    font-size: 1.2em;
+}
 div.double-knob .temperatureShadow {
     font-size: inherit;
     background-color: rgba(0, 0, 0, 0.3);

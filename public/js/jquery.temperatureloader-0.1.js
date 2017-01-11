@@ -377,7 +377,7 @@ see the file license.txt that was included with the plugin bundle.
                 var fontSize, string, smallSize, heightRemaining;
 
                 /* Calculate the size of the font based on the canvas size */
-                fontSize = cX / 7;
+                fontSize = cX / 9;
 
                 // knobs labels
                 ctx.save();

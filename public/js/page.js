@@ -241,8 +241,8 @@
 	  $rootScope.states = _states2.default;
 	  $scope.states = $rootScope.states;
 	  $scope.$watch('states.socketClient.errorCount', function (newValue, oldValue) {
-	    if (newValue >= 4) {
-	      $scope.events.errorEvent('Web socket connection error!');
+	    if (newValue >= 6) {
+	      $scope.events.errorEvent('Web socket connection error!', 'RECONNECT', $scope.states.socketClient.connectNow);
 	    }
 	  });
 
@@ -509,7 +509,8 @@
 	        },
 	        getSizingCoefficient: function getSizingCoefficient() {
 	          return $scope.edition.active ? 1 / 0.84 : 1;
-	        }
+	        },
+	        minHeight: 100
 	      });
 	    }
 	  };
@@ -543,8 +544,8 @@
 	    $($scope.grid.init());
 	    $scope.states.init();
 	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 600);
-	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 1000);
-	    // window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 2500) // TODO !0: still needed on slow browser?
+	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 2000);
+	    window.setTimeout($scope.edition.tools.addAutoRescaler.trigger, 15000);
 	    $(window).resize($scope.edition.tools.addAutoRescaler.trigger);
 	    $rootScope.speech.init('fr-FR'); // TODO !3: language depending on the user or a spoken keyword ?
 	  });
@@ -17887,28 +17888,33 @@
 	    }
 	  }
 	};
+
 	states.socketClient.onConnect = function () {
 	  states.socketClient.error = false;
 	  states.socketClient.errorCount = 0;
+	};
+	states.socketClient.connectedCallback = function (err) {
+	  if (err) {
+	    console.error('Socket client connection failure: ', err);
+	    return;
+	  }
+	  states.socketClient.subscribe('/socket/status', states.socketClient.updater('status'), states.socketClient.onSubscriptionError('status'));
+	  states.socketClient.subscribe('/socket/alarm', states.socketClient.updater('alarm'), states.socketClient.onSubscriptionError('alarm'));
+	  states.socketClient.subscribe('/socket/scenarii', states.socketClient.updater('scenarii'), states.socketClient.onSubscriptionError('scenarii'));
+	  states.socketClient.subscribe('/socket/domotic', states.socketClient.updater('domotic'), states.socketClient.onSubscriptionError('domotic'));
+	  states.socketClient.subscribe('/socket/data', states.socketClient.updater('data'), states.socketClient.onSubscriptionError('data'));
+	  states.socketClient.subscribe('/socket/heat', states.socketClient.updater('heat'), states.socketClient.onSubscriptionError('heat'));
+	  states.socketClient.subscribe('/socket/macro', states.socketClient.updater('macro'), states.socketClient.onSubscriptionError('macro'));
+	};
+	states.socketClient.connectNow = function () {
+	  states.socketClient.connect({ retries: 8, delay: 2000, maxDelay: 8000 }, states.socketClient.connectedCallback);
 	};
 
 	// Init step
 	states.init = function () {
 	  states.onDemandScenarii.load();
 	  states.activableScenarii.load();
-	  states.socketClient.connect({ retries: 10, delay: 2000, maxDelay: 8000 }, function (err) {
-	    if (err) {
-	      console.error('Socket client connection failure: ', err);
-	      return;
-	    }
-	    states.socketClient.subscribe('/socket/status', states.socketClient.updater('status'), states.socketClient.onSubscriptionError('status'));
-	    states.socketClient.subscribe('/socket/alarm', states.socketClient.updater('alarm'), states.socketClient.onSubscriptionError('alarm'));
-	    states.socketClient.subscribe('/socket/scenarii', states.socketClient.updater('scenarii'), states.socketClient.onSubscriptionError('scenarii'));
-	    states.socketClient.subscribe('/socket/domotic', states.socketClient.updater('domotic'), states.socketClient.onSubscriptionError('domotic'));
-	    states.socketClient.subscribe('/socket/data', states.socketClient.updater('data'), states.socketClient.onSubscriptionError('data'));
-	    states.socketClient.subscribe('/socket/heat', states.socketClient.updater('heat'), states.socketClient.onSubscriptionError('heat'));
-	    states.socketClient.subscribe('/socket/macro', states.socketClient.updater('macro'), states.socketClient.onSubscriptionError('macro'));
-	  });
+	  states.socketClient.connectNow();
 	};
 
 	exports.default = states;
