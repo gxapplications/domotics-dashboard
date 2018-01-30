@@ -2,15 +2,15 @@
 
 _A customizable front to manage domotics with Myfox services, written in NodeJS._
 
-This very first release is provided AS IS, without any guarantee about security and stability.
+**Warning: development of this software was aborted due to performances problems using Angular1 on the web browser side.
+Then a new generation of domotics software is in progress here: [https://github.com/gxapplications/asterism]**
+
+This release is provided AS IS, without any guarantee about security and stability.
 The service MUST ONLY be accessible in a private network: there is no authentication feature,
 so accessing the server through HTTP means accessing the full service.
 
 The application here uses [https://github.com/gxapplications/myfox-wrapper-api] as library to
 call Myfox services through HTML strategy to control many aspects of your domotics stuff.
-
-
-_Documentation to do_
 
 
 ## PM2 installation and usage
